@@ -27,12 +27,6 @@ function ConditionSwitch() {
     bigger: false
   });
 
-  /*  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
-  }, []); */
-
   const handleChange = event => {
     setValues(oldValues => ({
       ...oldValues,
@@ -47,12 +41,9 @@ function ConditionSwitch() {
         <Select
           value={values.bigger}
           onChange={handleChange}
-          inputProps={{
-            bigger: false
-          }}
         >
-          <MenuItem value={values.bigger = false}>is greater or equal to</MenuItem>
-          <MenuItem value={values.bigger = true}>is smaller or equal to</MenuItem>
+          <MenuItem value={true}>is greater or equal to</MenuItem>
+          <MenuItem value={false}>is smaller or equal to</MenuItem>
         </Select>
       </FormControl>
     </form>

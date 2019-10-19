@@ -11,11 +11,10 @@ import ConnectBtn from "./components/ConnectBtn";
 // const env = dotenv.config().parsed
 
 // const { InjectedConnector, NetworkOnlyConnector } = Connectors;
-const Infura = new NetworkOnlyConnector({
-  providerURL: process.env.REACT_APP_NETWORK_URL
-});
-const MetaMask = new InjectedConnector({ supportedNetworks: [1, 3, 4] });
-const connectors = { MetaMask, Infura };
+const Infura = new NetworkOnlyConnector({ providerURL: process.env.REACT_APP_NETWORK_URL })
+const MetaMask = new InjectedConnector({ supportedNetworks: [1, 3, 4] })
+const connectors = {MetaMask, Infura}
+
 
 // `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
 
@@ -29,14 +28,16 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <Web3Provider connectors={connectors} libraryName={"ethers.js"}>
-      <div className="App">
-        <MuiThemeProvider theme={theme}>
+
+      <Web3Provider connectors={connectors} libraryName={"ethers.js"}>
+          <div className="App">
+          <MuiThemeProvider theme={theme}>
           <ConnectBtn />
           <MyComponent />
         </MuiThemeProvider>
-      </div>
-    </Web3Provider>
+          </div>
+      </Web3Provider>
+
   );
 }
 

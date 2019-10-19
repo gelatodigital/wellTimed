@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 // web3 library
 import { ethers } from "ethers";
 // Context so we access the users account & provider
-import { useWeb3Context } from "web3-react";
+import { useWeb3Context, Connectors } from "web3-react";
 
 // Import ABIs
 import dummyContractABI from "../constants/ABIs/dummyContract.json";
@@ -12,9 +12,11 @@ import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 // Import addresses
 import { addresses } from "../constants/contractAddresses";
 
-// Material
 import IfInput from "./IfInput";
-import ConditionSwitch from './ConditionSwitch.js';
+import ConditionSwitch from "./ConditionSwitch.js";
+
+import { AbiCoder } from "ethers/utils";
+import { Icon } from "@material-ui/core";
 
 function MyComponent() {
   const context = useWeb3Context();
@@ -134,23 +136,13 @@ function MyComponent() {
       <h3>Swap Tokens on pre defined condition</h3>
       <IfInput></IfInput>
       <ConditionSwitch></ConditionSwitch>
+      <IfInput></IfInput>
+      <Icon>arrow_downward</Icon>
+      <IfInput></IfInput>
+      <Icon>arrow_downward</Icon>
+      <IfInput></IfInput>
     </React.Fragment>
   );
 }
 
 export default MyComponent;
-
-// {/* <h1>Web3 React Demo Shit</h1>
-// <h3>Trying out Metamask Logins / Logouts</h3>
-// {/* Render LogIn / LogOut Button */}
-// {/* {context.active ? (<IsLoggedIn/>) : (<IsLoggedOut/>)} */}
-// {(context.active || (context.error && context.connectorName)) && (
-//   <div>
-//     <LogOut></LogOut>
-//     <h4>Your Address: {context.account}</h4>
-
-//     {!waitingForTX && <ActionButton></ActionButton>}
-//     {waitingForTX && <button> Please wait ...</button>}
-//     {transactionHash && <p>Tx Hash: {transactionHash}</p>}
-//   </div>
-// )} */}
