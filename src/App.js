@@ -4,9 +4,10 @@ import InjectedConnector from "./InjectedConnector";
 import NetworkOnlyConnector from "./NetworkOnlyConnector";
 import "./App.css";
 import MyComponent from "./components/MyComponent";
-import { MuiThemeProvider } from "@material-ui/core";
+import { MuiThemeProvider, createMuiTheme, Container } from "@material-ui/core";
 
 import ConnectBtn from "./components/ConnectBtn";
+import { green, pink, red } from "@material-ui/core/colors";
 
 // const dotenv = require('dotenv');
 // const env = dotenv.config().parsed
@@ -20,14 +21,24 @@ const connectors = { MetaMask, Infura };
 
 // `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
 
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+    secondary: red,
+    pending: pink
+  }
+});
+
 function App() {
   return (
     <Web3Provider connectors={connectors} libraryName={"ethers.js"}>
       <div className="App">
-        <MuiThemeProvider>
-          <ConnectBtn />
-          <MyComponent />
-        </MuiThemeProvider>
+        <Container maxWidth="m">
+          <MuiThemeProvider theme={theme}>
+            <ConnectBtn />
+            <MyComponent />
+          </MuiThemeProvider>
+        </Container>
       </div>
     </Web3Provider>
   );

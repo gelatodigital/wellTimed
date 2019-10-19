@@ -15,7 +15,8 @@ import {
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    justifyContent: "center"
   },
   formControl: {
     margin: theme.spacing(1),
@@ -24,92 +25,75 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function IfInput() {
-  const coinOptions = [];
-
   const kyberAPIEndpoint = "https://api.kyber.network/currencies";
 
-  const iconAPIEndpoint = async coin => {
+  const iconAPI = coin => {
     return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${coin}/logo.png`;
   };
-
   async function allCoins() {
     await fetch(kyberAPIEndpoint)
       .then(result => result.json())
-      .then(val => setModal({ ...modal, availableCoins: val }));
-  }
-
-  const createOptions = async function () {
-    console.log(coinOptions);
-    await allCoins();
-    for (let option of modal.availableCoins.data) {
-      coinOptions.push(
-        <option>
-          {option.name}
-          <img src={iconAPIEndpoint(option.id)} alt="coin logo" />
-        </option>
-      );
-    }
+      .then(val => setModal({ ...state, availableCoins: val }));
   }
 
   const classes = useStyles();
 
   // State
 
-  const [modal, setModal] = React.useState({
+  const [state, setModal] = React.useState({
     open: false,
-    coin: "",
-    availableCoins: []
+    coinToLock: "",
+    coinFromLock: "",
+    availableCoins: [],
+    amountToLock: 0,
+    amountFromLock: 0
   });
 
   const handleChange = name => event => {
-    setModal({ ...modal, [name]: Number(event.target.value) || "" });
+    setModal({ ...state, [name]: event.target.value || "" });
   };
 
   const handleClickOpen = () => {
-    setModal({ ...modal, open: true });
+    setModal({ ...state, open: true });
   };
 
   const handleClose = () => {
-    setModal({ ...modal, open: false });
+    setModal({ ...state, open: false });
   };
 
   return (
     <div>
-      <span>
-        <Input />
-        <Button onClick={handleClickOpen}>Open select dialog</Button>
-        <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
-          open={modal.open}
-          onClose={handleClose}
-        >
-          <DialogTitle>Fill the form</DialogTitle>
-          <DialogContent>
-            <form className={classes.container}>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Coin</InputLabel>
-                <Select
-                  native
-                  value={modal.coin}
-                  onChange={handleChange("coin")}
-                  input={<Input id="coin-input" />}
-                >
-                  {coinOptions}
-                </Select>
-              </FormControl>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color="primary">
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </span>
+      <Input value={state.amountToLock} />
+      <Button onClick={handleClickOpen}>Choose Coin</Button>
+      <Dialog
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={state.open}
+        onClose={handleClose}
+      >
+        <DialogTitle>Choose coin from Dropdown</DialogTitle>
+        <DialogContent>
+          <form className={classes.container}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
+              <Select
+                native
+                value={state.coin}
+                onChange={handleChange("coinToLock")}
+                input={<Input id="coin-input" />}
+              ></Select>
+            </FormControl>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

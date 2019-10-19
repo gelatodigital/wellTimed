@@ -6,10 +6,18 @@ import { ethers } from "ethers";
 // Context so we access the users account & provider
 import { useWeb3Context } from "web3-react";
 
-import { Icon } from "@material-ui/core";
+import { Icon, Card, CardContent } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    margin: "90px;"
+  }
+}));
 
 function MyComponent() {
   const context = useWeb3Context();
+  const classes = useStyles();
 
   // State
   console.log(context);
@@ -79,14 +87,22 @@ function MyComponent() {
 
   return (
     <React.Fragment>
-      <h1>Swap tokens depending on conditions</h1>
-      <IfInput></IfInput>
-      <ConditionialSwitch></ConditionialSwitch>
-      <IfInput></IfInput>
+      <Card className={classes.card}>
+        <CardContent>
+          <h1>Swap tokens depending on conditions</h1>
+          <IfInput></IfInput>
+          <ConditionialSwitch></ConditionialSwitch>
+          <IfInput></IfInput>
+        </CardContent>
+      </Card>
       <Icon>arrow_downward</Icon>
-      <IfInput></IfInput>
-      <Icon>arrow_downward</Icon>
-      <IfInput></IfInput>
+      <Card className={classes.card}>
+        <CardContent>
+          <IfInput></IfInput>
+          <Icon>arrow_downward</Icon>
+          <IfInput></IfInput>
+        </CardContent>
+      </Card>
     </React.Fragment>
   );
 }
