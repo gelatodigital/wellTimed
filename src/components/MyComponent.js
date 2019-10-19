@@ -5,20 +5,22 @@ import { ethers } from 'ethers'
 import { useWeb3Context, Connectors } from 'web3-react'
 
 // Import ABIs
-import dummyContractABI from '../constants/ABIs/dummyContract.json';
 import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
 import dsProxyABI from '../constants/ABIs/ds-proxy.json';
+import dummyABI from '../constants/ABIs/dummyContract.json'
+
 
 // Import addresses
-import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY } from '../constants/contractAddresses';
+import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, example } from '../constants/contractAddresses';
 import { AbiCoder } from 'ethers/utils';
+import { REPLACEMENT_UNDERPRICED } from 'ethers/errors';
 
 
 function MyComponent() {
-    const context = useWeb3Context();
+    console.log(`Component rendered`)
 
+    const context = useWeb3Context();
     // State
-    console.log(context)
 
     // Used to display tx hash
     const [transactionHash, setTransactionHash] = React.useState(undefined);
@@ -40,7 +42,8 @@ function MyComponent() {
                 return (<button onClick={deployProxy}>Create Account</button>);
 
             case 2:
-                return (<button onClick={deployAndSetGuard}>Whitelist our relayer</button>);
+                return (<button onClick={test}>Test</button>);
+                // return (<button onClick={deployAndSetGuard}>Whitelist our relayer</button>);
 
             case 3:
                 return (<button onClick={placeOrder}>Place Order</button>);
@@ -61,7 +64,7 @@ function MyComponent() {
     }
 
     function LogOut() {
-        // checkIfUserHasProxy();
+        checkIfUserHasProxy();
         return (
             <button onClick={() => {
                 context.unsetConnector()
@@ -123,18 +126,45 @@ function MyComponent() {
         }
     }
 
+    async function test() {
+
+
+        const signer = context.library.getSigner()
+        const dummyContract = new ethers.Contract(example['dummy'], dummyABI, signer)
+        const dummyTransactionPromise = dummyContract.increment();
+
+        dummyTransactionPromise.then(function(txReceipt) {
+            console.log(txReceipt['hash'])
+            signer.provider.waitForTransaction(txReceipt['hash']).then(function(transaction) {
+                // console.log('Transaction Mined: ' + transaction.hash);
+                console.log(transaction);
+                console.log("mined")
+            });
+        })
+    }
+
 
     async function deployProxy() {
-        console.log("Test 1")
-        // const signer = context.library.getSigner()
-        // const dummyContractAddress = DS_PROXY_REGISTRY[context.networkId]
-        // const dummyContract = new ethers.Contract(dummyContractAddress, dummyContractABI, signer);
-        // // Get the current value
-        // let currentValue = await dummyContract.counter();
-        // console.log(`Current Value: ${currentValue}`);
-        // await dummyContract.increment();
-        // currentValue = await dummyContract.counter();
-        // console.log(`Current Value: ${currentValue}`);
+        console.log("Deploying new Proxy for user")
+        setWaitingForTX(true)
+        const signer = context.library.getSigner()
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
+        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+        try {
+            await proxyRegistryContract.build()
+            // error.message.includes("User denied transaction signature")
+            setWaitingForTX(false)
+            const proxyAddress = proxyRegistryContract.proxies(context.account)
+            console.log(`Deployed Proxy Address: ${proxyAddress}`)
+            const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+            let proxyOwner = await proxyContract.owner()
+            console.log(`Proxy Owner: ${proxyOwner}`)
+        // hanlde user rejecting the transaction
+        } catch(error) {
+            console.log(`This error: ${error}`)
+            setWaitingForTX(false)
+            return
+        }
     }
 
     async function deployAndSetGuard() {
@@ -158,10 +188,13 @@ function MyComponent() {
 
 
 
+
     return (
         <React.Fragment>
             <h1>Web3 React Demo Shit</h1>
             <h3>Trying out Metamask Logins / Logouts</h3>
+
+
             {/* Render LogIn / LogOut Button */}
             {/* {context.active ? (<IsLoggedIn/>) : (<IsLoggedOut/>)} */}
             { (context.active || (context.error && context.connectorName)) &&
