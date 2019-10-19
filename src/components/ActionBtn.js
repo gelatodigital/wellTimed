@@ -89,33 +89,53 @@ function ActionBtn() {
         })
     }
 
-
     async function deployProxy() {
         console.log("Deploying new Proxy for user")
         setWaitingForTX(true)
         const signer = context.library.getSigner()
         const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
         const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
-        try {
-            await proxyRegistryContract.build()
-            // error.message.includes("User denied transaction signature")
+
+        proxyRegistryContract.build()
+        .then(function(txReceipt) {
+            signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
+                console.log("ProxySuccessfully deployed")
+                setWaitingForTX(false)
+                const proxyAddress = await proxyRegistryContract.proxies(context.account)
+                console.log(`Deployed Proxy Address: ${proxyAddress}`)
+                console.log(tx)
+                if(proxyAddress !== ethers.constants.AddressZero)
+                {
+                    const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+                    let proxyOwner = await proxyContract.owner()
+                    console.log(`Proxy Owner: ${proxyOwner}`)
+
+                } else {
+                    console.log("BUG")
+                }
+            })
+        }, (error) => {
+            console.log("Sorry")
             setWaitingForTX(false)
-            const proxyAddress = proxyRegistryContract.proxies(context.account)
-            console.log(`Deployed Proxy Address: ${proxyAddress}`)
-            const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
-            let proxyOwner = await proxyContract.owner()
-            console.log(`Proxy Owner: ${proxyOwner}`)
-        // hanlde user rejecting the transaction
-        } catch(error) {
-            console.log(`This error: ${error}`)
-            setWaitingForTX(false)
-            return
-        }
+        })
+
     }
 
-    async function deployAndSetGuard() {
+
+    async function setAuthority(guardAddress) {
         console.log("Test 2")
+        console.log("Deploying new Proxy for user")
+        setWaitingForTX(true)
+        const signer = context.library.getSigner()
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
+        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+        const proxyAddress = await proxyRegistryContract.proxies(context.account)
+        const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+
+        // Fetch Guard contract
+        proxyContract.setAuthority(guardAddress)
     }
+
 
     async function placeOrder() {
         console.log("Test 3")
@@ -123,7 +143,6 @@ function ActionBtn() {
 
     return (
         <React.Fragment>
-            <p>Maxx Stinger</p>
             <ShowProxyStatus></ShowProxyStatus>
             { (context.active || (context.error && context.connectorName)) &&
                 <div>
