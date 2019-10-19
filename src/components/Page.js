@@ -85,10 +85,7 @@ function Page() {
       }
 
     }
-
     return table3
-
-
   }
 
 
