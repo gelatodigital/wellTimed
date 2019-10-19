@@ -20,7 +20,7 @@ function MyComponent() {
   const context = useWeb3Context();
 
   // State
-  let [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   // Used to display tx hash
   const [transactionHash, setTransactionHash] = React.useState(undefined);
@@ -40,7 +40,7 @@ function MyComponent() {
       case 1:
         return (
           <Button
-            disabled={this.state.loading}
+            disabled={loading}
             variant="contained"
             color="primary"
             onClick={deployProxy}
@@ -173,11 +173,11 @@ function MyComponent() {
     // Get the current value
     let currentValue = await dummyContract.counter();
     console.log(`Current Value: ${currentValue}`);
-    this.setState({loading: this.state.loading = true});
+    setLoading(true)
     await dummyContract.increment();
     currentValue = await dummyContract.counter();
     console.log(`Current Value: ${currentValue}`);
-    this.setState({loading: this.state.loading = true})
+   setLoading(false)
   }
 
   async function deployAndSetGuard() {
