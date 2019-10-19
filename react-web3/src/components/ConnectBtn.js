@@ -5,15 +5,11 @@ import { addresses } from "../constants/contractAddresses";
 import { ethers } from "ethers";
 
 // ABIs
-// Import ABIs
-import dummyContractABI from "../constants/ABIs/dummyContract.json";
 import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 
 function ConnectBtn() {
   const context = useWeb3Context();
-
-  const [isConnected, setConnection] = React.useState(false);
 
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
@@ -42,7 +38,7 @@ function ConnectBtn() {
           context.unsetConnector();
         }}
       >
-        Deactivate
+        Disconnect
       </Button>
     );
   }
@@ -101,19 +97,3 @@ function ConnectBtn() {
 }
 
 export default ConnectBtn;
-
-/* {(context.active || (context.error && context.connectorName)) && (
-    <div>
-      <LogOut></LogOut>
-      <h4>Your Address: {context.account}</h4>
-
-      {!waitingForTX && <ActionButton></ActionButton>}
-      {waitingForTX && <button> Please wait ...</button>}
-      {transactionHash && <p>Tx Hash: {transactionHash}</p>}
-    </div>
-  )}
-  {!context.active && (
-    <div>
-      <LogIn></LogIn>
-    </div>
-  )} */

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 // web3 library
 import { ethers } from "ethers";
 // Context so we access the users account & provider
-import { useWeb3Context, Connectors } from "web3-react";
+import { useWeb3Context } from "web3-react";
 
 // Import ABIs
 import dummyContractABI from "../constants/ABIs/dummyContract.json";
@@ -11,10 +11,10 @@ import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 
 // Import addresses
 import { addresses } from "../constants/contractAddresses";
-import { AbiCoder } from "ethers/utils";
 
 // Material
-import Button from "@material-ui/core/Button";
+import IfInput from "./IfInput";
+import ConditionSwitch from './ConditionSwitch.js';
 
 function MyComponent() {
   const context = useWeb3Context();
@@ -34,76 +34,6 @@ function MyComponent() {
   //     console.log("effect")
 
   // }, [])
-
-  function ActionButton() {
-    switch (proxyStatus) {
-      case 1:
-        return (
-          <Button
-            disabled={loading}
-            variant="contained"
-            color="primary"
-            onClick={deployProxy}
-          >
-            Create Account
-          </Button>
-        );
-
-      case 2:
-        return (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={deployAndSetGuard}
-          >
-            Whitelist our relayer
-          </Button>
-        );
-
-      case 3:
-        return (
-          <Button variant="contained" color="primary" onClick={placeOrder}>
-            Place Order
-          </Button>
-        );
-
-      default:
-        return (
-          <Button variant="contained" color="primary" onClick={placeOrder}>
-            Place Order
-          </Button>
-        );
-    }
-  }
-
-  function LogIn() {
-    return (
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          context.setFirstValidConnector(["MetaMask", "Infura"]);
-        }}
-      >
-        Connect Metamask
-      </Button>
-    );
-  }
-
-  function LogOut() {
-    checkIfUserHasProxy();
-    return (
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => {
-          context.unsetConnector();
-        }}
-      >
-        Deactivate
-      </Button>
-    );
-  }
 
   function sendDummyTransaction() {
     const signer = context.library.getSigner();
@@ -173,11 +103,11 @@ function MyComponent() {
     // Get the current value
     let currentValue = await dummyContract.counter();
     console.log(`Current Value: ${currentValue}`);
-    setLoading(true)
+    setLoading(true);
     await dummyContract.increment();
     currentValue = await dummyContract.counter();
     console.log(`Current Value: ${currentValue}`);
-   setLoading(false)
+    setLoading(false);
   }
 
   async function deployAndSetGuard() {
@@ -201,27 +131,26 @@ function MyComponent() {
 
   return (
     <React.Fragment>
-      <h1>Web3 React Demo Shit</h1>
-      <h3>Trying out Metamask Logins / Logouts</h3>
-      {/* Render LogIn / LogOut Button */}
-      {/* {context.active ? (<IsLoggedIn/>) : (<IsLoggedOut/>)} */}
-      {(context.active || (context.error && context.connectorName)) && (
-        <div>
-          <LogOut></LogOut>
-          <h4>Your Address: {context.account}</h4>
-
-          {!waitingForTX && <ActionButton></ActionButton>}
-          {waitingForTX && <button> Please wait ...</button>}
-          {transactionHash && <p>Tx Hash: {transactionHash}</p>}
-        </div>
-      )}
-      {!context.active && (
-        <div>
-          <LogIn></LogIn>
-        </div>
-      )}
+      <h3>Swap Tokens on pre defined condition</h3>
+      <IfInput></IfInput>
+      <ConditionSwitch></ConditionSwitch>
     </React.Fragment>
   );
 }
 
 export default MyComponent;
+
+// {/* <h1>Web3 React Demo Shit</h1>
+// <h3>Trying out Metamask Logins / Logouts</h3>
+// {/* Render LogIn / LogOut Button */}
+// {/* {context.active ? (<IsLoggedIn/>) : (<IsLoggedOut/>)} */}
+// {(context.active || (context.error && context.connectorName)) && (
+//   <div>
+//     <LogOut></LogOut>
+//     <h4>Your Address: {context.account}</h4>
+
+//     {!waitingForTX && <ActionButton></ActionButton>}
+//     {waitingForTX && <button> Please wait ...</button>}
+//     {transactionHash && <p>Tx Hash: {transactionHash}</p>}
+//   </div>
+// )} */}
