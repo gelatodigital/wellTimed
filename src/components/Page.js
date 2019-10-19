@@ -132,7 +132,7 @@ function Page() {
             <IfInput></IfInput>
           </CardContent>
         </Card>
-        <ActionBtn></ActionBtn>
+        <ActionBtn updateProxyStatus={updateProxyStatus}></ActionBtn>
         <Order></Order>
       </ProxyProvider>
     </React.Fragment>

@@ -22,17 +22,18 @@ import { AbiCoder } from 'ethers/utils';
 import { Icon, Button } from "@material-ui/core";
 
 
-function ActionBtn() {
+function ActionBtn(props) {
     const context = useWeb3Context();
     const proxyStatus = useContext(ProxyContext)
     // State
+    const updateProxyStatus = props.updateProxyStatus
 
     // Used to display tx hash
     const [transactionHash, setTransactionHash] = React.useState(undefined);
     // Used for reacting to successfull txs
     const [waitingForTX, setWaitingForTX] = React.useState(false);
     // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-    // const [proxyStatus, setProxyStatus] = React.useState(0)
+    const [guardAddress, setGuardAddress] = React.useState(undefined)
     //console.log(proxyStatus)
 
 
@@ -49,9 +50,12 @@ function ActionBtn() {
 
             case 2:
                 // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button color='primary' onClick={deployAndSetGuard}>Create Account 2</Button>);
+                return (<Button color='primary' onClick={deployAndSetGuard}>Create Account2</Button>);
 
             case 3:
+                return (<Button color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
+
+            case 4:
                 return (<Button color='primary' onClick={placeOrder}>Place Order</Button>);
 
             default:
@@ -96,19 +100,23 @@ function ActionBtn() {
         const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
         const gelatoCoreAddress = GELATO_CORE[context.networkId]
         const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+
         let guardAddress;
         gelatoCoreContract.on("LogDevirginize", (oldValue, newValue, event) => {
             console.log(`Old Value: ${oldValue}`)
             console.log(`New Value: ${newValue}`)
             guardAddress = newValue
+            setGuardAddress(guardAddress)
             console.log(event)
         })
 
         // Devirginize user
+        // 1st Tx
         gelatoCoreContract.devirginize()
         .then(function(txReceipt) {
             signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
                 setWaitingForTX(false)
+                updateProxyStatus(3)
                 console.log("ProxySuccessfully deployed")
                 // Fetch guard contract
 
@@ -119,8 +127,8 @@ function ActionBtn() {
                 console.log(tx)
                 if(proxyAddress !== ethers.constants.AddressZero)
                 {
+                    // 2nd Tx
                     const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
-                    setAuthority(guardAddress, proxyContract, proxyAddress, signer)
 
                 } else {
                     console.log("Proxy not found")
@@ -137,17 +145,22 @@ function ActionBtn() {
         console.log("Deploying new guard")
         setWaitingForTX(true)
         const signer = context.library.getSigner()
-        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
-        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+
         const gelatoCoreAddress = GELATO_CORE[context.networkId]
         const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
 
+        let guardAddress;
+        gelatoCoreContract.on("LogGuard", (_guardAddress) => {
+            setGuardAddress(_guardAddress)
+            console.log(`Guard Address: ${_guardAddress}`)
+        })
         // Devirginize user
         gelatoCoreContract.guard()
         .then(function(txReceipt) {
             signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
                 console.log("Guard successfully deployed")
                 setWaitingForTX(false)
+                updateProxyStatus(3)
                 // const proxyAddress = await proxyRegistryContract.proxies(context.account)
                 // console.log(`Deployed Proxy Address: ${proxyAddress}`)
                 // console.log("Transaction:")
@@ -169,7 +182,17 @@ function ActionBtn() {
     }
 
 
-    async function setAuthority(guardAddress, proxyContract, proxyAddress, signer) {
+    async function setAuthority() {
+        setWaitingForTX(true)
+        console.log("Setting Authority")
+        const signer = context.library.getSigner()
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
+        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+
+
+        const proxyAddress = await proxyRegistryContract.proxies(context.account)
+        const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+
         console.log(`Setting Guard ${guardAddress} as authority for Proxy: ${proxyAddress}`)
         setWaitingForTX(true)
 
@@ -178,6 +201,7 @@ function ActionBtn() {
             signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
                 console.log("Authority successfully setted")
                 setWaitingForTX(false)
+                updateProxyStatus(4)
             })
         }, (error) => {
             console.log("Sorry")
