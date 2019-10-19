@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Input,
   Button,
@@ -9,107 +9,97 @@ import {
   FormControl,
   InputLabel,
   Select,
-  DialogActions
+  DialogActions,
+  MenuItem
 } from "@material-ui/core";
+import { coins } from "../constants/coins";
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    justifyContent: "center"
   },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120
+  },
+  img: {
+    width: "24px",
+    height: "24px"
+  },
+  coins: {
+    display: "flex",
+    justifyContent: "space-between"
   }
 }));
 
 function IfInput() {
-  const coinOptions = [];
-
-  const kyberAPIEndpoint = "https://api.kyber.network/currencies";
-
-  const iconAPIEndpoint = async coin => {
-    return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${coin}/logo.png`;
-  };
-
-  async function allCoins() {
-    await fetch(kyberAPIEndpoint)
-      .then(result => result.json())
-      .then(val => setModal({ ...modal, availableCoins: val }));
-  }
-
-  const createOptions = async function () {
-    console.log(coinOptions);
-    await allCoins();
-    for (let option of modal.availableCoins.data) {
-      coinOptions.push(
-        <option>
-          {option.name}
-          <img src={iconAPIEndpoint(option.id)} alt="coin logo" />
-        </option>
-      );
-    }
-  }
-
   const classes = useStyles();
 
   // State
 
-  const [modal, setModal] = React.useState({
+  const [state, setModal] = React.useState({
     open: false,
     coin: "",
-    availableCoins: []
+    availableCoins: coins
   });
 
   const handleChange = name => event => {
-    setModal({ ...modal, [name]: Number(event.target.value) || "" });
+    // setModal({ availableCoins: props.value });
+    setModal({ ...state, [name]: event.target.value || "" });
   };
 
   const handleClickOpen = () => {
-    setModal({ ...modal, open: true });
+    setModal({ ...state, open: true });
   };
 
   const handleClose = () => {
-    setModal({ ...modal, open: false });
+    setModal({ ...state, open: false });
   };
+
 
   return (
     <div>
-      <span>
-        <Input />
-        <Button onClick={handleClickOpen}>Open select dialog</Button>
-        <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
-          open={modal.open}
-          onClose={handleClose}
-        >
-          <DialogTitle>Fill the form</DialogTitle>
-          <DialogContent>
-            <form className={classes.container}>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-native-simple">Coin</InputLabel>
-                <Select
-                  native
-                  value={modal.coin}
-                  onChange={handleChange("coin")}
-                  input={<Input id="coin-input" />}
-                >
-                  {coinOptions}
-                </Select>
-              </FormControl>
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color="primary">
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </span>
+      <Input value={state.amountToLock} />
+      <Button onClick={handleClickOpen}>Choose Coin</Button>
+      <Dialog
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={state.open}
+        onClose={handleClose}
+      >
+        <DialogTitle>Choose coin from Dropdown</DialogTitle>
+        <DialogContent>
+          <form className={classes.container}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
+              <Select value={state.coin} onChange={handleChange("coin")}>
+                {state.availableCoins[1].map(coin => {
+                  return (
+                    <MenuItem key={coin.id} value={coin.name} className={classes.coins}>
+                      {coin.name}
+                      <img
+                        className={classes.img}
+                        src={coin.logo()}
+                        alt="coin logo"
+                      />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
