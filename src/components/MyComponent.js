@@ -79,6 +79,7 @@ function MyComponent() {
 
   return (
     <React.Fragment>
+      <h1>Swap tokens depending on conditions</h1>
       <IfInput></IfInput>
       <ConditionialSwitch></ConditionialSwitch>
       <IfInput></IfInput>

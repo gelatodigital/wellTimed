@@ -10,7 +10,8 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    justifyContent: 'center'
   },
   formControl: {
     margin: theme.spacing(1),

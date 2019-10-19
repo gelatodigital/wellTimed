@@ -1,18 +1,23 @@
 import React from "react";
 import { useWeb3Context } from "web3-react";
-import { Button } from "@material-ui/core";
-import { addresses } from "../constants/contractAddresses";
+import { Button, makeStyles } from "@material-ui/core";
 import { ethers } from "ethers";
-import {
-  DS_PROXY_REGISTRY,
-  DS_GUARD_FACTORY
-} from "../constants/contractAddresses";
+import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
 
 // ABIs
 import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "flex-end",
+    margin: "20px 10px"
+  }
+}));
+
 function ConnectBtn() {
+  const classes = useStyles();
   const context = useWeb3Context();
 
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
@@ -89,10 +94,12 @@ function ConnectBtn() {
   return (
     <React.Fragment>
       {(context.active || (context.error && context.connectorName)) && (
-        <LogOut></LogOut>
+        <div className={classes.root}>
+          <LogOut></LogOut>
+        </div>
       )}
       {!context.active && (
-        <div>
+        <div className={classes.root}>
           <LogIn></LogIn>
         </div>
       )}
