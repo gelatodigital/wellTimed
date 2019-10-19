@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 
 // Import Components
-import IfInput from "./IfInput";
+import LockFrom from "./LockFrom";
+import LockTo from "./LockTo";
 import ConditionialSwitch from "./ConditionSwitch";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
@@ -25,18 +26,19 @@ import {
   DS_GUARD_FACTORY,
   example
 } from "../constants/contractAddresses";
-
-import {coins} from '../constants/coins'
 import { AbiCoder } from "ethers/utils";
 import { REPLACEMENT_UNDERPRICED } from "ethers/errors";
 
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
 import { borderColor } from "@material-ui/system";
-import Order from './orders';
+import Order from "./orders";
+import ApproveBtn from "./ApproveBtn";
+import ERC20Input from "./ERC20Input";
+import SwapTo from "./SwapTo";
 
 const style = makeStyles({
   card: {
-    margin: "50px",
+    margin: "50px"
   },
   arrow: {
     marginTop: "20px"
@@ -47,7 +49,14 @@ function Page() {
   const context = useWeb3Context();
   const classes = style();
   // State
-
+  // Activate the current ERC20 Token
+  const [erc20, setERC20] = React.useState(null);
+  const [activeCoins, setActivCoins] = React.useState({
+    lockTo: "",
+    lockfrom: "",
+    ERC20: "",
+    swapTo: ""
+  });
   // Used to display tx hash
   const [transactionHash, setTransactionHash] = React.useState(undefined);
   // Used for reacting to successfull txs
@@ -55,41 +64,11 @@ function Page() {
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
 
-  async function updateProxyStatus(newProxyStatus) {
+  function updateProxyStatus(newProxyStatus) {
     console.log(`Setting new Proxy Status in Page.js`);
     console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
   }
-
-  function getCorrectImageLink() {
-
-
-    const table1 = {}
-    const table2 = {}
-    coins[3].forEach(coin => {
-      table1[coin['symbol']] = coin
-    })
-    coins[1].forEach(coin => {
-      table2[coin['symbol']] = coin['logo']
-    })
-
-    const table3 = {}
-    for(let key in table1)
-    {
-      for(let key2 in table2)
-      {
-        if (key === key2)
-        {
-
-          table1[key]['logo'] = table2[key2]
-          table3[table1[key]['address']] = table1[key]
-        }
-      }
-
-    }
-    return table3
-  }
-
 
   async function test() {
     const signer = context.library.getSigner();
@@ -112,6 +91,15 @@ function Page() {
     });
   }
 
+  function activeAddress(address) {
+    setActivCoins({ ...activeCoins, ERC20: address });
+  }
+
+  const lockFrom = (coin) => {
+    setActivCoins({...activeCoins, lockFrom: coin})
+    console.log(coin);
+  }
+
   return (
     <React.Fragment>
       <ProxyProvider value={proxyStatus}>
@@ -119,17 +107,18 @@ function Page() {
         <h1>Swap tokens depending on conditions</h1>
         <Card className={classes.card} raised>
           <CardContent>
-            <IfInput></IfInput>
+            <LockFrom ficker={lockFrom}></LockFrom>
             <ConditionialSwitch></ConditionialSwitch>
-            <IfInput></IfInput>
+            <LockTo ></LockTo>
           </CardContent>
         </Card>
         <Icon>arrow_downward</Icon>
         <Card className={classes.card} raised>
           <CardContent>
-            <IfInput></IfInput>
+            <ERC20Input activeAddress={activeAddress}></ERC20Input>
+            <ApproveBtn></ApproveBtn>
             <Icon className={classes.arrow}>arrow_downward</Icon>
-            <IfInput></IfInput>
+            <SwapTo></SwapTo>
           </CardContent>
         </Card>
         <ActionBtn></ActionBtn>

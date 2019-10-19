@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import IfInput from "./IfInput";
+import IfInput from "./LockFrom";
 import ConditionialSwitch from "./ConditionSwitch";
 // web3 library
 import { ethers } from "ethers";

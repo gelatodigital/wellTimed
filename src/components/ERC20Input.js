@@ -34,9 +34,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function IfInput() {
+function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
+
 
   // State
 
@@ -61,6 +62,7 @@ function IfInput() {
 
   const userChoice = () => {
     if (state.coin) {
+      props.activeAddress(state.coin)
       return (
         <span className={classes.coins}>
           {state.coin.name}
@@ -140,4 +142,4 @@ function IfInput() {
   );
 }
 
-export default IfInput;
+export default ERC20Input;
