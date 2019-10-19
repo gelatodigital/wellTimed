@@ -10,7 +10,7 @@ import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
 import dsProxyABI from '../constants/ABIs/ds-proxy.json';
 
 // Import addresses
-import { addresses } from '../constants/contractAddresses';
+import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY } from '../constants/contractAddresses';
 import { AbiCoder } from 'ethers/utils';
 
 
@@ -18,6 +18,7 @@ function MyComponent() {
     const context = useWeb3Context();
 
     // State
+    console.log(context)
 
     // Used to display tx hash
     const [transactionHash, setTransactionHash] = React.useState(undefined);
@@ -45,7 +46,7 @@ function MyComponent() {
                 return (<button onClick={placeOrder}>Place Order</button>);
 
             default:
-                return (<button onClick={placeOrder}>Place Order</button>);
+                return (<button onClick={placeOrder}>Default</button>);
           }
 
     }
@@ -60,7 +61,7 @@ function MyComponent() {
     }
 
     function LogOut() {
-        checkIfUserHasProxy();
+        // checkIfUserHasProxy();
         return (
             <button onClick={() => {
                 context.unsetConnector()
@@ -89,7 +90,7 @@ function MyComponent() {
 
     async function checkIfUserHasProxy() {
         const signer = context.library.getSigner()
-        const proxyRegistryAddress = addresses['ds-proxy-registry']
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
         const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer)
         let proxyAddress = await proxyRegistryContract.proxies(context.account);
         if (proxyAddress === ethers.constants.AddressZero)
@@ -126,7 +127,7 @@ function MyComponent() {
     async function deployProxy() {
         console.log("Test 1")
         // const signer = context.library.getSigner()
-        // const dummyContractAddress = addresses['dummy']
+        // const dummyContractAddress = DS_PROXY_REGISTRY[context.networkId]
         // const dummyContract = new ethers.Contract(dummyContractAddress, dummyContractABI, signer);
         // // Get the current value
         // let currentValue = await dummyContract.counter();
@@ -144,7 +145,7 @@ function MyComponent() {
         console.log("Test 3")
     }
     // async function sendTxExample() {
-    //     const dummyContractAddress = addresses['dummy']
+    //     const dummyContractAddress = DS_PROXY_REGISTRY[context.networkId]
     //     const signer = context.library.getSigner();
     //     const dummyContract = new ethers.Contract(dummyContractAddress, dummyContractABI, signer);
     //     // Get the current value

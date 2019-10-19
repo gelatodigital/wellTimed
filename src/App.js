@@ -10,7 +10,7 @@ import MyComponent from './components/MyComponent'
 
 // const { InjectedConnector, NetworkOnlyConnector } = Connectors;
 const Infura = new NetworkOnlyConnector({ providerURL: process.env.REACT_APP_NETWORK_URL })
-const MetaMask = new InjectedConnector({ supportedNetworks: [1, 4] })
+const MetaMask = new InjectedConnector({ supportedNetworks: [1, 3, 4] })
 const connectors = {MetaMask, Infura}
 
 
