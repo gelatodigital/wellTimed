@@ -3,7 +3,7 @@ import Web3Provider from "web3-react";
 import InjectedConnector from "./InjectedConnector";
 import NetworkOnlyConnector from "./NetworkOnlyConnector";
 import "./App.css";
-import MyComponent from "./components/MyComponent";
+import Page from "./components/Page";
 import { MuiThemeProvider } from "@material-ui/core";
 
 import ConnectBtn from "./components/ConnectBtn";
@@ -25,8 +25,7 @@ function App() {
     <Web3Provider connectors={connectors} libraryName={"ethers.js"}>
       <div className="App">
         <MuiThemeProvider>
-          <ConnectBtn />
-          <MyComponent />
+          <Page />
         </MuiThemeProvider>
       </div>
     </Web3Provider>
