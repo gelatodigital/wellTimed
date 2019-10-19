@@ -58,11 +58,9 @@ function IfInput() {
     setModal({ ...state, open: false });
   };
 
-  const log = () => {};
 
   return (
     <div>
-      <button onClick={log}>sasa</button>
       <Input value={state.amountToLock} />
       <Button onClick={handleClickOpen}>Choose Coin</Button>
       <Dialog
