@@ -20,7 +20,7 @@ import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, example } from '../constants/contr
 import { AbiCoder } from 'ethers/utils';
 import { REPLACEMENT_UNDERPRICED } from 'ethers/errors';
 
-import { Icon } from "@material-ui/core";
+import { Icon, Button } from "@material-ui/core";
 
 
 function ActionBtn() {
@@ -46,17 +46,17 @@ function ActionBtn() {
     function CreateTransactButton() {
         switch(proxyStatus) {
             case 1:
-                return (<button onClick={deployProxy}>Create Account</button>);
+                return (<Button color='primary' onClick={deployProxy}>Create Account</Button>);
 
             case 2:
-                return (<button onClick={test}>Test</button>);
-                // return (<button onClick={setAuthority}>Whitelist our relayer</button>);
+                return (<Button color='primary' onClick={test}>Test</Button>);
+                // return (<button onClick={deployAndSetGuard}>Whitelist our relayer</button>);
 
             case 3:
-                return (<button onClick={placeOrder}>Place Order</button>);
+                return (<Button color='primary' onClick={placeOrder}>Place Order</Button>);
 
             default:
-                return (<button onClick={placeOrder}>Default</button>);
+                return (<Button color='primary' onClick={placeOrder}>Default</Button>);
           }
 
     }
