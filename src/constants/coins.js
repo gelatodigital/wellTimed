@@ -1,7 +1,3 @@
-const iconAPI = coin => {
-  return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${coin}/logo.png`;
-};
-
 export const coins = {
   1: [
     {

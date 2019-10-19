@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Input,
   Button,
@@ -13,11 +13,11 @@ import {
   MenuItem
 } from "@material-ui/core";
 import { coins } from "../constants/coins";
+import { useWeb3Context } from "web3-react";
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
-    flexWrap: "wrap",
     justifyContent: "center"
   },
   formControl: {
@@ -35,41 +35,73 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function IfInput() {
+  const context = useWeb3Context();
   const classes = useStyles();
 
   // State
 
-  const [state, setModal] = React.useState({
+  const [state, setState] = React.useState({
     open: false,
     coin: "",
+    amount: 0,
     availableCoins: coins
   });
 
   const handleChange = name => event => {
-    // setModal({ availableCoins: props.value });
-    setModal({ ...state, [name]: event.target.value || "" });
+    setState({ ...state, [name]: event.target.value || "" });
   };
 
   const handleClickOpen = () => {
-    setModal({ ...state, open: true });
+    setState({ ...state, open: true });
   };
 
   const handleClose = () => {
-    setModal({ ...state, open: false });
+    setState({ ...state, open: false });
   };
 
+  const userChoice = () => {
+    if (state.coin) {
+      return (
+        <span className={classes.coins}>
+          {state.coin.name}
+          <img
+            src={state.coin.logo()}
+            alt="coin logo"
+            className={classes.img}
+          />
+        </span>
+      );
+    } else {
+      return <span>Choose a coin</span>;
+    }
+  };
+
+  const handleAmount = name => event => {
+    setState({ ...state, [name]: event.target.value || "" });
+  };
 
   return (
-    <div>
-      <Input value={state.amountToLock} />
-      <Button onClick={handleClickOpen}>Choose Coin</Button>
+    <div className={classes.container}>
+      <Input
+        value={state.amount}
+        onChange={handleAmount("amount")}
+        type="number"
+        autoComplete="off"
+      />
+      <Button
+        color={state.coin ? "primary" : "secondary"}
+        onClick={handleClickOpen}
+      >
+        {" "}
+        {userChoice()}
+      </Button>
       <Dialog
         disableBackdropClick
         disableEscapeKeyDown
         open={state.open}
         onClose={handleClose}
       >
-        <DialogTitle>Choose coin from Dropdown</DialogTitle>
+        <DialogTitle>Choose coin from dropdown</DialogTitle>
         <DialogContent>
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
@@ -77,7 +109,11 @@ function IfInput() {
               <Select value={state.coin} onChange={handleChange("coin")}>
                 {state.availableCoins[1].map(coin => {
                   return (
-                    <MenuItem key={coin.id} value={coin.name} className={classes.coins}>
+                    <MenuItem
+                      key={coin.id}
+                      value={coin}
+                      className={classes.coins}
+                    >
                       {coin.name}
                       <img
                         className={classes.img}

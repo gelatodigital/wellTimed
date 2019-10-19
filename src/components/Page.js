@@ -29,10 +29,12 @@ import { AbiCoder } from "ethers/utils";
 import { REPLACEMENT_UNDERPRICED } from "ethers/errors";
 
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
+import { borderColor } from "@material-ui/system";
+import Order from './orders';
 
 const style = makeStyles({
   card: {
-    margin: "50px"
+    margin: "50px",
   },
   arrow: {
     marginTop: "20px"
@@ -83,7 +85,7 @@ function Page() {
       <ProxyProvider value={proxyStatus}>
         <ConnectBtn updateProxyStatus={updateProxyStatus} />
         <h1>Swap tokens depending on conditions</h1>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised>
           <CardContent>
             <IfInput></IfInput>
             <ConditionialSwitch></ConditionialSwitch>
@@ -91,7 +93,7 @@ function Page() {
           </CardContent>
         </Card>
         <Icon>arrow_downward</Icon>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised>
           <CardContent>
             <IfInput></IfInput>
             <Icon className={classes.arrow}>arrow_downward</Icon>
@@ -99,6 +101,7 @@ function Page() {
           </CardContent>
         </Card>
         <ActionBtn></ActionBtn>
+        <Order></Order>
       </ProxyProvider>
     </React.Fragment>
   );
