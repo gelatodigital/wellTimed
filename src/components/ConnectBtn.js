@@ -16,10 +16,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function ConnectBtn() {
+function ConnectBtn(props) {
   const classes = useStyles();
   const context = useWeb3Context();
 
+  const updateProxyStatus = props.updateProxyStatus
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
 
@@ -65,7 +66,7 @@ function ConnectBtn() {
       console.log(
         "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
       );
-      setProxyStatus(1);
+      updateProxyStatus(1)
       // Deploy Proxy
       // Deploy Guard
     } else {
@@ -82,11 +83,13 @@ function ConnectBtn() {
         console.log(
           "No guard contract found, please 1) deploy guard and 2) set as authority"
         );
-        setProxyStatus(2);
+        // setProxyStatus(2);
+        updateProxyStatus(2)
       } else {
         console.log(`Guard contract found - address: ${guardAddress}`);
         console.log("Set Guard as authority");
-        setProxyStatus(3);
+        updateProxyStatus(3)
+        // setProxyStatus(3);
       }
     }
   }
