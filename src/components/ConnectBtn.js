@@ -85,7 +85,6 @@ function ConnectBtn() {
       }
     }
   }
-  
 
   return (
     <React.Fragment>
