@@ -1,22 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import IfInput from "./IfInput";
 import ConditionialSwitch from "./ConditionSwitch";
 // web3 library
 import { ethers } from "ethers";
 // Context so we access the users account & provider
-import { useWeb3Context, Connectors } from "web3-react";
+import { useWeb3Context } from "web3-react";
 
-// Import ABIs
-import dummyContractABI from "../constants/ABIs/dummyContract.json";
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import dsProxyABI from "../constants/ABIs/ds-proxy.json";
-
-// Import addresses
-import {
-  DS_PROXY_REGISTRY,
-  DS_GUARD_FACTORY
-} from "../constants/contractAddresses";
-import { AbiCoder } from "ethers/utils";
 import { Icon } from "@material-ui/core";
 
 function MyComponent() {
@@ -38,49 +27,6 @@ function MyComponent() {
 
   // }, [])
 
-  function ActionButton() {
-    switch (proxyStatus) {
-      case 1:
-        return <button onClick={deployProxy}>Create Account</button>;
-
-      case 2:
-        return (
-          <button onClick={deployAndSetGuard}>Whitelist our relayer</button>
-        );
-
-      case 3:
-        return <button onClick={placeOrder}>Place Order</button>;
-
-      default:
-        return <button onClick={placeOrder}>Default</button>;
-    }
-  }
-
-  function LogIn() {
-    return (
-      <button
-        onClick={() => {
-          context.setFirstValidConnector(["MetaMask", "Infura"]);
-        }}
-      >
-        Connect Metamask
-      </button>
-    );
-  }
-
-  function LogOut() {
-    // checkIfUserHasProxy();
-    return (
-      <button
-        onClick={() => {
-          context.unsetConnector();
-        }}
-      >
-        Deactivate
-      </button>
-    );
-  }
-
   function sendDummyTransaction() {
     const signer = context.library.getSigner();
     console.log("Sending Tx");
@@ -97,45 +43,6 @@ function MyComponent() {
         setTransactionHash(hash);
         setWaitingForTX(false);
       });
-  }
-
-  async function checkIfUserHasProxy() {
-    const signer = context.library.getSigner();
-    const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-    const proxyRegistryContract = new ethers.Contract(
-      proxyRegistryAddress,
-      proxyRegistryABI,
-      signer
-    );
-    let proxyAddress = await proxyRegistryContract.proxies(context.account);
-    if (proxyAddress === ethers.constants.AddressZero) {
-      console.log(
-        "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
-      );
-      setProxyStatus(1);
-      // Deploy Proxy
-      // Deploy Guard
-    } else {
-      console.log(`Proxy exists - Address: ${proxyAddress}`);
-      // fetch proxy
-      const proxyContract = new ethers.Contract(
-        proxyAddress,
-        dsProxyABI,
-        signer
-      );
-      // Check if proxy has guard / authority
-      let guardAddress = await proxyContract.authority();
-      if (guardAddress === ethers.constants.AddressZero) {
-        console.log(
-          "No guard contract found, please 1) deploy guard and 2) set as authority"
-        );
-        setProxyStatus(2);
-      } else {
-        console.log(`Guard contract found - address: ${guardAddress}`);
-        console.log("Set Guard as authority");
-        setProxyStatus(3);
-      }
-    }
   }
 
   async function deployProxy() {
