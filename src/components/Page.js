@@ -59,7 +59,7 @@ function Page() {
     setProxyStatus(newProxyStatus);
   }
 
-  function sortThatShit() {
+  function getCorrectImageLink() {
 
 
     const table1 = {}
@@ -78,7 +78,7 @@ function Page() {
       {
         if (key === key2)
         {
-          console.log(table2[key2])
+
           table1[key]['logo'] = table2[key2]
           table3[table1[key]['address']] = table1[key]
         }
@@ -86,12 +86,11 @@ function Page() {
 
     }
 
-    console.log(table3)
+    return table3
 
 
   }
 
-  sortThatShit()
 
   async function test() {
     const signer = context.library.getSigner();
