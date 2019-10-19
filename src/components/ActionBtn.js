@@ -50,7 +50,7 @@ function ActionBtn() {
 
             case 2:
                 return (<button onClick={test}>Test</button>);
-                // return (<button onClick={deployAndSetGuard}>Whitelist our relayer</button>);
+                // return (<button onClick={setAuthority}>Whitelist our relayer</button>);
 
             case 3:
                 return (<button onClick={placeOrder}>Place Order</button>);
@@ -89,7 +89,6 @@ function ActionBtn() {
         })
     }
 
-
     async function deployProxy() {
         console.log("Deploying new Proxy for user")
         setWaitingForTX(true)
@@ -122,9 +121,21 @@ function ActionBtn() {
 
     }
 
-    async function deployAndSetGuard() {
+
+    async function setAuthority(guardAddress) {
         console.log("Test 2")
+        console.log("Deploying new Proxy for user")
+        setWaitingForTX(true)
+        const signer = context.library.getSigner()
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
+        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+        const proxyAddress = await proxyRegistryContract.proxies(context.account)
+        const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+
+        // Fetch Guard contract
+        proxyContract.setAuthority(guardAddress)
     }
+
 
     async function placeOrder() {
         console.log("Test 3")
@@ -132,7 +143,6 @@ function ActionBtn() {
 
     return (
         <React.Fragment>
-            <p>Maxx Stinger</p>
             <ShowProxyStatus></ShowProxyStatus>
             { (context.active || (context.error && context.connectorName)) &&
                 <div>
