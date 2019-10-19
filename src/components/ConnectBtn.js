@@ -79,9 +79,11 @@ function ConnectBtn(props) {
       );
       // Check if proxy has guard / authority
       let guardAddress = await proxyContract.authority();
+      // Also check past events if user deployed guard at some point
+
       if (guardAddress === ethers.constants.AddressZero) {
         console.log(
-          "No guard contract found, please 1) deploy guard and 2) set as authority"
+          "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
         );
         // setProxyStatus(2);
         updateProxyStatus(2)
