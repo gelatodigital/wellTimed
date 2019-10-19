@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Input,
   Button,
@@ -9,8 +9,10 @@ import {
   FormControl,
   InputLabel,
   Select,
-  DialogActions
+  DialogActions,
+  MenuItem
 } from "@material-ui/core";
+import { coins } from "../constants/coins";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,35 +23,30 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120
+  },
+  img: {
+    width: "24px",
+    height: "24px"
+  },
+  coins: {
+    display: "flex",
+    justifyContent: "space-between"
   }
 }));
 
 function IfInput() {
-  const kyberAPIEndpoint = "https://api.kyber.network/currencies";
-
-  const iconAPI = coin => {
-    return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${coin}/logo.png`;
-  };
-  async function allCoins() {
-    await fetch(kyberAPIEndpoint)
-      .then(result => result.json())
-      .then(val => setModal({ ...state, availableCoins: val }));
-  }
-
   const classes = useStyles();
 
   // State
 
   const [state, setModal] = React.useState({
     open: false,
-    coinToLock: "",
-    coinFromLock: "",
-    availableCoins: [],
-    amountToLock: 0,
-    amountFromLock: 0
+    coin: "",
+    availableCoins: coins
   });
 
   const handleChange = name => event => {
+    // setModal({ availableCoins: props.value });
     setModal({ ...state, [name]: event.target.value || "" });
   };
 
@@ -61,8 +58,11 @@ function IfInput() {
     setModal({ ...state, open: false });
   };
 
+  const log = () => {};
+
   return (
     <div>
+      <button onClick={log}>sasa</button>
       <Input value={state.amountToLock} />
       <Button onClick={handleClickOpen}>Choose Coin</Button>
       <Dialog
@@ -76,12 +76,20 @@ function IfInput() {
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
-              <Select
-                native
-                value={state.coin}
-                onChange={handleChange("coinToLock")}
-                input={<Input id="coin-input" />}
-              ></Select>
+              <Select value={state.coin} onChange={handleChange("coin")}>
+                {state.availableCoins[1].map(coin => {
+                  return (
+                    <MenuItem key={coin.id} value={coin.name} className={classes.coins}>
+                      {coin.name}
+                      <img
+                        className={classes.img}
+                        src={coin.logo()}
+                        alt="coin logo"
+                      />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </form>
         </DialogContent>

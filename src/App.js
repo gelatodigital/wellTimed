@@ -3,8 +3,8 @@ import Web3Provider from "web3-react";
 import InjectedConnector from "./InjectedConnector";
 import NetworkOnlyConnector from "./NetworkOnlyConnector";
 import "./App.css";
-import MyComponent from "./components/MyComponent";
 import { MuiThemeProvider, createMuiTheme, Container } from "@material-ui/core";
+import Page from "./components/Page";
 
 import ConnectBtn from "./components/ConnectBtn";
 import { green, pink, red } from "@material-ui/core/colors";
@@ -33,10 +33,9 @@ function App() {
   return (
     <Web3Provider connectors={connectors} libraryName={"ethers.js"}>
       <div className="App">
-        <Container maxWidth="m">
+        <Container maxWidth="md">
           <MuiThemeProvider theme={theme}>
-            <ConnectBtn />
-            <MyComponent />
+            <Page />
           </MuiThemeProvider>
         </Container>
       </div>
