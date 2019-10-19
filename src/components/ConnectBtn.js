@@ -1,5 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
+
+// Contexts
 import { useWeb3Context } from "web3-react";
+import ProxyContext from '../contexts/ProxyContext'
+
 import { Button, makeStyles } from "@material-ui/core";
 import { ethers } from "ethers";
 import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
@@ -19,10 +23,10 @@ const useStyles = makeStyles(theme => ({
 function ConnectBtn(props) {
   const classes = useStyles();
   const context = useWeb3Context();
+  const proxyStatus = useContext(ProxyContext)
 
   const updateProxyStatus = props.updateProxyStatus
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-  const [proxyStatus, setProxyStatus] = React.useState(0);
 
   function LogIn() {
     return (
@@ -54,6 +58,7 @@ function ConnectBtn(props) {
   }
 
   async function checkIfUserHasProxy() {
+    console.log("checkIfUserHasProxy")
     const signer = context.library.getSigner();
     const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
     const proxyRegistryContract = new ethers.Contract(
@@ -62,7 +67,7 @@ function ConnectBtn(props) {
       signer
     );
     let proxyAddress = await proxyRegistryContract.proxies(context.account);
-    if (proxyAddress === ethers.constants.AddressZero) {
+    if (proxyAddress === ethers.constants.AddressZero && proxyStatus !== 3) {
       console.log(
         "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
       );
@@ -77,19 +82,29 @@ function ConnectBtn(props) {
         dsProxyABI,
         signer
       );
+
       // Check if proxy has guard / authority
       let guardAddress = await proxyContract.authority();
-      if (guardAddress === ethers.constants.AddressZero) {
+      // Also check past events if user deployed guard at some point
+
+      if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3) {
         console.log(
-          "No guard contract found, please 1) deploy guard and 2) set as authority"
+          "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
         );
         // setProxyStatus(2);
         updateProxyStatus(2)
-      } else {
+      }
+      else if (guardAddress === ethers.constants.AddressZero  && proxyStatus === 3)
+      {
+        console.log(`Guard already deployed, set Authority`)
+        return
+      }
+      else
+      {
         console.log(`Guard contract found - address: ${guardAddress}`);
-        console.log("Set Guard as authority");
-        updateProxyStatus(3)
-        // setProxyStatus(3);
+        console.log("Purchase!");
+        updateProxyStatus(4)
+
       }
     }
   }
