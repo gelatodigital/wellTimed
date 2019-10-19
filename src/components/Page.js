@@ -25,6 +25,8 @@ import {
   DS_GUARD_FACTORY,
   example
 } from "../constants/contractAddresses";
+
+import {coins} from '../constants/coins'
 import { AbiCoder } from "ethers/utils";
 import { REPLACEMENT_UNDERPRICED } from "ethers/errors";
 
@@ -56,6 +58,36 @@ function Page() {
     console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
   }
+
+  function getCorrectImageLink() {
+
+
+    const table1 = {}
+    const table2 = {}
+    coins[3].forEach(coin => {
+      table1[coin['symbol']] = coin
+    })
+    coins[1].forEach(coin => {
+      table2[coin['symbol']] = coin['logo']
+    })
+
+    const table3 = {}
+    for(let key in table1)
+    {
+      for(let key2 in table2)
+      {
+        if (key === key2)
+        {
+
+          table1[key]['logo'] = table2[key2]
+          table3[table1[key]['address']] = table1[key]
+        }
+      }
+
+    }
+    return table3
+  }
+
 
   async function test() {
     const signer = context.library.getSigner();
