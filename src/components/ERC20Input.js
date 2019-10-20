@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Input,
   Button,
@@ -12,8 +12,9 @@ import {
   DialogActions,
   MenuItem
 } from "@material-ui/core";
-import { coins } from "../constants/coins";
 import { useWeb3Context } from "web3-react";
+import CoinContext from "../contexts/CoinContext";
+import { getCorrectImageLink } from '../helpers';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -34,10 +35,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function ERC20Input(props) {
+function ERC20Input() {
   const context = useWeb3Context();
   const classes = useStyles();
-
+  const coinContext = useContext(CoinContext);
 
   // State
 
@@ -45,11 +46,12 @@ function ERC20Input(props) {
     open: false,
     coin: "",
     amount: 0,
-    availableCoins: coins
+    availableCoins: Object.values(getCorrectImageLink())
   });
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
+    coinContext.ERC20 = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -62,12 +64,11 @@ function ERC20Input(props) {
 
   const userChoice = () => {
     if (state.coin) {
-      props.activeAddress(state.coin)
       return (
         <span className={classes.coins}>
           {state.coin.name}
           <img
-            src={state.coin.logo()}
+            src={state.coin.logo(state.coin.mainnet)}
             alt="coin logo"
             className={classes.img}
           />
@@ -109,7 +110,7 @@ function ERC20Input(props) {
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
               <Select value={state.coin} onChange={handleChange("coin")}>
-                {state.availableCoins[1].map(coin => {
+                {state.availableCoins.map(coin => {
                   return (
                     <MenuItem
                       key={coin.id}
@@ -119,7 +120,7 @@ function ERC20Input(props) {
                       {coin.name}
                       <img
                         className={classes.img}
-                        src={coin.logo()}
+                        src={coin.logo(coin.mainnet)}
                         alt="coin logo"
                       />
                     </MenuItem>

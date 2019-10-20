@@ -7,6 +7,8 @@ import ConditionialSwitch from "./ConditionSwitch";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
 
+import CoinContext, { CoinProvider } from "../contexts/CoinContext";
+
 // Import ContextParents
 import { ProxyProvider } from "../contexts/ProxyContext";
 
@@ -53,7 +55,7 @@ function Page() {
   const [erc20, setERC20] = React.useState(null);
   const [activeCoins, setActivCoins] = React.useState({
     lockTo: "",
-    lockfrom: "",
+    LockFrom: "",
     ERC20: "",
     swapTo: ""
   });
@@ -91,39 +93,31 @@ function Page() {
     });
   }
 
-  function activeAddress(address) {
-    setActivCoins({ ...activeCoins, ERC20: address });
-  }
-
-  const lockFrom = (coin) => {
-    console.log("Page: LogForm")
-    setActivCoins({...activeCoins, lockFrom: coin})
-    console.log(coin);
-  }
-
   return (
     <React.Fragment>
       <ProxyProvider value={proxyStatus}>
-        <ConnectBtn updateProxyStatus={updateProxyStatus} />
-        <h1>Swap tokens depending on conditions</h1>
-        <Card className={classes.card} raised>
-          <CardContent>
-            <LockFrom lockFrom={lockFrom}></LockFrom>
-            <ConditionialSwitch></ConditionialSwitch>
-            <LockTo ></LockTo>
-          </CardContent>
-        </Card>
-        <Icon>arrow_downward</Icon>
-        <Card className={classes.card} raised>
-          <CardContent>
-            <ERC20Input activeAddress={activeAddress}></ERC20Input>
-            <ApproveBtn></ApproveBtn>
-            <Icon className={classes.arrow}>arrow_downward</Icon>
-            <SwapTo></SwapTo>
-          </CardContent>
-        </Card>
-        <ActionBtn updateProxyStatus={updateProxyStatus}></ActionBtn>
-        <Order></Order>
+        <CoinProvider value={activeCoins}>
+          <ConnectBtn updateProxyStatus={updateProxyStatus} />
+          <h1>Swap tokens depending on conditions</h1>
+          <Card className={classes.card} raised>
+            <CardContent>
+              <LockFrom></LockFrom>
+              <ConditionialSwitch></ConditionialSwitch>
+              <LockTo></LockTo>
+            </CardContent>
+          </Card>
+          <Icon>arrow_downward</Icon>
+          <Card className={classes.card} raised>
+            <CardContent>
+              <ERC20Input></ERC20Input>
+              <ApproveBtn></ApproveBtn>
+              <Icon className={classes.arrow}>arrow_downward</Icon>
+              <SwapTo></SwapTo>
+            </CardContent>
+          </Card>
+          <ActionBtn updateProxyStatus={updateProxyStatus}></ActionBtn>
+          <Order></Order>
+        </CoinProvider>
       </ProxyProvider>
     </React.Fragment>
   );
