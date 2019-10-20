@@ -1,6 +1,10 @@
 import { ethers } from "ethers";
 import ERC20_ABI from "../constants/ABIs/erc20.json";
 import {coins} from '../constants/coins'
+import Web3 from 'web3'
+const web3 = new Web3(Web3.givenProvider);
+
+
 
 // get the token balance of an address
 export async function getTokenBalance(tokenAddress, signer, signerAddress) {
@@ -35,4 +39,42 @@ export function getCorrectImageLink() {
     }
   }
   return table3;
+}
+
+export async function getEncodedFunction() {
+
+    const blockNumber = await web3.eth.getBlockNumber();
+    const block = await web3.eth.getBlock(blockNumber);
+    const timestamp = block.timestamp;
+
+
+    let triggerPayload = web3.eth.abi.encodeFunctionCall(
+        {
+          name: "fired(uint256)",
+          type: "function",
+          inputs: [
+            {
+              type: "uint256",
+              name: "_timestamp"
+            }
+          ]
+        },
+        [ timestamp ]
+      );
+
+
+      // Encode Action
+
+    let actionPayload = web3.eth.abi.encodeFunctionCall(
+        {
+          name: "action()",
+          type: "function",
+          inputs: []
+        },
+        []
+
+    );
+
+    return [triggerPayload, actionPayload]
+
 }

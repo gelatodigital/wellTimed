@@ -14,10 +14,23 @@ export const DS_GUARD_FACTORY = {
 
 export const GELATO_CORE = {
     1: '0x0',
-    3: '0x329B9f3A9522BfCd92f1FA9d6571C404B9dBa5b2',
+    3: '0x49A791153dbEe3fBc081Ce159d51C70A89323e73',
     4: '0x0',
     42: '0x0'
 }
+
+export const TRIGGER = {
+    3: '0xE0397A466E97363f759c00fB4c4e5cF6bbF5fEa7'
+}
+
+export const ACTION = {
+    3: '0x5a2b97997934aa2113CB289BF47006B55eC7d461'
+}
+
+export const EXECUTOR = {
+    3: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72'
+}
+
 
 export const example = {
     'dummy2': "0xf1c13889924609f102D359Ca41ABaB9AEe072C77",

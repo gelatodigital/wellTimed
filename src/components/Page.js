@@ -37,6 +37,7 @@ import Order from "./orders";
 import ApproveBtn from "./ApproveBtn";
 import ERC20Input from "./ERC20Input";
 import SwapTo from "./SwapTo";
+import Encoder from './Encoder'
 
 const style = makeStyles({
   card: {

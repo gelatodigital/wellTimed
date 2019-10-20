@@ -15,9 +15,12 @@ import dsProxyABI from '../constants/ABIs/ds-proxy.json';
 import dummyABI from '../constants/ABIs/dummyContract.json'
 import gelatoCoreABI from '../constants/ABIs/gelatoCore.json'
 
+// import helpers
+import { getEncodedFunction } from '../helpers'
+
 
 // Import addresses
-import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, example } from '../constants/contractAddresses';
+import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, ACTION, EXECUTOR } from '../constants/contractAddresses';
 import { AbiCoder } from 'ethers/utils';
 
 import { Icon, Button } from "@material-ui/core";
@@ -51,7 +54,7 @@ function ActionBtn(props) {
 
             case 2:
                 // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button color='primary' onClick={deployAndSetGuard}>Create Account2</Button>);
+                return (<Button color='primary' onClick={deployAndSetGuard}>Connect your Proxy</Button>);
 
             case 3:
                 return (<Button color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
@@ -60,7 +63,7 @@ function ActionBtn(props) {
                 return (<Button color='primary' onClick={placeOrder}>Place Order</Button>);
 
             default:
-                return (<Button color='primary' onClick={placeOrder}>Default</Button>);
+                return (<Button color='primary' >Place Order</Button>);
           }
 
     }
@@ -68,30 +71,12 @@ function ActionBtn(props) {
     function ShowProxyStatus() {
         return (
             <div>
-                <h1>ProxyStatus</h1>
+                <h1>Account Status</h1>
                 <h1>{proxyStatus}</h1>
             </div>
         )
     }
 
-
-
-    async function test() {
-
-
-        const signer = context.library.getSigner()
-        const dummyContract = new ethers.Contract(example['dummy'], dummyABI, signer)
-        const dummyTransactionPromise = dummyContract.increment();
-
-        dummyTransactionPromise.then(function(txReceipt) {
-            console.log(txReceipt['hash'])
-            signer.provider.waitForTransaction(txReceipt['hash']).then(function(transaction) {
-                // console.log('Transaction Mined: ' + transaction.hash);
-                console.log(transaction);
-                console.log("mined")
-            });
-        })
-    }
 
     async function devirginize() {
         console.log("Deploying new Proxy for user")
@@ -108,6 +93,7 @@ function ActionBtn(props) {
             console.log(`New Value: ${newValue}`)
             guardAddress = newValue
             setGuardAddress(guardAddress)
+            localStorage.setItem('guardAddress', guardAddress)
             console.log(event)
         })
 
@@ -154,6 +140,7 @@ function ActionBtn(props) {
         gelatoCoreContract.on("LogGuard", (_guardAddress) => {
             setGuardAddress(_guardAddress)
             console.log(`Guard Address: ${_guardAddress}`)
+            localStorage.setItem('guardAddress', guardAddress)
         })
         // Devirginize user
         gelatoCoreContract.guard()
@@ -162,19 +149,6 @@ function ActionBtn(props) {
                 console.log("Guard successfully deployed")
                 setWaitingForTX(false)
                 updateProxyStatus(3)
-                // const proxyAddress = await proxyRegistryContract.proxies(context.account)
-                // console.log(`Deployed Proxy Address: ${proxyAddress}`)
-                // console.log("Transaction:")
-                // console.log(tx)
-                // if(proxyAddress !== ethers.constants.AddressZero)
-                // {
-                //     const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
-                //     let proxyOwner = await proxyContract.owner()
-                //     console.log(`Proxy Owner: ${proxyOwner}`)
-
-                // } else {
-                //     console.log("Proxy not found")
-                // }
             })
         }, (error) => {
             console.log("Sorry")
@@ -193,11 +167,13 @@ function ActionBtn(props) {
 
         const proxyAddress = await proxyRegistryContract.proxies(context.account)
         const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+        let guardAddressCopy = guardAddress
+        if (guardAddressCopy === undefined) {guardAddressCopy = localStorage.getItem('guardAddress')}
 
-        console.log(`Setting Guard ${guardAddress} as authority for Proxy: ${proxyAddress}`)
+        console.log(`Setting Guard ${guardAddressCopy} as authority for Proxy: ${proxyAddress}`)
         setWaitingForTX(true)
 
-        proxyContract.setAuthority(guardAddress)
+        proxyContract.setAuthority(guardAddressCopy)
         .then(function(txReceipt) {
             signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
                 console.log("Authority successfully setted")
@@ -212,12 +188,74 @@ function ActionBtn(props) {
 
 
     async function placeOrder() {
-        console.log("Test 3")
+        // Prepayment => call getMintingDepositPayable(_action, _selectedExecutor)
+        setWaitingForTX(true)
+        const signer = context.library.getSigner()
+        const gelatoCoreAddress = GELATO_CORE[context.networkId]
+        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+
+        const action = ACTION[context.networkId]
+        const trigger = TRIGGER[context.networkId]
+        const executor = EXECUTOR[context.networkId]
+
+
+        let prepayment = await gelatoCoreContract.getMintingDepositPayable(action, executor)
+        console.log(`Needed Prepayment: ${prepayment}`)
+
+        // Get encoded trigger and action payload + addresses
+        const array = await getEncodedFunction()
+        const triggerPayload = array[0]
+        const actionPayload = array[1]
+        console.log(`
+            TriggerPayload: ${triggerPayload}
+            ActionPayload: ${actionPayload}`)
+        // console.log(`actionPayload: ${actionPayload}`)
+
+
+        // Send Minting TX
+        /*
+        mintExecutionClaim(address _trigger,
+            bytes calldata _specificTriggerParams,
+            address _action,
+            bytes calldata _specificActionParams,
+            address payable _selectedExecutor
+        */
+
+        let overrides = {
+
+            // The maximum units of gas for the transaction to use
+            // gasLimit: 23000,
+
+            // The price (in wei) per unit of gas
+            gasPrice: ethers.utils.parseUnits('3.0', 'gwei'),
+
+            // The nonce to use in the transaction
+            // nonce: 123,
+
+            // The amount to send with the transaction (i.e. msg.value)
+            value: prepayment,
+
+            // The chain ID (or network ID) to use
+            // chainId: 3
+
+        };
+
+        gelatoCoreContract.mintExecutionClaim(trigger, triggerPayload, action, actionPayload, executor, overrides)
+        .then( function(txReceipt) {
+            console.log("waiting for tx to get mined ...")
+            signer.provider.waitForTransaction(txReceipt['hash'])
+            .then(async function(tx) {
+                    console.log("Execution Claim successfully minted")
+                    setWaitingForTX(false)
+                    console.log(tx)
+            })
+        })
+
     }
 
     return (
         <React.Fragment>
-            <ShowProxyStatus></ShowProxyStatus>
+            {/* <ShowProxyStatus></ShowProxyStatus> */}
             { (context.active || (context.error && context.connectorName)) &&
                 <div>
 
@@ -231,6 +269,17 @@ function ActionBtn(props) {
                         <p>Tx Hash: {transactionHash}</p>
                     }
                 </div>
+            }
+
+            { !context.active &&
+                <Button
+                    color="primary"
+                    onClick={() => {
+                    context.setFirstValidConnector(["MetaMask", "Infura"]);
+                    }}
+                >
+                    Connect Metamask
+                </Button>
             }
         </React.Fragment>
     )
