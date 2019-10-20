@@ -63,7 +63,7 @@ function ApproveBtn() {
     }
   }
 
-  return <div color="primary">{userNeedToApprove()}</div>;
+  return <div>{userNeedToApprove()}</div>;
 }
 
 export default ApproveBtn;

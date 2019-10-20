@@ -8,7 +8,8 @@ const CoinContext = React.createContext({
     bigger: true,
     amountLockFrom: 0,
     amountLockTo: 0,
-    amountSwapTo: 0
+    amountSwapTo: 0,
+    amountERC20: 0
 })
 
 export const CoinProvider = CoinContext.Provider

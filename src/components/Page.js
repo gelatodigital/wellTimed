@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 
 // Import Components
 import LockFrom from "./LockFrom";
@@ -50,6 +50,7 @@ const style = makeStyles({
 function Page() {
   const context = useWeb3Context();
   const classes = style();
+  const coinContext = useContext(CoinContext);
   // State
   // Activate the current ERC20 Token
   const [erc20, setERC20] = React.useState(null);

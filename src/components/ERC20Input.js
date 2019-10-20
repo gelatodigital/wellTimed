@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
-import { getCorrectImageLink } from '../helpers';
+import { getCorrectImageLink } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -81,6 +81,7 @@ function ERC20Input() {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
+    coinContext.amountERC20 = event.target.value;
   };
 
   return (
