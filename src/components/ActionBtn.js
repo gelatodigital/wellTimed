@@ -51,7 +51,7 @@ function ActionBtn(props) {
 
             case 2:
                 // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button color='primary' onClick={deployAndSetGuard}>Create Account2</Button>);
+                return (<Button color='primary' onClick={deployAndSetGuard}>Connect your Proxy</Button>);
 
             case 3:
                 return (<Button color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
@@ -75,24 +75,6 @@ function ActionBtn(props) {
     }
 
 
-
-    async function test() {
-
-
-        const signer = context.library.getSigner()
-        const dummyContract = new ethers.Contract(example['dummy'], dummyABI, signer)
-        const dummyTransactionPromise = dummyContract.increment();
-
-        dummyTransactionPromise.then(function(txReceipt) {
-            console.log(txReceipt['hash'])
-            signer.provider.waitForTransaction(txReceipt['hash']).then(function(transaction) {
-                // console.log('Transaction Mined: ' + transaction.hash);
-                console.log(transaction);
-                console.log("mined")
-            });
-        })
-    }
-
     async function devirginize() {
         console.log("Deploying new Proxy for user")
         setWaitingForTX(true)
@@ -108,6 +90,7 @@ function ActionBtn(props) {
             console.log(`New Value: ${newValue}`)
             guardAddress = newValue
             setGuardAddress(guardAddress)
+            localStorage.setItem('guardAddress', guardAddress)
             console.log(event)
         })
 
@@ -154,6 +137,7 @@ function ActionBtn(props) {
         gelatoCoreContract.on("LogGuard", (_guardAddress) => {
             setGuardAddress(_guardAddress)
             console.log(`Guard Address: ${_guardAddress}`)
+            localStorage.setItem('guardAddress', guardAddress)
         })
         // Devirginize user
         gelatoCoreContract.guard()
@@ -162,19 +146,6 @@ function ActionBtn(props) {
                 console.log("Guard successfully deployed")
                 setWaitingForTX(false)
                 updateProxyStatus(3)
-                // const proxyAddress = await proxyRegistryContract.proxies(context.account)
-                // console.log(`Deployed Proxy Address: ${proxyAddress}`)
-                // console.log("Transaction:")
-                // console.log(tx)
-                // if(proxyAddress !== ethers.constants.AddressZero)
-                // {
-                //     const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
-                //     let proxyOwner = await proxyContract.owner()
-                //     console.log(`Proxy Owner: ${proxyOwner}`)
-
-                // } else {
-                //     console.log("Proxy not found")
-                // }
             })
         }, (error) => {
             console.log("Sorry")
@@ -193,11 +164,13 @@ function ActionBtn(props) {
 
         const proxyAddress = await proxyRegistryContract.proxies(context.account)
         const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+        let guardAddressCopy = guardAddress
+        if (guardAddressCopy === undefined) {guardAddressCopy = localStorage.getItem('guardAddress')}
 
-        console.log(`Setting Guard ${guardAddress} as authority for Proxy: ${proxyAddress}`)
+        console.log(`Setting Guard ${guardAddressCopy} as authority for Proxy: ${proxyAddress}`)
         setWaitingForTX(true)
 
-        proxyContract.setAuthority(guardAddress)
+        proxyContract.setAuthority(guardAddressCopy)
         .then(function(txReceipt) {
             signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
                 console.log("Authority successfully setted")

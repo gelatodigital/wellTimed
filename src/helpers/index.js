@@ -35,3 +35,18 @@ export function getCorrectImageLink() {
   }
   return table3;
 }
+
+export function encodeFunction() {
+  let num1 = 1;
+  let num2 = 2;
+  let byt = ethers.utils.defaultAbiCoder.encode(
+    [
+        'uint256', 'uint256'
+    ],
+    [
+        num1, num2
+    ]
+  );
+
+
+}

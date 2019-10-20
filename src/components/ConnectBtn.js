@@ -86,18 +86,26 @@ function ConnectBtn(props) {
       // Check if proxy has guard / authority
       let guardAddress = await proxyContract.authority();
       // Also check past events if user deployed guard at some point
+      const localStorageGuard = localStorage.getItem('guardAddress')
+      console.log(`Local Storage: ${localStorageGuard}`)
 
-      if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3) {
+      if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard === null) {
         console.log(
           "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
         );
         // setProxyStatus(2);
         updateProxyStatus(2)
       }
+      else if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard !== null)
+      {
+        console.log(`Guard already deployed, set Authority`)
+        updateProxyStatus(3)
+
+      }
       else if (guardAddress === ethers.constants.AddressZero  && proxyStatus === 3)
       {
         console.log(`Guard already deployed, set Authority`)
-        return
+        updateProxyStatus(3)
       }
       else
       {
