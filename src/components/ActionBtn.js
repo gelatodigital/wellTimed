@@ -204,7 +204,7 @@ function ActionBtn(props) {
         const triggerSellAmount = coins['amountTriggerFrom']
         const triggerBuyToken =  coins['triggerTo']['address']
         const triggerBuyAmount = coins['amountTriggerTo']
-        const isBigger = coins['bigger']
+        const isBigger = coins['bigger'] 
 
         // Action vars
         const actionSellToken = coins['actionFrom']['address']
@@ -212,6 +212,8 @@ function ActionBtn(props) {
         const actionBuyToken = coins['actionTo']['address']
         const actionBuyAmount = coins['amountActionTo']
         const minAmount = 0;
+
+        if( triggerSellToken === ""|| coins['actionTo'] === ""|| coins['actionFrom'] === ""|| isBigger === "") {return}
 
         console.log(`
         Execution Claim Overview:
