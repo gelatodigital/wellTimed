@@ -42,7 +42,7 @@ function ConditionSwitch() {
   return (
     <form className={classes.root} autoComplete="off">
       <FormControl className={classes.formControl}>
-        <InputLabel>Set condition</InputLabel>
+        {/* <InputLabel>Set condition</InputLabel> */}
         <Select value={values.bigger} onChange={handleChange}>
           <MenuItem value={true}>is greater or equal to</MenuItem>
           <MenuItem value={false}>is smaller or equal to</MenuItem>

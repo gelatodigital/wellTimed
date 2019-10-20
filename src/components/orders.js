@@ -10,12 +10,6 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [createData("PenisAction", "Muschi", "asas", "Pending", 4.3)];
-
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -43,8 +37,8 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: "if", numeric: false, disablePadding: false, label: "If" },
-  { id: "swap", numeric: true, disablePadding: false, label: "Swap" },
+  { id: "if", numeric: false, disablePadding: false, label: "If This" },
+  { id: "swap", numeric: true, disablePadding: false, label: "Then Swap" },
   { id: "created", numeric: true, disablePadding: false, label: "Created" },
   { id: "status", numeric: false, disablePadding: false, label: "Status" },
   { id: "action", numeric: false, disablePadding: false, label: "Action" }
@@ -130,6 +124,13 @@ export default function Order() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  const rows = [createData("10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel")];
+
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";

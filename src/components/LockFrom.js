@@ -77,7 +77,14 @@ function LockFrom() {
         </span>
       );
     } else {
-      return <span>Choose a coin</span>;
+      return (<span className={classes.coins}>
+      {"Kyber Network"}
+      <img
+        src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"}
+        alt="coin logo"
+        className={classes.img}
+      />
+    </span>)
     }
   };
 
@@ -93,7 +100,7 @@ function LockFrom() {
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="Set the amount"
+        placeholder="100"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}

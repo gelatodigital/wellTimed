@@ -89,10 +89,11 @@ function SwapTo(props) {
   return (
     <div className={classes.container}>
       <Input
+        disabled
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="Set the amount"
+        placeholder="MAX"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}
