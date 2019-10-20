@@ -8,8 +8,8 @@ export const coins = {
       id: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       reserves_src: ["0x57f8160e1c59D16C01BbE181fD94db4E56b60495"],
       reserves_dest: ["0x57f8160e1c59D16C01BbE181fD94db4E56b60495"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -18,8 +18,8 @@ export const coins = {
       address: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
       decimals: 18,
       id: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       },
       reserves_src: [
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
@@ -56,8 +56,8 @@ export const coins = {
         "0x7a3370075a54B187d7bD5DceBf0ff2B5552d4F7D",
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -76,8 +76,8 @@ export const coins = {
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
         "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -88,8 +88,8 @@ export const coins = {
       id: "0x744d70fdbe2ba4cf95131626614a1763df805b9e",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -100,8 +100,8 @@ export const coins = {
       id: "0xbf2179859fc6d5bee9bf9158632dc51678a4100e",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -112,8 +112,8 @@ export const coins = {
       id: "0x595832f8fc6bf59c85c527fec3740a1b7a361269",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -124,8 +124,8 @@ export const coins = {
       id: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -144,8 +144,8 @@ export const coins = {
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
         "0x5D154c145Db2ca90B8aB5e8Fe3E716AfA4AB7Ff0"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -162,8 +162,8 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -180,8 +180,8 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -192,8 +192,8 @@ export const coins = {
       id: "0x1a7a8bd9106f2b8d977e08582dc7d24c723ab0db",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -210,8 +210,8 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -222,8 +222,8 @@ export const coins = {
       id: "0x5af2be193a6abca9c8817001f45744777db30756",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -240,8 +240,8 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -252,8 +252,8 @@ export const coins = {
       id: "0x514910771af9ca656af840dff83e8264ecf986ca",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -264,8 +264,8 @@ export const coins = {
       id: "0x4f3afec4e5a3f2a6a1a411def7d7dfe50ee057bf",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -276,8 +276,8 @@ export const coins = {
       id: "0xd0a4b8946cb52f0661273bfbc6fd0e0c75fc6433",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -288,8 +288,8 @@ export const coins = {
       id: "0xfa1a856cfa3409cfa145fa4e20eb270df3eb21ab",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -300,8 +300,8 @@ export const coins = {
       id: "0xb98d4c97425d9908e66e53a6fdf673acca0be986",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -312,8 +312,8 @@ export const coins = {
       id: "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -324,8 +324,8 @@ export const coins = {
       id: "0x5732046a883704404f284ce41ffadd5b007fd668",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -336,8 +336,8 @@ export const coins = {
       id: "0x9992ec3cf6a55b00978cddf2b27bc6882d88d1ec",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -348,8 +348,8 @@ export const coins = {
       id: "0xfe5f141bf94fe84bc28ded0ab966c16b17490657",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -360,8 +360,8 @@ export const coins = {
       id: "0x41e5560054824ea6b0732e656e3ad64e20e94e45",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -372,8 +372,8 @@ export const coins = {
       id: "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -384,8 +384,8 @@ export const coins = {
       id: "0xb97048628db6b661d4c2aa833e95dbe1a905b280",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -396,8 +396,8 @@ export const coins = {
       id: "0x69b148395ce0015c13e36bffbad63f49ef874e03",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -408,8 +408,8 @@ export const coins = {
       id: "0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -426,8 +426,8 @@ export const coins = {
         "0x5D154c145Db2ca90B8aB5e8Fe3E716AfA4AB7Ff0",
         "0x7a3370075a54B187d7bD5DceBf0ff2B5552d4F7D"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -438,8 +438,8 @@ export const coins = {
       id: "0x80fb784b7ed66730e8b1dbd9820afd29931aab03",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -450,8 +450,8 @@ export const coins = {
       id: "0xf433089366899d83a9f26a773d59ec7ecf30355e",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -462,8 +462,8 @@ export const coins = {
       id: "0x865ec58b06bf6305b886793aa20a2da31d034e68",
       reserves_src: ["0x742e8BB8e6bDE9CB2DF5449f8de7510798727fB1"],
       reserves_dest: ["0x742e8BB8e6bDE9CB2DF5449f8de7510798727fB1"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -480,8 +480,8 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0x5D154c145Db2ca90B8aB5e8Fe3E716AfA4AB7Ff0"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -492,8 +492,8 @@ export const coins = {
       id: "0xe41d2489571d322189246dafa5ebde1f4699f498",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -504,8 +504,8 @@ export const coins = {
       id: "0x81c9151de0c8bafcd325a57e3db5a5df1cebf79c",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -516,8 +516,8 @@ export const coins = {
       id: "0x408e41876cccdc0f92210600ef50372656052a38",
       reserves_src: ["0x45eb33D008801d547990cAF3b63B4F8aE596EA57"],
       reserves_dest: ["0x45eb33D008801d547990cAF3b63B4F8aE596EA57"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -528,8 +528,8 @@ export const coins = {
       id: "0xea26c4ac16d4a5a106820bc8aee85fd0b7b2b664",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -546,8 +546,8 @@ export const coins = {
         "0x04A487aFd662c4F9DEAcC07A7B10cFb686B682A4",
         "0x5D154c145Db2ca90B8aB5e8Fe3E716AfA4AB7Ff0"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -558,8 +558,8 @@ export const coins = {
       id: "0xa6a840e50bcaa50da017b91a0d86b8b2d41156ee",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -570,8 +570,8 @@ export const coins = {
       id: "0x2c4e8f2d746113d0696ce89b35f0d8bf88e0aeca",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -582,8 +582,8 @@ export const coins = {
       id: "0x094c875704c14783049ddf8136e298b3a099c446",
       reserves_src: ["0x2295fc6BC32cD12fdBb852cFf4014cEAc6d79C10"],
       reserves_dest: ["0x2295fc6BC32cD12fdBb852cFf4014cEAc6d79C10"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -600,8 +600,8 @@ export const coins = {
         "0x3e9FFBA3C3eB91f501817b031031a71de2d3163B",
         "0x1C802020Eea688E2B05936CDb98b8E6894ACC1c2"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -622,8 +622,8 @@ export const coins = {
         "0x485c4Ec93D18eBd16623D455567886475aE28D04",
         "0x5D154c145Db2ca90B8aB5e8Fe3E716AfA4AB7Ff0"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -634,8 +634,8 @@ export const coins = {
       id: "0xec67005c4e498ec7f55e092bd1d35cbc47c91892",
       reserves_src: ["0xa33c7c22d0BB673c2aEa2C048BB883b679fa1BE9"],
       reserves_dest: ["0xa33c7c22d0BB673c2aEa2C048BB883b679fa1BE9"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -658,8 +658,8 @@ export const coins = {
         "0x7a3370075a54B187d7bD5DceBf0ff2B5552d4F7D",
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -670,8 +670,8 @@ export const coins = {
       id: "0xdb25f211ab05b1c97d595516f45794528a807ad8",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -682,8 +682,8 @@ export const coins = {
       id: "0x177d39ac676ed1c67a2b268ad7f1e58826e5b0af",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -694,8 +694,8 @@ export const coins = {
       id: "0xb63b606ac810a52cca15e44bb630fd42d8d1d83d",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -714,8 +714,8 @@ export const coins = {
         "0x7a3370075a54B187d7bD5DceBf0ff2B5552d4F7D",
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -726,8 +726,8 @@ export const coins = {
       id: "0x543ff227f64aa17ea132bf9886cab5db55dcaddf",
       reserves_src: ["0xAA14DCAA0AdbE79cBF00edC6cC4ED17ed39240AC"],
       reserves_dest: ["0xAA14DCAA0AdbE79cBF00edC6cC4ED17ed39240AC"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -738,8 +738,8 @@ export const coins = {
       id: "0xbbbbca6a901c926f240b89eacb641d8aec7aeafd",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -750,8 +750,8 @@ export const coins = {
       id: "0x607f4c5bb672230e8672085532f7e901544a7375",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -762,8 +762,8 @@ export const coins = {
       id: "0xa15c7ebe1f07caf6bff097d8a589fb8ac49ae5b3",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -780,8 +780,8 @@ export const coins = {
         "0x05461124C86C0AD7C5d8E012e1499fd9109fFb7d",
         "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -792,8 +792,8 @@ export const coins = {
       id: "0x5d60d8d7ef6d37e16ebabc324de3be57f135e0bc",
       reserves_src: ["0x1833AD67362249823515B59A8aA8b4f6B4358d1B"],
       reserves_dest: ["0x1833AD67362249823515B59A8aA8b4f6B4358d1B"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -804,8 +804,8 @@ export const coins = {
       id: "0x22b3faaa8df978f6bafe18aade18dc2e3dfa0e0c",
       reserves_src: ["0x302B35bd0B01312ec2652783c04955D7200C3D9b"],
       reserves_dest: ["0x302B35bd0B01312ec2652783c04955D7200C3D9b"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -816,8 +816,8 @@ export const coins = {
       id: "0x20f7a3ddf244dc9299975b4da1c39f8d5d75f05a",
       reserves_src: ["0x6b84DBd29643294703dBabf8Ed97cDef74EDD227"],
       reserves_dest: ["0x6b84DBd29643294703dBabf8Ed97cDef74EDD227"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -828,8 +828,8 @@ export const coins = {
       id: "0xc28e931814725bbeb9e670676fabbcb694fe7df2",
       reserves_src: ["0x0232Ba609782Cea145Ec3663F52CF7aEb4AC773C"],
       reserves_dest: ["0x0232Ba609782Cea145Ec3663F52CF7aEb4AC773C"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -840,8 +840,8 @@ export const coins = {
       id: "0xc86d054809623432210c107af2e3f619dcfbf652",
       reserves_src: ["0x7e2fd015616263Add31a2AcC2A437557cEe80Fc4"],
       reserves_dest: ["0x7e2fd015616263Add31a2AcC2A437557cEe80Fc4"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -852,8 +852,8 @@ export const coins = {
       id: "0xd4c435f5b09f855c3317c8524cb1f586e42795fa",
       reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -870,8 +870,8 @@ export const coins = {
         "0x7a3370075a54B187d7bD5DceBf0ff2B5552d4F7D",
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -882,8 +882,8 @@ export const coins = {
       id: "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
       reserves_src: ["0xa107dfa919c3f084a7893A260b99586981beb528"],
       reserves_dest: ["0xa107dfa919c3f084a7893A260b99586981beb528"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -894,8 +894,8 @@ export const coins = {
       id: "0xb683d83a532e2cb7dfa5275eed3698436371cc9f",
       reserves_src: ["0x08030715560a146E306b87CA93Fd618bb2A80363"],
       reserves_dest: ["0x08030715560a146E306b87CA93Fd618bb2A80363"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -906,8 +906,8 @@ export const coins = {
       id: "0xaaaf91d9b90df800df4f55c205fd6989c977e73a",
       reserves_src: ["0x3480E12B6C2438e02319e34b4c23770679169190"],
       reserves_dest: ["0x3480E12B6C2438e02319e34b4c23770679169190"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     }
   ],
@@ -926,8 +926,8 @@ export const coins = {
         "0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a",
         "0x356DbBe12E42E8B57D89F24929d48300b0FcAB76"
       ],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -938,8 +938,8 @@ export const coins = {
       id: "0x4bfba4a8f28755cb2061c413459ee562c6b9c51b",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -950,8 +950,8 @@ export const coins = {
       id: "0xd5b4218b950a53ff07985e2d88346925c335eae7",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -962,8 +962,8 @@ export const coins = {
       id: "0xbf5d8683b9be6c43fca607eb2a6f2626a18837a6",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -974,8 +974,8 @@ export const coins = {
       id: "0x9fcc27c7320703c43368cf1a4bf076402cd0d6b4",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -986,8 +986,8 @@ export const coins = {
       id: "0xa577731515303f0c0d00e236041855a5c4f114dc",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -998,8 +998,8 @@ export const coins = {
       id: "0x72fd6c7c1397040a66f33c2ecc83a0f71ee46d5c",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1010,8 +1010,8 @@ export const coins = {
       id: "0xdb0040451f373949a4be60dcd7b6b8d6e42658b6",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1022,8 +1022,8 @@ export const coins = {
       id: "0xb43d10bbe7222519da899b72bf2c7f094b6f79d7",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1034,8 +1034,8 @@ export const coins = {
       id: "0xe55c607d58c53b2b06a8e38f67f4c0fcaeed2c31",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1046,8 +1046,8 @@ export const coins = {
       id: "0x5422ef695ed0b1213e2b953cfa877029637d9d26",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1058,8 +1058,8 @@ export const coins = {
       id: "0x2799f05b55d56be756ca01af40bf7350787f48d4",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1070,8 +1070,8 @@ export const coins = {
       id: "0x95cc8d8f29d0f7fcc425e8708893e759d1599c97",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1082,8 +1082,8 @@ export const coins = {
       id: "0xb47f1a9b121ba114d5e98722a8948e274d0f4042",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1094,8 +1094,8 @@ export const coins = {
       id: "0x9504a86a881f63da06302fb3639d4582022097db",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1106,8 +1106,8 @@ export const coins = {
       id: "0x499990db50b34687cdafb2c8dabae4e99d6f38a7",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1118,8 +1118,8 @@ export const coins = {
       id: "0xef06f410c26a0ff87b3a43927459cce99268a2ef",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1130,8 +1130,8 @@ export const coins = {
       id: "0x99338aa9218c6c23aa9d8cc2f3efaf29954ea26b",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1142,8 +1142,8 @@ export const coins = {
       id: "0xad78afbbe48ba7b670fbc54c65708cbc17450167",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1154,8 +1154,8 @@ export const coins = {
       id: "0xad6d458402f60fd3bd25163575031acdce07538d",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1166,8 +1166,8 @@ export const coins = {
       id: "0xb4f7332ed719eb4839f091eddb2a3ba309739521",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1178,8 +1178,8 @@ export const coins = {
       id: "0x27db28a6c4ac3d82a08d490cfb746e6f02bc467c",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1190,8 +1190,8 @@ export const coins = {
       id: "0x8fff7de21de8ad9c510704407337542073fdc44b",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1200,8 +1200,8 @@ export const coins = {
       address: "0xa94758d328af7ef1815e73053e95b5f86588c16d",
       decimals: 18,
       id: "0xa94758d328af7ef1815e73053e95b5f86588c16d",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1210,8 +1210,8 @@ export const coins = {
       address: "0xb91786188f8d4e35d6d67799e9f162587bf4da03",
       decimals: 18,
       id: "0xb91786188f8d4e35d6d67799e9f162587bf4da03",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1220,8 +1220,8 @@ export const coins = {
       address: "0x7a17267576318efb728bc4a0833e489a46ba138f",
       decimals: 18,
       id: "0x7a17267576318efb728bc4a0833e489a46ba138f",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1230,8 +1230,8 @@ export const coins = {
       address: "0x1742c81075031b8f173d2327e3479d1fc3feaa76",
       decimals: 18,
       id: "0x1742c81075031b8f173d2327e3479d1fc3feaa76",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1240,8 +1240,8 @@ export const coins = {
       address: "0xc2c37d1a2cdd601ce665c4a785074670657f83ac",
       decimals: 18,
       id: "0xc2c37d1a2cdd601ce665c4a785074670657f83ac",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1250,8 +1250,8 @@ export const coins = {
       address: "0xef75e34c50c1b109fe65ee696f12225de508b9f2",
       decimals: 18,
       id: "0xef75e34c50c1b109fe65ee696f12225de508b9f2",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1260,8 +1260,8 @@ export const coins = {
       address: "0xade0e0ed3ec60c7124ddc88c410af671493dc949",
       decimals: 18,
       id: "0xade0e0ed3ec60c7124ddc88c410af671493dc949",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1270,8 +1270,8 @@ export const coins = {
       address: "0x7f7992a21e333baeeab065d54829122173caceb7",
       decimals: 6,
       id: "0x7f7992a21e333baeeab065d54829122173caceb7",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1280,8 +1280,8 @@ export const coins = {
       address: "0x4aefa5bded67f5842ade8f025a738cb3363b7499",
       decimals: 8,
       id: "0x4aefa5bded67f5842ade8f025a738cb3363b7499",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1290,8 +1290,8 @@ export const coins = {
       address: "0xbca556c912754bc8e7d4aad20ad69a1b1444f42d",
       decimals: 18,
       id: "0xbca556c912754bc8e7d4aad20ad69a1b1444f42d",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1300,8 +1300,8 @@ export const coins = {
       address: "0xe8e692f05ecdd531c4550a93d323939fb826f968",
       decimals: 18,
       id: "0xe8e692f05ecdd531c4550a93d323939fb826f968",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1310,8 +1310,8 @@ export const coins = {
       address: "0x013ae307648f529aa72c5767a334ddd37aab43c3",
       decimals: 18,
       id: "0x013ae307648f529aa72c5767a334ddd37aab43c3",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1320,8 +1320,8 @@ export const coins = {
       address: "0xc68d7c356e1b725f75cbaf1306a2603abd7157ca",
       decimals: 18,
       id: "0xc68d7c356e1b725f75cbaf1306a2603abd7157ca",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1330,8 +1330,8 @@ export const coins = {
       address: "0x8ae2a0bfb3315b63ee8e88ac7d3f6b5a68f01cf5",
       decimals: 18,
       id: "0x8ae2a0bfb3315b63ee8e88ac7d3f6b5a68f01cf5",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1340,8 +1340,8 @@ export const coins = {
       address: "0x0e953389a6002a2017d686ff9f448a1eab890d7b",
       decimals: 18,
       id: "0x0e953389a6002a2017d686ff9f448a1eab890d7b",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1350,8 +1350,8 @@ export const coins = {
       address: "0xfcd404ec70c662128d3a6bd508dfb3e598d79a0c",
       decimals: 18,
       id: "0xfcd404ec70c662128d3a6bd508dfb3e598d79a0c",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1360,8 +1360,8 @@ export const coins = {
       address: "0xeaf845462e78cfba40a2f11c13154ce5f103eeff",
       decimals: 18,
       id: "0xeaf845462e78cfba40a2f11c13154ce5f103eeff",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1370,8 +1370,8 @@ export const coins = {
       address: "0xaa15075edf8e33867687428d0e49ae898e5b3513",
       decimals: 8,
       id: "0xaa15075edf8e33867687428d0e49ae898e5b3513",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
     {
@@ -1380,8 +1380,8 @@ export const coins = {
       address: "0xacbdbc20459d98c902e748b09cfbd5dd98b23cf9",
       decimals: 18,
       id: "0xacbdbc20459d98c902e748b09cfbd5dd98b23cf9",
-      logo: function() {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${this.address}/logo.png`;
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     }
   ]

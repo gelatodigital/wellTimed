@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Input,
   Button,
@@ -12,8 +12,9 @@ import {
   DialogActions,
   MenuItem
 } from "@material-ui/core";
-import { coins } from "../constants/coins";
 import { useWeb3Context } from "web3-react";
+import CoinContext from "../contexts/CoinContext";
+import { getCorrectImageLink } from '../helpers';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 function SwapTo(props) {
   const context = useWeb3Context();
   const classes = useStyles();
+  const coinContext = useContext(CoinContext);
 
   // State
 
@@ -44,11 +46,14 @@ function SwapTo(props) {
     open: false,
     coin: "",
     amount: 0,
-    availableCoins: coins
+    availableCoins: Object.values(getCorrectImageLink())
   });
 
   const handleChange = name => event => {
+    const newState = { ...state };
+    newState[name] = event.target.value;
     setState({ ...state, [name]: event.target.value });
+    coinContext.swapTo = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -61,13 +66,11 @@ function SwapTo(props) {
 
   const userChoice = () => {
     if (state.coin) {
-            // push to parent works only here, not in handleChange
-      props.activeCoin(state.coin, 'swapTo')
       return (
         <span className={classes.coins}>
           {state.coin.name}
           <img
-            src={state.coin.logo()}
+            src={state.coin.logo(state.coin.mainnet)}
             alt="coin logo"
             className={classes.img}
           />
@@ -80,6 +83,7 @@ function SwapTo(props) {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
+    coinContext.amountSwapTo = event.target.value;
   };
 
   return (
@@ -94,7 +98,6 @@ function SwapTo(props) {
         color={state.coin ? "primary" : "secondary"}
         onClick={handleClickOpen}
       >
-        {" "}
         {userChoice()}
       </Button>
       <Dialog
@@ -109,7 +112,7 @@ function SwapTo(props) {
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
               <Select value={state.coin} onChange={handleChange("coin")}>
-                {state.availableCoins[1].map(coin => {
+                {state.availableCoins.map(coin => {
                   return (
                     <MenuItem
                       key={coin.id}
@@ -119,7 +122,7 @@ function SwapTo(props) {
                       {coin.name}
                       <img
                         className={classes.img}
-                        src={coin.logo()}
+                        src={coin.logo(coin.mainnet)}
                         alt="coin logo"
                       />
                     </MenuItem>
