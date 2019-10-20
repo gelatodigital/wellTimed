@@ -19,6 +19,19 @@ export const GELATO_CORE = {
     42: '0x0'
 }
 
+export const TRIGGER = {
+    3: '0xE0397A466E97363f759c00fB4c4e5cF6bbF5fEa7'
+}
+
+export const ACTION = {
+    3: '0x5a2b97997934aa2113CB289BF47006B55eC7d461'
+}
+
+export const EXECUTOR = {
+    3: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72'
+}
+
+
 export const example = {
     'dummy2': "0xf1c13889924609f102D359Ca41ABaB9AEe072C77",
     'dummy': '0xcc2D4e178af12f5A99FB8f58f3A89C860b6c779e',
