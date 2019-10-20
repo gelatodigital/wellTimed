@@ -40,26 +40,16 @@ export function getCorrectImageLink() {
   return table3;
 }
 
-export async function getEncodedFunction() {
+export async function getEncodedFunction(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, isBigger)
+{
 
-    const blockNumber = await web3.eth.getBlockNumber();
-    const block = await web3.eth.getBlock(blockNumber);
-    const timestamp = block.timestamp;
+    // const blockNumber = await web3.eth.getBlockNumber();
+    // const block = await web3.eth.getBlock(blockNumber);
+    // const timestamp = block.timestamp;
 
 
-    let triggerPayload = web3.eth.abi.encodeFunctionCall(
-        {
-          name: "fired(uint256)",
-          type: "function",
-          inputs: [
-            {
-              type: "uint256",
-              name: "_timestamp"
-            }
-          ]
-        },
-        [ timestamp ]
-      );
+    let triggerPayload = web3.eth.abi.encodeParameters(['address','address', 'uint256', 'bool', 'uint256'], [triggerSellToken, triggerBuyToken, triggerSellAmount, isBigger,  triggerBuyAmount ]
+    );
 
 
       // Encode Action

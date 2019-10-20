@@ -53,7 +53,7 @@ function LockFrom() {
     const newState = { ...state };
     newState[name] = event.target.value;
     setState({ ...state, [name]: event.target.value });
-    coinContext.lockFrom = event.target.value;
+    coinContext.triggerFrom = event.target.value;
   };
 
   const handleClickOpen = async () => {
@@ -83,7 +83,7 @@ function LockFrom() {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountLockFrom = event.target.value;
+    coinContext.amountTriggerFrom = event.target.value;
     console.log(coinContext);
   };
 

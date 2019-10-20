@@ -1,15 +1,15 @@
 import React from 'react'
 
 const CoinContext = React.createContext({
-    lockFrom: '',
-    lockTo: '',
-    ERC20: '',
-    swapTo: '',
+    triggerFrom: "",
+    triggerTo: "",
+    actionFrom: "",
+    actionTo: "",
     bigger: true,
-    amountLockFrom: 0,
-    amountLockTo: 0,
-    amountSwapTo: 0,
-    amountERC20: 0
+    amountTriggerFrom: 0,
+    amountTriggerTo: 0,
+    amountActionTo: 0,
+    amountActionFrom: 0
 })
 
 export const CoinProvider = CoinContext.Provider

@@ -8,6 +8,7 @@ import { ethers } from "ethers";
 // Context so we access the users account & provider
 import { useWeb3Context, Connectors } from 'web3-react'
 import ProxyContext from '../contexts/ProxyContext'
+import CoinContext from "../contexts/CoinContext";
 
 // Import ABIs
 import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
@@ -20,7 +21,7 @@ import { getEncodedFunction } from '../helpers'
 
 
 // Import addresses
-import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, ACTION, EXECUTOR } from '../constants/contractAddresses';
+import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, ACTION, EXECUTOR, KYBER_TRIGGER } from '../constants/contractAddresses';
 import { AbiCoder } from 'ethers/utils';
 
 import { Icon, Button } from "@material-ui/core";
@@ -29,6 +30,7 @@ import { Icon, Button } from "@material-ui/core";
 function ActionBtn(props) {
     const context = useWeb3Context();
     const proxyStatus = useContext(ProxyContext)
+    const coins = useContext(CoinContext)
     // State
     const updateProxyStatus = props.updateProxyStatus
 
@@ -72,7 +74,7 @@ function ActionBtn(props) {
         return (
             <div>
                 <h1>Account Status</h1>
-                <h1>{proxyStatus}</h1>
+                <h1>{CoinContext}</h1>
             </div>
         )
     }
@@ -188,6 +190,32 @@ function ActionBtn(props) {
 
 
     async function placeOrder() {
+
+        // Trigger Vars
+        console.log(coins)
+        const triggerSellToken = coins['triggerFrom']['address']
+        const triggerSellAmount = coins['amountTriggerFrom']
+        const triggerBuyToken =  coins['triggerTo']['address']
+        const triggerBuyAmount = coins['amountTriggerTo']
+        const isBigger = coins['bigger']
+
+        // Action vars
+        const actionSellToken = coins['actionFrom']['address']
+        const actionrSellAmount = coins['amountActionFrom']
+        const actionBuyToken = coins['actionTo']['address']
+        const actionBuyAmount = coins['amountActionTo']
+
+
+        // Get encoded trigger and action payload + addresses
+        let array = await getEncodedFunction(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, isBigger)
+        const triggerPayload = array[0]
+        const actionPayload = array[1]
+        console.log(`
+            TriggerPayload: ${triggerPayload}
+            ActionPayload: ${actionPayload}`)
+        // console.log(`actionPayload: ${actionPayload}`)
+
+
         // Prepayment => call getMintingDepositPayable(_action, _selectedExecutor)
         setWaitingForTX(true)
         const signer = context.library.getSigner()
@@ -195,21 +223,12 @@ function ActionBtn(props) {
         const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
 
         const action = ACTION[context.networkId]
-        const trigger = TRIGGER[context.networkId]
+        const trigger = KYBER_TRIGGER[context.networkId]['address']
         const executor = EXECUTOR[context.networkId]
 
 
         let prepayment = await gelatoCoreContract.getMintingDepositPayable(action, executor)
         console.log(`Needed Prepayment: ${prepayment}`)
-
-        // Get encoded trigger and action payload + addresses
-        const array = await getEncodedFunction()
-        const triggerPayload = array[0]
-        const actionPayload = array[1]
-        console.log(`
-            TriggerPayload: ${triggerPayload}
-            ActionPayload: ${actionPayload}`)
-        // console.log(`actionPayload: ${actionPayload}`)
 
 
         // Send Minting TX

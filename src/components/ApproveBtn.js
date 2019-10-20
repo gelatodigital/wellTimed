@@ -77,7 +77,7 @@ function ApproveBtn() {
   return (
     <div>
       <button onClick={checkOptions}>Refresh</button>
-      {checkOptions}
+      {/* {checkOptions} */}
     </div>
   );
 }

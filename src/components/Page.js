@@ -51,10 +51,10 @@ function Page() {
   // Activate the current ERC20 Token
   const [erc20, setERC20] = React.useState(null);
   const [activeCoins, setActivCoins] = React.useState({
-    lockTo: "",
-    LockFrom: "",
-    ERC20: "",
-    swapTo: ""
+    triggerFrom: "",
+    triggerTo: "",
+    actionFrom: "",
+    actionTo: ""
   });
   // Used to display tx hash
   const [transactionHash, setTransactionHash] = React.useState(undefined);
@@ -68,6 +68,13 @@ function Page() {
     console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
   }
+
+  function updateActiveCoins(coins) {
+    console.log(`Setting coins in Page.js`);
+    console.log(`${coins}`);
+    setProxyStatus(coins);
+  }
+
 
   async function test() {
     const signer = context.library.getSigner();
@@ -108,7 +115,7 @@ function Page() {
           <Card className={classes.card} raised>
             <CardContent>
               <h4 className={classes.title}>Then swap these coins</h4>
-              <ERC20Input></ERC20Input>
+              <ERC20Input updateActiveCoins={updateActiveCoins}></ERC20Input>
               <ApproveBtn></ApproveBtn>
               <Icon className={classes.arrow}>arrow_downward</Icon>
               <SwapTo></SwapTo>

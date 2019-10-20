@@ -31,7 +31,11 @@ export const ACTION = {
 }
 
 export const KYBER_TRIGGER = {
-    3: '0x9F5Ef81EfD972A105D2E1F077d3Efa5CF2fcBB0a'
+    3:
+        {
+            address: '0x2dA801790B0A91baFE8f7e9642Ed34a489D48792',
+            funcSig: 'fired(address,address,uint256,bool,uint256)'
+        }
 }
 
 export const EXECUTOR = {

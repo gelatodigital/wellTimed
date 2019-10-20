@@ -51,7 +51,7 @@ function ERC20Input() {
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.ERC20 = event.target.value;
+    coinContext.actionFrom = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -81,7 +81,7 @@ function ERC20Input() {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountERC20 = event.target.value;
+    coinContext.amountActionFrom = event.target.value;
   };
 
   return (
