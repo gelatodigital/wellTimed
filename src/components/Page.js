@@ -96,6 +96,7 @@ function Page() {
   }
 
   const lockFrom = (coin) => {
+    console.log("Page: LogForm")
     setActivCoins({...activeCoins, lockFrom: coin})
     console.log(coin);
   }
@@ -107,7 +108,7 @@ function Page() {
         <h1>Swap tokens depending on conditions</h1>
         <Card className={classes.card} raised>
           <CardContent>
-            <LockFrom ficker={lockFrom}></LockFrom>
+            <LockFrom lockFrom={lockFrom}></LockFrom>
             <ConditionialSwitch></ConditionialSwitch>
             <LockTo ></LockTo>
           </CardContent>

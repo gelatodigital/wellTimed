@@ -34,11 +34,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function LockFrom(prop) {
+function LockFrom(props) {
   const context = useWeb3Context();
   const classes = useStyles();
 
   // State
+
+  const lockFrom = props.lockFrom
 
   const [state, setState] = React.useState({
     open: false,
@@ -47,9 +49,13 @@ function LockFrom(prop) {
     availableCoins: coins
   });
 
+
+
   const handleChange = name => event => {
+    const newState = {...state}
+    newState[name] = event.target.value
     setState({ ...state, [name]: event.target.value });
-    prop.ficker(state.coin);
+    lockFrom(newState);
   };
 
   const handleClickOpen = async () => {
@@ -78,6 +84,7 @@ function LockFrom(prop) {
   };
 
   const handleAmount = name => event => {
+    console.log(event.target.value)
     setState({ ...state, [name]: event.target.value || "" });
   };
 
