@@ -93,7 +93,6 @@ function ConnectBtn(props) {
         console.log(
           "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
         );
-        // setProxyStatus(2);
         updateProxyStatus(2)
       }
       else if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard !== null)

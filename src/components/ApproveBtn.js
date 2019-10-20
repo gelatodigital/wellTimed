@@ -10,28 +10,35 @@ import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 function ApproveBtn() {
   const context = useWeb3Context();
   const coinContext = useContext(CoinContext);
-
   let loading = false;
+
+  const [state, setState] = React.useState(null);
 
   async function userHasToken() {
     if (context.active && !!coinContext.ERC20.address) {
       const signerAddress = context.account;
       const signer = context.library.getSigner();
-      const tokens = await getTokenBalance(
+      let tokens;
+      await getTokenBalance(
         coinContext.ERC20.address,
         signer,
         signerAddress
-      ).then(res => res.json());
-      console.log(tokens);
+      ).then(data => (tokens = data));
       return tokens;
     } else {
       return;
     }
   }
 
-  function userNeedToApprove() {
-    console.log(!!coinContext.ERC20.address);
-    if (context.active && userHasToken() && !!coinContext.ERC20.address) {
+  const checkOptions = async function() {
+    let userToken;
+    await userHasToken().then(data => (userToken = data));
+    if (
+      context.active &&
+      !!coinContext.ERC20.address &&
+      userToken._hex !== "0x00"
+    ) {
+      setState({ cool: true });
       return (
         <Button
           color={loading ? "pending" : "primary"}
@@ -59,34 +66,20 @@ function ApproveBtn() {
         </Button>
       );
     } else if (context.active && !!coinContext.ERC20.address) {
-      return <div>You got insufficient token amount</div>;
+      setState({ cool: true });
+      return <Button>You got insufficient token amount</Button>;
+    } else {
+      setState({ cool: true });
+      return <Button>yes</Button>;
     }
-  }
+  };
 
-  return <div>{userNeedToApprove()}</div>;
+  return (
+    <div>
+      <button onClick={checkOptions}>Refresh</button>
+      {checkOptions}
+    </div>
+  );
 }
 
 export default ApproveBtn;
-
-// <Button
-// onClick={async () => {
-//   /*      const estimatedGas = await tokenContract.estimate.approve(
-//       selectedTokenExchangeAddress,
-//       ethers.constants.MaxUint256
-//     ); */
-//   const tokenContract = new ethers.Contract(
-//     coinContext.ERC20.address,
-//     erc20,
-//     context.library.getSigner()
-//   );
-//   /*     tokenContract
-//       .approve(props.address.address, ethers.constants.MaxUint256, {
-//         gasLimit: calculateGasMargin(estimatedGas, GAS_MARGIN)
-//       })
-//       .then(response => {
-//         addTransaction(response, { approval: selectedTokenAddress });
-//       }); */
-// }}
-// >Connect
-// {/*    {t("unlock")} */}
-// </Button>
