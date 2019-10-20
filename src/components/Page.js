@@ -15,29 +15,21 @@ import { ProxyProvider } from "../contexts/ProxyContext";
 // web3 library
 import { ethers } from "ethers";
 // Context so we access the users account & provider
-import { useWeb3Context, Connectors } from "web3-react";
+import { useWeb3Context } from "web3-react";
 
 // Import ABIs
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 import dummyABI from "../constants/ABIs/dummyContract.json";
 
 // Import addresses
 import {
-  DS_PROXY_REGISTRY,
-  DS_GUARD_FACTORY,
   example
 } from "../constants/contractAddresses";
-import { AbiCoder } from "ethers/utils";
-import { REPLACEMENT_UNDERPRICED } from "ethers/errors";
 
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
-import { borderColor } from "@material-ui/system";
 import Order from "./orders";
 import ApproveBtn from "./ApproveBtn";
 import ERC20Input from "./ERC20Input";
 import SwapTo from "./SwapTo";
-import Encoder from './Encoder'
 
 const style = makeStyles({
   card: {
@@ -45,6 +37,9 @@ const style = makeStyles({
   },
   arrow: {
     marginTop: "20px"
+  },
+  title: {
+    textAlign: "left"
   }
 });
 
@@ -103,6 +98,7 @@ function Page() {
           <h1>Swap tokens depending on conditions</h1>
           <Card className={classes.card} raised>
             <CardContent>
+              <h4 className={classes.title}>If this condition is true</h4>
               <LockFrom></LockFrom>
               <ConditionialSwitch></ConditionialSwitch>
               <LockTo></LockTo>
@@ -111,6 +107,7 @@ function Page() {
           <Icon>arrow_downward</Icon>
           <Card className={classes.card} raised>
             <CardContent>
+              <h4 className={classes.title}>Then swap these coins</h4>
               <ERC20Input></ERC20Input>
               <ApproveBtn></ApproveBtn>
               <Icon className={classes.arrow}>arrow_downward</Icon>

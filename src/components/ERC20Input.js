@@ -87,10 +87,10 @@ function ERC20Input() {
   return (
     <div className={classes.container}>
       <Input
-        value={state.amount}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
+        placeholder="Set the amount"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}

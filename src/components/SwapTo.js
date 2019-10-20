@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
-import { getCorrectImageLink } from '../helpers';
+import { getCorrectImageLink } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -89,10 +89,10 @@ function SwapTo(props) {
   return (
     <div className={classes.container}>
       <Input
-        value={state.amount}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
+        placeholder="Set the amount"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}
