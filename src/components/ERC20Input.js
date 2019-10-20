@@ -12,9 +12,16 @@ import {
   DialogActions,
   MenuItem
 } from "@material-ui/core";
+
+import { ethers } from "ethers";
+import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
+
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
 import { getCorrectImageLink } from "../helpers";
+import ApproveBtn from './ApproveBtn'
+import { getTokenBalance, getTokenAllowance } from "../helpers";
+import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -35,11 +42,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function ERC20Input() {
+function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
 
+  const updateAllowance = props.updateAllowance
+  const needAllowance = props.needAllowance
   // State
 
   const [state, setState] = React.useState({
@@ -51,7 +60,7 @@ function ERC20Input() {
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.ERC20 = event.target.value;
+    coinContext.actionFrom = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -75,14 +84,81 @@ function ERC20Input() {
         </span>
       );
     } else {
-      return <span>Choose a coin</span>;
+      return  (<span className={classes.coins}>
+        {"Chain Link"}
+        <img
+          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
+          alt="coin logo"
+          className={classes.img}
+        />
+      </span>)
     }
   };
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountERC20 = event.target.value;
+    coinContext.amountActionFrom = event.target.value;
+    displayApproveBtn()
   };
+
+  async function displayApproveBtn() {
+    // check if context has an actionFrom
+    if (context.active)
+    {
+      if (coinContext['actionFrom']['address']) {
+        let sellTokenAddress = coinContext['actionFrom']['address'];
+
+        // Check balance
+        const signerAddress = context.account;
+        const signer = context.library.getSigner();
+        let sellTokenBalance = await getTokenBalance(sellTokenAddress, signer, signerAddress)
+
+
+        console.log(`SellTokenBalance: ${sellTokenBalance}`)
+
+        if (parseInt(sellTokenBalance) !== 0)
+        {
+          // Check if proxy is approved
+          const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
+          const proxyRegistryContract = new ethers.Contract(
+            proxyRegistryAddress,
+            proxyRegistryABI,
+            signer
+          );
+          const proxyAddress = await proxyRegistryContract.proxies(
+            context.account)
+
+          let sellAmount = coinContext['amountActionFrom']
+          if (sellAmount && parseInt(sellAmount) > 0)
+          {
+            let sellTokenAllowance = await getTokenAllowance(
+              sellTokenAddress,
+              proxyAddress,
+              signer,
+              context.account
+            );
+            console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
+
+            if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
+            {
+              // Render approve button
+              updateAllowance(true)
+
+            }
+
+          }
+          else {
+            updateAllowance(false)
+          }
+
+
+        } else {
+          updateAllowance(false)
+        }
+      }
+
+    }
+  }
 
   return (
     <div className={classes.container}>

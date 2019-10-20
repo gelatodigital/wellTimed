@@ -13,9 +13,9 @@ export async function getTokenBalance(tokenAddress, signer, signerAddress) {
 }
 
 // get the token allowance
-export async function getTokenAllowance(tokenAddress, proxyAddress, signer) {
+export async function getTokenAllowance(tokenAddress, proxyAddress, signer, userAddress) {
   const erc20Contract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
-  return erc20Contract.allowance(signer.provider.account, proxyAddress);
+  return erc20Contract.allowance(userAddress, proxyAddress);
 }
 
 export function getCorrectImageLink() {
@@ -40,40 +40,45 @@ export function getCorrectImageLink() {
   return table3;
 }
 
-export async function getEncodedFunction() {
+export async function getEncodedFunction(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, isBigger, actionSellToken,actionrSellAmount, actionBuyToken, slippage)
+{
 
-    const blockNumber = await web3.eth.getBlockNumber();
-    const block = await web3.eth.getBlock(blockNumber);
-    const timestamp = block.timestamp;
-
-
-    let triggerPayload = web3.eth.abi.encodeFunctionCall(
-        {
-          name: "fired(uint256)",
-          type: "function",
-          inputs: [
-            {
-              type: "uint256",
-              name: "_timestamp"
-            }
-          ]
-        },
-        [ timestamp ]
-      );
+    let triggerPayload = web3.eth.abi.encodeParameters(['address','address', 'uint256', 'bool', 'uint256'], [triggerSellToken, triggerBuyToken, triggerSellAmount, isBigger, triggerBuyAmount ]
+    );
 
 
-      // Encode Action
-
-    let actionPayload = web3.eth.abi.encodeFunctionCall(
-        {
-          name: "action()",
-          type: "function",
-          inputs: []
-        },
-        []
-
+    let actionPayload = web3.eth.abi.encodeParameters(['address','address', 'uint256', 'uint256'], [ actionSellToken, actionBuyToken, actionrSellAmount, slippage ]
     );
 
     return [triggerPayload, actionPayload]
 
 }
+
+
+//  let actionPayload = web3.eth.abi.encodeFunctionCall(
+    //     {
+    //       name: "action(address,address,uint256,uint256)",
+    //       type: "function",
+    //       inputs: [
+    //         {
+    //           type: "address",
+    //           name: "user"
+    //         },
+    //         {
+    //           type: "address",
+    //           name: "src"
+    //         },
+    //         {
+    //           type: "address",
+    //           name: "dest"
+    //         },
+    //         {
+    //           type: "uint256",
+    //           name: "srcAmount"
+    //         },
+    //         {
+    //           type: "uint256",
+    //           name: "slippage"
+    //         }
+    //       ]
+    //     }, [actionSellToken,actionrSellAmount, actionBuyToken, actionBuyAmount]

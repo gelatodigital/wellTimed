@@ -53,7 +53,7 @@ function SwapTo(props) {
     const newState = { ...state };
     newState[name] = event.target.value;
     setState({ ...state, [name]: event.target.value });
-    coinContext.swapTo = event.target.value;
+    coinContext.actionTo = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -83,16 +83,17 @@ function SwapTo(props) {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountSwapTo = event.target.value;
+    coinContext.amountActionTo = event.target.value;
   };
 
   return (
     <div className={classes.container}>
       <Input
+        disabled
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="Set the amount"
+        placeholder="MAX"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}

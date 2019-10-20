@@ -53,7 +53,7 @@ function LockTo(props) {
     const newState = { ...state };
     newState[name] = event.target.value;
     setState({ ...state, [name]: event.target.value });
-    coinContext.lockTo = event.target.value;
+    coinContext.triggerTo = event.target.value;
   };
 
   const handleClickOpen = () => {
@@ -83,7 +83,7 @@ function LockTo(props) {
 
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountLockTo = event.target.value;
+    coinContext.amountTriggerTo = event.target.value;
   };
 
   return (

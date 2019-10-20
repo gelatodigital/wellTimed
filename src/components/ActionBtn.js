@@ -8,6 +8,8 @@ import { ethers } from "ethers";
 // Context so we access the users account & provider
 import { useWeb3Context, Connectors } from 'web3-react'
 import ProxyContext from '../contexts/ProxyContext'
+import CoinContext from "../contexts/CoinContext";
+import OrderContext from "../contexts/OrderContext";
 
 // Import ABIs
 import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
@@ -20,7 +22,7 @@ import { getEncodedFunction } from '../helpers'
 
 
 // Import addresses
-import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, ACTION, EXECUTOR } from '../constants/contractAddresses';
+import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, KYBER_ACTION, EXECUTOR, KYBER_TRIGGER } from '../constants/contractAddresses';
 import { AbiCoder } from 'ethers/utils';
 
 import { Icon, Button } from "@material-ui/core";
@@ -29,6 +31,8 @@ import { Icon, Button } from "@material-ui/core";
 function ActionBtn(props) {
     const context = useWeb3Context();
     const proxyStatus = useContext(ProxyContext)
+    const coins = useContext(CoinContext)
+    const orders = useContext(OrderContext)
     // State
     const updateProxyStatus = props.updateProxyStatus
 
@@ -50,20 +54,20 @@ function ActionBtn(props) {
     function CreateTransactButton() {
         switch(proxyStatus) {
             case 1:
-                return (<Button color='primary' onClick={devirginize}>Create Account</Button>);
+                return (<Button variant="contained" color='primary' onClick={devirginize}>Create Account</Button>);
 
             case 2:
                 // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button color='primary' onClick={deployAndSetGuard}>Connect your Proxy</Button>);
+                return (<Button variant="contained" color='primary' onClick={deployAndSetGuard}>Connect your Proxy</Button>);
 
             case 3:
-                return (<Button color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
+                return (<Button variant="contained" color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
 
             case 4:
-                return (<Button color='primary' onClick={placeOrder}>Place Order</Button>);
+                return (<Button variant="contained" color='primary' onClick={placeOrder}>Place Order</Button>);
 
             default:
-                return (<Button color='primary' >Place Order</Button>);
+                return (<Button variant="contained" color='primary' >Place Order</Button>);
           }
 
     }
@@ -72,7 +76,7 @@ function ActionBtn(props) {
         return (
             <div>
                 <h1>Account Status</h1>
-                <h1>{proxyStatus}</h1>
+                <h1>{CoinContext}</h1>
             </div>
         )
     }
@@ -186,24 +190,45 @@ function ActionBtn(props) {
         })
     }
 
+    function createRow() {
+        console.log("here")
+        console.log(orders)
+    }
+
 
     async function placeOrder() {
-        // Prepayment => call getMintingDepositPayable(_action, _selectedExecutor)
-        setWaitingForTX(true)
-        const signer = context.library.getSigner()
-        const gelatoCoreAddress = GELATO_CORE[context.networkId]
-        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
 
-        const action = ACTION[context.networkId]
-        const trigger = TRIGGER[context.networkId]
-        const executor = EXECUTOR[context.networkId]
+        // Trigger Vars
+        console.log(coins)
+        const triggerSellToken = coins['triggerFrom']['address']
+        const triggerSellAmount = coins['amountTriggerFrom']
+        const triggerBuyToken =  coins['triggerTo']['address']
+        const triggerBuyAmount = coins['amountTriggerTo']
+        const isBigger = coins['bigger'] 
+
+        // Action vars
+        const actionSellToken = coins['actionFrom']['address']
+        const actionSellAmount = coins['amountActionFrom']
+        const actionBuyToken = coins['actionTo']['address']
+        const actionBuyAmount = coins['amountActionTo']
+        const minAmount = 0;
+
+        if( triggerSellToken === ""|| coins['actionTo'] === ""|| coins['actionFrom'] === ""|| isBigger === "") {return}
+
+        console.log(`
+        Execution Claim Overview:
 
 
-        let prepayment = await gelatoCoreContract.getMintingDepositPayable(action, executor)
-        console.log(`Needed Prepayment: ${prepayment}`)
+            Condition: If ${triggerSellAmount} ${coins["triggerFrom"]["symbol"]} is greater or equal to ${triggerBuyAmount} ${coins["triggerTo"]["symbol"]}
+
+            Action: Sell ${actionSellAmount} ${coins["actionFrom"]["symbol"]} to ${coins["actionTo"]["symbol"]}
+
+
+        `)
+
 
         // Get encoded trigger and action payload + addresses
-        const array = await getEncodedFunction()
+        let array = await getEncodedFunction(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, isBigger, actionSellToken, actionSellAmount, actionBuyToken, minAmount)
         const triggerPayload = array[0]
         const actionPayload = array[1]
         console.log(`
@@ -212,14 +237,21 @@ function ActionBtn(props) {
         // console.log(`actionPayload: ${actionPayload}`)
 
 
-        // Send Minting TX
-        /*
-        mintExecutionClaim(address _trigger,
-            bytes calldata _specificTriggerParams,
-            address _action,
-            bytes calldata _specificActionParams,
-            address payable _selectedExecutor
-        */
+        // Prepayment => call getMintingDepositPayable(_action, _selectedExecutor)
+        setWaitingForTX(true)
+        const signer = context.library.getSigner()
+        const gelatoCoreAddress = GELATO_CORE[context.networkId]
+        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+
+        const action = KYBER_ACTION[context.networkId]['address']
+        const trigger = KYBER_TRIGGER[context.networkId]['address']
+        const executor = EXECUTOR[context.networkId]
+
+        console.log(`executor: ${executor}, action: ${action}, `)
+
+
+        let prepayment = await gelatoCoreContract.getMintingDepositPayable(action, executor)
+        console.log(`Needed Prepayment: ${prepayment}`)
 
         let overrides = {
 
@@ -249,6 +281,9 @@ function ActionBtn(props) {
                     setWaitingForTX(false)
                     console.log(tx)
             })
+        }, (error) => {
+            console.log("Sorry")
+            setWaitingForTX(false)
         })
 
     }
@@ -256,6 +291,8 @@ function ActionBtn(props) {
     return (
         <React.Fragment>
             {/* <ShowProxyStatus></ShowProxyStatus> */}
+            {/* <div><button onClick={createRow} ></button></div> */}
+
             { (context.active || (context.error && context.connectorName)) &&
                 <div>
 
@@ -281,6 +318,7 @@ function ActionBtn(props) {
                     Connect Metamask
                 </Button>
             }
+
         </React.Fragment>
     )
 

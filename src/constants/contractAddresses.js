@@ -20,11 +20,30 @@ export const GELATO_CORE = {
 }
 
 export const TRIGGER = {
-    3: '0xE0397A466E97363f759c00fB4c4e5cF6bbF5fEa7'
+    3: {
+        address: '0x2dA801790B0A91baFE8f7e9642Ed34a489D48792',
+        funcSig: 'fired(address,address,uint256,bool,uint256)'
+    }
 }
 
 export const ACTION = {
     3: '0x5a2b97997934aa2113CB289BF47006B55eC7d461'
+}
+
+export const KYBER_TRIGGER = {
+    3:
+        {
+            address: '0x2dA801790B0A91baFE8f7e9642Ed34a489D48792',
+            funcSig: 'fired(address,address,uint256,bool,uint256)'
+        }
+}
+
+export const KYBER_ACTION= {
+    3:
+        {
+            address: '0xdb9c6EF4A4871A8C13e95cd904969647286De997',
+            funcSig: 'fired(address,address,uint256,bool,uint256)'
+        }
 }
 
 export const EXECUTOR = {
