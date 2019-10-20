@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
+<<<<<<< HEAD
 
+=======
+import IfInput from "./LockFrom";
+import ConditionialSwitch from "./ConditionSwitch";
+>>>>>>> IOTA
 // web3 library
 import { ethers } from "ethers";
 
