@@ -9,7 +9,6 @@ const web3 = new Web3(Web3.givenProvider);
 // get the token balance of an address
 export async function getTokenBalance(tokenAddress, signer, signerAddress) {
   const erc20Contract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
-  console.log(signerAddress);
   return erc20Contract.balanceOf(signerAddress);
 }
 
