@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useContext} from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -9,6 +9,9 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
+
+import { useWeb3Context } from "web3-react";
+import OrderContext from "../contexts/OrderContext";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,21 +119,64 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Order() {
+export default function Order(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+  const context = useWeb3Context()
+  const rows = useContext(OrderContext)
+  console.log(rows)
+
+
+  // const fetchedRows = props.orderRows
+
+  // SETTING ROWS
+  const [orderRows, setOrderRows] = React.useState(0)
+
+
+  function updateRow()
+  {
+    const fetchedRows = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
+    console.log(fetchedRows)
+    console.log(orderRows)
+    if (rows === null && fetchedRows !== rows) {
+      console.log("in If")
+      setOrderRows(fetchedRows)
+      for (let order in fetchedRows)
+      {
+        console.log(order)
+        // console.log(orders)
+        rows[order] = fetchedRows[order]
+      }
+    }
+  }
+  updateRow()
+
+
+  function createData(fetchedRows) {
+    const rowsArray = []
+    for (let row in fetchedRows)
+    {
+      rowsArray.push(createDataHelper(fetchedRows[row].ifThis, fetchedRows[row].thenSwap, fetchedRows[row].created, fetchedRows[row].status, fetchedRows[row].action))
+    }
+    return rowsArray
   }
 
-  const rows = [createData("10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel")];
+  function createDataHelper(ifThis, thenSwap, created, status, action) {
+    return { ifThis, thenSwap, created, status, action };
+  }
 
+  // const rows = [createData("10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel")];
+
+  // const rows = createData(orders);
+  console.log(rows)
+
+  // const rows = {"10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel"}
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -204,16 +250,16 @@ export default function Order() {
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.created);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name)}
+                      onClick={event => handleClick(event, row.created)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.created}
                       selected={isItemSelected}
                     >
                       <TableCell
@@ -223,12 +269,13 @@ export default function Order() {
                         padding="none"
                         align="center"
                       >
-                        {row.name}
+                        {row.ifThis}
                       </TableCell>
-                      <TableCell align="center">{row.calories}</TableCell>
-                      <TableCell align="center">{row.fat}</TableCell>
-                      <TableCell align="center">{row.carbs}</TableCell>
-                      <TableCell align="center">{row.protein}</TableCell>
+                      {/* { ifThis, thenSwap, created, status, action }; */}
+                      <TableCell align="center">{row.thenSwap}</TableCell>
+                      <TableCell align="center">{row.created}</TableCell>
+                      <TableCell align="center">{row.status}</TableCell>
+                      <TableCell align="center">{row.action}</TableCell>
                     </TableRow>
                   );
                 })}

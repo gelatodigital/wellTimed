@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "flex-end",
     margin: "20px 10px"
   }
+
 }));
 
 function ConnectBtn(props) {
@@ -26,6 +27,10 @@ function ConnectBtn(props) {
   const proxyStatus = useContext(ProxyContext)
 
   const updateProxyStatus = props.updateProxyStatus
+  const fetchOrderFromLocalStorage = props.fetchOrderFromLocalStorage
+  const handleChangeInPage = props.handleChange
+  const updateRows = props.updateRows
+  const rows = props.rows
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
 
   function LogIn() {
@@ -34,31 +39,56 @@ function ConnectBtn(props) {
         variant="contained"
         color="primary"
         onClick={() => {
+
           context.setFirstValidConnector(["MetaMask", "Infura"]);
         }}
       >
         Connect Metamask
       </Button>
-    );
+  );
   }
 
   function LogOut() {
-    checkIfUserHasProxy();
-    return (
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => {
-          context.unsetConnector();
-        }}
-      >
-        Disconnect
-      </Button>
-    );
+    switch(context.networkId)
+    {
+      case 3:
+        checkIfUserHasProxy()
+
+        // const fetchedRows = fetchOrderFromLocalStorage();
+        // if (newProxyStatus === proxyStatus) {
+        //   if (fetchedRows === rows) { updateRows(fetchOrderFromLocalStorage) }
+        // } else {
+        //   updateProxyStatus(newProxyStatus)
+        //   updateRows(fetchOrderFromLocalStorage)
+        // }
+        return (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              context.unsetConnector();
+            }}
+          >
+            Disconnect
+          </Button>
+        );
+
+      default:
+        return (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              context.unsetConnector();
+            }}
+          >
+            Ropsten Network only
+          </Button>
+        );
+    }
   }
 
   async function checkIfUserHasProxy() {
-    console.log("checkIfUserHasProxy")
     const signer = context.library.getSigner();
     const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
     const proxyRegistryContract = new ethers.Contract(
@@ -68,14 +98,14 @@ function ConnectBtn(props) {
     );
     let proxyAddress = await proxyRegistryContract.proxies(context.account);
     if (proxyAddress === ethers.constants.AddressZero && proxyStatus !== 3) {
-      console.log(
-        "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
-      );
+      // console.log(
+      //   "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
+      // );
       updateProxyStatus(1)
       // Deploy Proxy
       // Deploy Guard
     } else {
-      console.log(`Proxy exists - Address: ${proxyAddress}`);
+      // console.log(`Proxy exists - Address: ${proxyAddress}`);
       // fetch proxy
       const proxyContract = new ethers.Contract(
         proxyAddress,
@@ -87,29 +117,29 @@ function ConnectBtn(props) {
       let guardAddress = await proxyContract.authority();
       // Also check past events if user deployed guard at some point
       const localStorageGuard = localStorage.getItem('guardAddress')
-      console.log(`Local Storage: ${localStorageGuard}`)
+      // console.log(`Local Storage: ${localStorageGuard}`)
 
       if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard === null) {
-        console.log(
-          "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
-        );
+        // console.log(
+        //   "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
+        // );
         updateProxyStatus(2)
       }
       else if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard !== null)
       {
-        console.log(`Guard already deployed, set Authority`)
+        // console.log(`Guard already deployed, set Authority`)
         updateProxyStatus(3)
 
       }
       else if (guardAddress === ethers.constants.AddressZero  && proxyStatus === 3)
       {
-        console.log(`Guard already deployed, set Authority`)
+        // console.log(`Guard already deployed, set Authority`)
         updateProxyStatus(3)
       }
       else
       {
-        console.log(`Guard contract found - address: ${guardAddress}`);
-        console.log("Purchase!");
+        // console.log(`Guard contract found - address: ${guardAddress}`);
+        // console.log("Purchase!");
         updateProxyStatus(4)
 
       }
@@ -127,6 +157,7 @@ function ConnectBtn(props) {
         <div className={classes.root}>
           <LogIn></LogIn>
         </div>
+
       )}
     </React.Fragment>
   );
