@@ -32,7 +32,10 @@ function ActionBtn(props) {
     const context = useWeb3Context();
     const proxyStatus = useContext(ProxyContext)
     const coins = useContext(CoinContext)
-    const orders = useContext(OrderContext)
+    const ordersContext = useContext(OrderContext)
+    const orders = ordersContext['orders']
+    const setOrders = ordersContext['setOrders']
+
     // State
     const updateProxyStatus = props.updateProxyStatus
 
@@ -197,23 +200,22 @@ function ActionBtn(props) {
         }
 
         const sign = isBigger ? ">=" : "<="
-        const newRow = {
+
+        const newOrder = {
             ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
         }
 
-        let newRows;
+        let newOrders;
         // check the page's state, if it is still default or we already fetched orders from localStorage
         console.log("preOrders")
         console.log(orders)
-        orders === 0 ? newRows = [] : newRows = [...orders];
-        newRows.push(newRow)
-        localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newRows))
-        for (let order in newRows)
-        {
-            orders[order] = newRows[order]
-        }
-        console.log("postOrders")
-        console.log(orders)
+        orders === 0 ? newOrders = [] : newOrders = [...orders];
+        newOrders.push(newOrder)
+        // Push new order into local storage
+        localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
+        // Set state including new order
+        setOrders(newOrders)
+
     }
 
 

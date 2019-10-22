@@ -129,47 +129,48 @@ export default function Order(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const context = useWeb3Context()
-  const rows = useContext(OrderContext)
+  const ordersContext = useContext(OrderContext)
+  const rows = ordersContext['orders']
   console.log(rows)
 
 
   // const fetchedRows = props.orderRows
 
   // SETTING ROWS
-  const [orderRows, setOrderRows] = React.useState(0)
+  // const [orderRows, setOrderRows] = React.useState(0)
 
 
-  function updateRow()
-  {
-    const fetchedRows = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
-    console.log(fetchedRows)
-    console.log(orderRows)
-    if (rows === null && fetchedRows !== rows) {
-      console.log("in If")
-      setOrderRows(fetchedRows)
-      for (let order in fetchedRows)
-      {
-        console.log(order)
-        // console.log(orders)
-        rows[order] = fetchedRows[order]
-      }
-    }
-  }
-  updateRow()
+  // function updateRow()
+  // {
+  //   const fetchedRows = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
+  //   console.log(fetchedRows)
+  //   console.log(orderRows)
+  //   if (rows === null && fetchedRows !== rows) {
+  //     console.log("in If")
+  //     setOrderRows(fetchedRows)
+  //     for (let order in fetchedRows)
+  //     {
+  //       console.log(order)
+  //       // console.log(orders)
+  //       rows[order] = fetchedRows[order]
+  //     }
+  //   }
+  // }
+  // updateRow()
 
 
-  function createData(fetchedRows) {
-    const rowsArray = []
-    for (let row in fetchedRows)
-    {
-      rowsArray.push(createDataHelper(fetchedRows[row].ifThis, fetchedRows[row].thenSwap, fetchedRows[row].created, fetchedRows[row].status, fetchedRows[row].action))
-    }
-    return rowsArray
-  }
+  // function createData(fetchedRows) {
+  //   const rowsArray = []
+  //   for (let row in fetchedRows)
+  //   {
+  //     rowsArray.push(createDataHelper(fetchedRows[row].ifThis, fetchedRows[row].thenSwap, fetchedRows[row].created, fetchedRows[row].status, fetchedRows[row].action))
+  //   }
+  //   return rowsArray
+  // }
 
-  function createDataHelper(ifThis, thenSwap, created, status, action) {
-    return { ifThis, thenSwap, created, status, action };
-  }
+  // function createDataHelper(ifThis, thenSwap, created, status, action) {
+  //   return { ifThis, thenSwap, created, status, action };
+  // }
 
   // const rows = [createData("10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel")];
 

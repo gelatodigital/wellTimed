@@ -58,13 +58,38 @@ function Page() {
   // Activate the current ERC20 Token
   const [erc20, setERC20] = React.useState(null);
 
-  let orderFromLocalStorage
+  let ordersFromLocalStorage
   if (context.active) {
-    orderFromLocalStorage = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
+    console.log("isActive")
+    let fetchedLocalStorage = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
+    if (fetchedLocalStorage !== null)
+    {
+      ordersFromLocalStorage = fetchedLocalStorage
+    }
+    else {
+      ordersFromLocalStorage = []
+    }
+    console.log(ordersFromLocalStorage)
   } else {
-    orderFromLocalStorage = []
+    console.log("isNotActive")
+    ordersFromLocalStorage = []
   }
-  console.log(orderFromLocalStorage)
+
+  // Used to display orders Table in orders
+  const [orders, setOrders] = React.useState(ordersFromLocalStorage)
+
+  const ordersContext = {
+    orders: orders,
+    setOrders: setOrders
+  }
+  console.log(orders.length)
+  if (context.active && orders.length === 0 && ordersFromLocalStorage.length > 0) {
+    console.log("SetState")
+    setOrders(ordersFromLocalStorage)
+  } else {
+    console.log("Not the case")
+
+  }
 
   const [activeCoins, setActivCoins] = React.useState({
     triggerFrom: {
@@ -113,7 +138,7 @@ function Page() {
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
 
-
+  console.log(orders)
   // const [rows, setRows] = React.useState(0)
 
   // function handleChange (newProxyStatus, newRows) {
@@ -158,34 +183,11 @@ function Page() {
     }
   }
 
-
-
-  async function test() {
-    const signer = context.library.getSigner();
-    const dummyContract = new ethers.Contract(
-      example["dummy"],
-      dummyABI,
-      signer
-    );
-    const dummyTransactionPromise = dummyContract.increment();
-
-    dummyTransactionPromise.then(function(txReceipt) {
-      console.log(txReceipt["hash"]);
-      signer.provider
-        .waitForTransaction(txReceipt["hash"])
-        .then(function(transaction) {
-          // console.log('Transaction Mined: ' + transaction.hash);
-          console.log(transaction);
-          console.log("mined");
-        });
-    });
-  }
-
   return (
     <React.Fragment>
       <ProxyProvider value={proxyStatus}>
         <CoinProvider value={activeCoins}>
-          <OrderProvider value={orderFromLocalStorage}>
+          <OrderProvider value={ordersContext}>
             <OrderRowCreator proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
             </OrderRowCreator>
 
