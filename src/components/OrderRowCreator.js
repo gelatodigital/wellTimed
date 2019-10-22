@@ -79,11 +79,11 @@ function OrderRowCreator(props) {
     return (
         <React.Fragment>
             <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
-              <h1>TriggeredX</h1>
-              <h3>Cross-Token Conditional Limit Orders for DEXs</h3>
+              <h1>TriggerdX</h1>
+              <h3>Advanced ERC20 Trading using Contingent Orders</h3>
               <Card className={classes.card} raised>
                 <CardContent>
-                  <h4 className={classes.title}>If this condition is true</h4>
+                  <h4 className={classes.title}>If this condition is met</h4>
                   <LockFrom></LockFrom>
                   <ConditionialSwitch></ConditionialSwitch>
                   <LockTo></LockTo>
@@ -92,7 +92,7 @@ function OrderRowCreator(props) {
               <Icon>arrow_downward</Icon>
               <Card className={classes.card} raised>
                 <CardContent>
-                  <h4 className={classes.title}>Then swap these coins</h4>
+                  <h4 className={classes.title}>Place this market order</h4>
                   <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
                   <br></br>
                   <ApproveBtn updateAllowance={updateAllowance} needAllowance={needAllowance}></ApproveBtn>

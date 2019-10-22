@@ -49,14 +49,27 @@ function LockFrom() {
     availableCoins: Object.values(getCorrectImageLink())
   });
 
-  const handleChange = name => event => {
+  // const handleChange = name => event => {
+  //   console.log(name)
+  //   console.log(event)
+  //   const newState = { ...state };
+  //   newState[name] = event.target.value;
+  //   setState({ ...state, [name]: event.target.value , open: false});
+  //   coinContext.triggerFrom = event.target.value;
+  //   // handleClose()
+  // };
+
+  const handleChange = coin => {
+    console.log(coin)
     const newState = { ...state };
-    newState[name] = event.target.value;
-    setState({ ...state, [name]: event.target.value });
-    coinContext.triggerFrom = event.target.value;
+    newState['coin'] = coin
+    setState({ ...state, ['coin']: coin , open: false});
+    coinContext.triggerFrom = coin;
+    // handleClose()
   };
 
   const handleClickOpen = async () => {
+    console.log("open")
     setState({ ...state, open: true });
   };
 
@@ -113,30 +126,40 @@ function LockFrom() {
         disableEscapeKeyDown
         open={state.open}
         onClose={handleClose}
+        value={state.coin}
+        // onChange={handleChange("coin")}
       >
         <DialogTitle>Choose coin from dropdown</DialogTitle>
-        <DialogContent>
+        {/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
+          {/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+            {state.availableCoins.map(coin => {
+              return (
+                <MenuItem
+                  // onChange={handleChange("coin")}
+                  // onClick={handleClose}
+                  onClick={() => {
+                    console.log(coin)
+                    handleChange(coin)
+                  }}
+                  key={coin.id}
+                  value={coin}
+                  className={classes.coins}
+                >
+                  {coin.symbol}
+                  <img
+                    className={classes.img}
+                    src={coin.logo(coin.mainnet)}
+                    alt="coin logo"
+                  />
+                </MenuItem>
+              );
+            })}
+          {/* </div> */}
+          {/* </Select> */}
+        {/* <DialogContent>
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
-              <Select value={state.coin} onChange={handleChange("coin")}>
-                {state.availableCoins.map(coin => {
-                  return (
-                    <MenuItem
-                      key={coin.id}
-                      value={coin}
-                      className={classes.coins}
-                    >
-                      {coin.name}
-                      <img
-                        className={classes.img}
-                        src={coin.logo(coin.mainnet)}
-                        alt="coin logo"
-                      />
-                    </MenuItem>
-                  );
-                })}
-              </Select>
             </FormControl>
           </form>
         </DialogContent>
@@ -147,7 +170,7 @@ function LockFrom() {
           <Button onClick={handleClose} color="primary">
             Ok
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </div>
   );

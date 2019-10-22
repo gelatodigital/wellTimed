@@ -77,7 +77,7 @@ function LockTo(props) {
         </span>
       );
     } else {
-      return <span>Choose a coin</span>;
+      return <span>Select a token</span>;
     }
   };
 
