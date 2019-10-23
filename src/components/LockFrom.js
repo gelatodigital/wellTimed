@@ -78,6 +78,7 @@ function LockFrom() {
   };
 
   const userChoice = () => {
+    console.log(classes)
     if (state.coin) {
       return (
         <span className={classes.coins}>
