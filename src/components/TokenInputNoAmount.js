@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function TokenInput(props) {
+function TokenInputNoAmount(props) {
 
 	// fetch params
 	const inputData = props.inputData
@@ -101,8 +101,18 @@ function TokenInput(props) {
 			);
 		} else {
 			return (
-				defaultToken
-			);
+					<span className={classes.coins}>
+					{"Kyber Network"}
+					<img
+					src={
+						"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"
+					}
+					alt="coin logo"
+					className={classes.img}
+					/>
+				  </span>
+				  )
+
 		}
 	};
 
@@ -113,23 +123,6 @@ function TokenInput(props) {
 
 	return (
 		<div className={classes.container}>
-			{ disabledAmount &&
-				<Input
-					onChange={handleAmount("amount")}
-					type="number"
-					autoComplete="off"
-					placeholder={amountPlaceholder}
-					disabled
-				/>
-			}
-			{ !disabledAmount &&
-				<Input
-					onChange={handleAmount("amount")}
-					type="number"
-					autoComplete="off"
-					placeholder={amountPlaceholder}
-				/>
-			}
 			<Button
 				color={state.coin ? "primary" : "secondary"}
 				onClick={handleClickOpen}
@@ -174,4 +167,4 @@ function TokenInput(props) {
 	);
 }
 
-export default TokenInput;
+export default TokenInputNoAmount;

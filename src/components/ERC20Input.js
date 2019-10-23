@@ -58,18 +58,33 @@ function ERC20Input(props) {
     availableCoins: Object.values(getCorrectImageLink())
   });
 
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.value || "" });
-    coinContext.actionFrom = event.target.value;
+  const handleChange = coin => {
+    const newState = { ...state };
+		newState["coin"] = coin;
+		setState({ ...state, ["coin"]: coin, open: false });
+    coinContext.actionFrom = coin;
+
   };
+
+  // const handleChange = coin => {
+	// 	console.log(coin);
+	// 	const newState = { ...state };
+	// 	newState["coin"] = coin;
+	// 	setState({ ...state, ["coin"]: coin, open: false });
+	// 	coinContext[tokenType] = coin;
+	// 	// handleClose()
+	// };
 
   const handleClickOpen = () => {
     setState({ ...state, open: true });
   };
 
   const handleClose = () => {
+    console.log("in close")
     setState({ ...state, open: false });
   };
+
+
 
   const userChoice = () => {
     if (state.coin) {
@@ -166,7 +181,7 @@ function ERC20Input(props) {
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="Set the amount"
+        placeholder="0"
       />
       <Button
         color={state.coin ? "primary" : "secondary"}
@@ -176,46 +191,39 @@ function ERC20Input(props) {
         {userChoice()}
       </Button>
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
-        open={state.open}
-        onClose={handleClose}
-      >
-        <DialogTitle>Choose coin from dropdown</DialogTitle>
-        <DialogContent>
-          <form className={classes.container}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
-              <Select value={state.coin} onChange={handleChange("coin")}>
-                {state.availableCoins.map(coin => {
-                  return (
-                    <MenuItem
-                      key={coin.id}
-                      value={coin}
-                      className={classes.coins}
-                    >
-                      {coin.name}
-                      <img
-                        className={classes.img}
-                        src={coin.logo(coin.mainnet)}
-                        alt="coin logo"
-                      />
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+				disableBackdropClick
+				disableEscapeKeyDown
+				open={state.open}
+				onClose={handleClose}
+				value={state.coin}
+				// onChange={handleChange("coin")}
+			>
+				<DialogTitle>Choose coin from dropdown</DialogTitle>
+				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
+				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+				{state.availableCoins.map(coin => {
+					return (
+						<MenuItem
+							// onChange={handleChange("coin")}
+							// onClick={handleClose}
+							onClick={() => {
+								console.log(coin);
+								handleChange(coin);
+							}}
+							key={coin.id}
+							value={coin}
+							className={classes.coins}
+						>
+							{coin.symbol}
+							<img
+								className={classes.img}
+								src={coin.logo(coin.mainnet)}
+								alt="coin logo"
+							/>
+						</MenuItem>
+					);
+				})}
+			</Dialog>
     </div>
   );
 }

@@ -35,8 +35,7 @@ import {
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
 import Order from "./Orders";
 import ApproveBtn from "./ApproveBtn";
-import ERC20Input from "./ERC20Input";
-import SwapTo from "./SwapTo";
+
 
 const style = makeStyles({
   card: {

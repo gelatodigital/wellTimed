@@ -2,22 +2,29 @@ import React, {useContext, useEffect} from 'react'
 import { useWeb3Context } from "web3-react";
 
 // Import Components
-import LockFrom from "./LockFrom";
-import LockTo from "./LockTo";
 import ConditionialSwitch from "./ConditionSwitch";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
 import Order from "./Orders";
 import ApproveBtn from "./ApproveBtn";
 import ERC20Input from "./ERC20Input";
-import SwapTo from "./SwapTo";
 import TokenInput from "./TokenInput";
+import NoOfSwaps from "./NoOfSwaps";
+import TimeBetween from "./TimeBetween";
+import Interval from "./Interval";
+import Grid from '@material-ui/core/Grid';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+
 
 // Style
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
 
 
 const style = makeStyles({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
     card: {
       margin: "25px"
     },
@@ -77,7 +84,7 @@ function OrderRowCreator(props) {
     const needAllowance = props.needAllowance
     const updateActiveCoins = props.updateActiveCoins
 
-    // Props for <TokenInput>
+    // Props for <TokenInputNoAmount>
     // // TriggerFrom
     const triggerFrom = {
       tokenType: 'triggerFrom',
@@ -130,7 +137,7 @@ function OrderRowCreator(props) {
      const actionTo = {
       tokenType: 'actionTo',
       amountType: 'amountActionTo',
-      amountPlaceholder: 'MAX',
+      amountPlaceholder: 'Market Price',
       disabledAmount: true,
       defaultToken: (
         <span>Select a Token</span>
@@ -142,30 +149,53 @@ function OrderRowCreator(props) {
     return (
         <React.Fragment>
             <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
-              <h1>TriggerdX</h1>
-              <h3>Advanced ERC20 Trading using Contingent Orders</h3>
+              <h1>Well Timed 🐎</h1>
+              <h3>Time-based order splitting on Kyber Network</h3>
               <Card className={classes.card} raised>
                 <CardContent>
-                  <h4 className={classes.title}>If this condition is met</h4>
-                  {/* <LockFrom></LockFrom> */}
-                  <TokenInput inputData={triggerFrom}></TokenInput>
-                  <ConditionialSwitch></ConditionialSwitch>
-                  {/* <LockTo></LockTo> */}
-                  <TokenInput inputData={triggerTo}></TokenInput>
+                  <h4 className={classes.title}>Swap</h4>
+                  <Grid container spacing={2}>
+                      <Grid item xs={5}>
+                        <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <SwapHorizIcon></SwapHorizIcon>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <TokenInput inputData={actionTo}></TokenInput>
+                      </Grid>
+                  </Grid>
+                  <ApproveBtn updateAllowance={updateAllowance} needAllowance={needAllowance}></ApproveBtn>
+
+                  {/* <TokenInput inputData={actionFrom}></TokenInput> */}
+                  {/* <br></br>
+                  <br></br> */}
+
+                  {/* <SwapTo></SwapTo> */}
+
                 </CardContent>
               </Card>
               <Icon>arrow_downward</Icon>
               <Card className={classes.card} raised>
                 <CardContent>
-                  <h4 className={classes.title}>Place this market order</h4>
-                  <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
-                  {/* <TokenInput inputData={actionFrom}></TokenInput> */}
-                  <br></br>
-                  <ApproveBtn updateAllowance={updateAllowance} needAllowance={needAllowance}></ApproveBtn>
-                  <br></br>
-                  <Icon className={classes.arrow}>arrow_downward</Icon>
-                  {/* <SwapTo></SwapTo> */}
-                  <TokenInput inputData={actionTo}></TokenInput>
+
+
+                  <h4 className={classes.title}>How often?</h4>
+                  {/* <TokenInput inputData={actionTo}></TokenInput> */}
+                  <form className={classes.root} autoComplete="off">
+                    <Grid container spacing={3}>
+                      <Grid item xs={6}>
+                        <NoOfSwaps></NoOfSwaps>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TimeBetween ></TimeBetween>
+                        <Interval></Interval>
+                      </Grid>
+                      {/* <Grid item xs={4}>
+                      </Grid> */}
+                    </Grid>
+                  </form>
+
                 </CardContent>
               </Card>
               <ActionBtn   updateProxyStatus={updateProxyStatus}></ActionBtn>
