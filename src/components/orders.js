@@ -39,12 +39,18 @@ function getSorting(order, orderBy) {
     : (a, b) => desc(a, b, orderBy);
 }
 
+// const headCells = [
+//   { id: "if", numeric: false, disablePadding: false, label: "If This" },
+//   { id: "swap", numeric: true, disablePadding: false, label: "Then Swap" },
+//   { id: "created", numeric: true, disablePadding: false, label: "Created" },
+//   { id: "status", numeric: false, disablePadding: false, label: "Status" },
+//   { id: "action", numeric: false, disablePadding: false, label: "Action" }
+// ];
+
 const headCells = [
-  { id: "if", numeric: false, disablePadding: false, label: "If This" },
-  { id: "swap", numeric: true, disablePadding: false, label: "Then Swap" },
-  { id: "created", numeric: true, disablePadding: false, label: "Created" },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
-  { id: "action", numeric: false, disablePadding: false, label: "Action" }
+  { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
+  { id: "when", numeric: true, disablePadding: false, label: "When" },
+  { id: "status", numeric: true, disablePadding: false, label: "Status" }
 ];
 
 function EnhancedTableHead(props) {
@@ -132,51 +138,7 @@ export default function Order(props) {
   const ordersContext = useContext(OrderContext)
   const rows = ordersContext['orders']
 
-
-  // const fetchedRows = props.orderRows
-
-  // SETTING ROWS
-  // const [orderRows, setOrderRows] = React.useState(0)
-
-
-  // function updateRow()
-  // {
-  //   const fetchedRows = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
-  //   console.log(fetchedRows)
-  //   console.log(orderRows)
-  //   if (rows === null && fetchedRows !== rows) {
-  //     console.log("in If")
-  //     setOrderRows(fetchedRows)
-  //     for (let order in fetchedRows)
-  //     {
-  //       console.log(order)
-  //       // console.log(orders)
-  //       rows[order] = fetchedRows[order]
-  //     }
-  //   }
-  // }
-  // updateRow()
-
-
-  // function createData(fetchedRows) {
-  //   const rowsArray = []
-  //   for (let row in fetchedRows)
-  //   {
-  //     rowsArray.push(createDataHelper(fetchedRows[row].ifThis, fetchedRows[row].thenSwap, fetchedRows[row].created, fetchedRows[row].status, fetchedRows[row].action))
-  //   }
-  //   return rowsArray
-  // }
-
-  // function createDataHelper(ifThis, thenSwap, created, status, action) {
-  //   return { ifThis, thenSwap, created, status, action };
-  // }
-
-  // const rows = [createData("10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel")];
-
-  // const rows = createData(orders);
   console.log(rows)
-
-  // const rows = {"10 WETH >= 2000 DAI", "200 KNC => 2000 DAI", "10/20/19 - 19:02:43", "open", "cancel"}
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -250,32 +212,22 @@ export default function Order(props) {
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.created);
+                  const isItemSelected = isSelected(row.when);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.created)}
+                      onClick={event => handleClick(event, row.when)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.created}
+                      key={row.when}
                       selected={isItemSelected}
                     >
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align="center"
-                      >
-                        {row.ifThis}
-                      </TableCell>
                       {/* { ifThis, thenSwap, created, status, action }; */}
-                      <TableCell align="center">{row.thenSwap}</TableCell>
-                      <TableCell align="center">{row.created}</TableCell>
+                      <TableCell align="center">{row.swap}</TableCell>
+                      <TableCell align="center">{row.when}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
-                      <TableCell align="center">{row.action}</TableCell>
                     </TableRow>
                   );
                 })}

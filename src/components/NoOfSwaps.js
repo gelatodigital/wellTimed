@@ -66,6 +66,6 @@ export default function NoOfSwaps() {
                 <MenuItem value={5}>5</MenuItem>
                 </Select>
                 {/* <FormHelperText>Label + placeholder</FormHelperText> */}
-            </FormControl>
+          </FormControl>
   );
 }

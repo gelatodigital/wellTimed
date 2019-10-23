@@ -9,6 +9,7 @@ import { useWeb3Context, Connectors } from 'web3-react'
 import ProxyContext from '../contexts/ProxyContext'
 import CoinContext from "../contexts/CoinContext";
 import OrderContext from "../contexts/OrderContext";
+import TimeContext from "../contexts/TimeContext"
 
 // Import ABIs
 import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
@@ -32,6 +33,7 @@ function ActionBtn(props) {
     const proxyStatus = useContext(ProxyContext)
     const coins = useContext(CoinContext)
     const ordersContext = useContext(OrderContext)
+    const timeContext = useContext(TimeContext)
     const orders = ordersContext['orders']
     const setOrders = ordersContext['setOrders']
 
@@ -73,16 +75,6 @@ function ActionBtn(props) {
           }
 
     }
-
-    function ShowProxyStatus() {
-        return (
-            <div>
-                <h1>Account Status</h1>
-                <h1>{CoinContext}</h1>
-            </div>
-        )
-    }
-
 
     async function devirginize() {
         console.log("Deploying new Proxy for user")
@@ -220,26 +212,25 @@ function ActionBtn(props) {
 
     async function placeOrder() {
 
-        // Trigger Vars
-        console.log(coins)
-        const triggerSellToken = coins['triggerFrom']['address']
-        const triggerSellTokenSymbol = coins['triggerFrom']['symbol']
-        const triggerSellAmount = coins['amountTriggerFrom']
 
-        const triggerBuyToken =  coins['triggerTo']['address']
-        const triggerBuyTokenSymbol =  coins['triggerTo']['symbol']
-        const triggerBuyAmount = coins['amountTriggerTo']
-        const isBigger = coins['bigger'] 
+        // TRIGGER: Time Input
+        const numOrders = timeContext.time.numOrders
+        const intervalTime = timeContext.time.intervalTime
+        const intervalType = timeContext.time.intervalType
 
-        // Action vars
+        // ACTION: Token SWAP INPUT
         const actionSellToken = coins['actionFrom']['address']
         const actionSellTokenSymbol = coins['actionFrom']['symbol']
         const actionSellAmount = coins['amountActionFrom']
 
         const actionBuyToken = coins['actionTo']['address']
         const actionBuyTokenSymbol = coins['actionTo']['symbol']
-        const actionBuyAmount = coins['amountActionTo']
-        const minAmount = 0;
+
+        console.log(numOrders, intervalTime, intervalType)
+
+
+
+        /*
 
         if( triggerSellToken === ""|| coins['actionTo'] === ""|| coins['actionFrom'] === ""|| isBigger === "") {return}
 
@@ -316,6 +307,7 @@ function ActionBtn(props) {
             setWaitingForTX(false)
         })
 
+    */
     }
 
     return (
