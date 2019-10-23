@@ -131,7 +131,6 @@ export default function Order(props) {
   const context = useWeb3Context()
   const ordersContext = useContext(OrderContext)
   const rows = ordersContext['orders']
-  console.log(rows)
 
 
   // const fetchedRows = props.orderRows

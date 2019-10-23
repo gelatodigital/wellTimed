@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import ReactDOM from 'react-dom';
 
 
 // Import Components
@@ -7,34 +6,21 @@ import OrderRowCreator from './OrderRowCreator'
 
 import CoinContext, { CoinProvider } from "../contexts/CoinContext";
 
+import {TimeProvider} from "../contexts/TimeContext"
+
 import { OrderProvider } from "../contexts/OrderContext";
 
-import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
-
-// ABIs
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 
 
 // Import ContextParents
 import { ProxyProvider } from "../contexts/ProxyContext";
 
-// web3 library
-import { ethers } from "ethers";
 // Context so we access the users account & provider
 import { useWeb3Context } from "web3-react";
 
-// Import ABIs
-import dummyABI from "../constants/ABIs/dummyContract.json";
 
-// Import addresses
-import {
-  example
-} from "../constants/contractAddresses";
 
-import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
-import Order from "./Orders";
-import ApproveBtn from "./ApproveBtn";
+import { makeStyles } from "@material-ui/core";
 
 
 const style = makeStyles({
@@ -70,7 +56,6 @@ function Page() {
     }
     console.log(ordersFromLocalStorage)
   } else {
-    console.log("isNotActive")
     ordersFromLocalStorage = []
   }
 
@@ -81,12 +66,9 @@ function Page() {
     orders: orders,
     setOrders: setOrders
   }
-  console.log(orders.length)
   if (context.active && orders.length === 0 && ordersFromLocalStorage.length > 0) {
-    console.log("SetState")
     setOrders(ordersFromLocalStorage)
   } else {
-    console.log("Not the case")
 
   }
 
@@ -136,6 +118,16 @@ function Page() {
   const [waitingForTX, setWaitingForTX] = React.useState(false);
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
+
+  const [time, setTime] = React.useState({
+    numOrders: 0,
+    intervalTime: 0,
+    intervalType: ''
+  });
+
+  const timePackage = {time, setTime}
+
+  console.log(time)
 
   console.log(orders)
   // const [rows, setRows] = React.useState(0)
@@ -187,9 +179,10 @@ function Page() {
       <ProxyProvider value={proxyStatus}>
         <CoinProvider value={activeCoins}>
           <OrderProvider value={ordersContext}>
-            <OrderRowCreator proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
-            </OrderRowCreator>
-
+            <TimeProvider value={timePackage}>
+              <OrderRowCreator proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
+              </OrderRowCreator>
+            </TimeProvider>
           </OrderProvider>
         </CoinProvider>
       </ProxyProvider>

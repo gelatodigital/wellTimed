@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+// Context
+import TimeContext from '../contexts/TimeContext'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,45 +26,44 @@ const useStyles = makeStyles(theme => ({
 
 export default function NoOfSwaps() {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
-    age: '',
-    name: 'hai',
-  });
 
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
-    // setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
+  const timeContext = useContext(TimeContext)
+
+  const time = timeContext.time
+  const setTime = timeContext.setTime
 
   const handleChange = event => {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
-  };
+    const newTime = {...time}
+    let newNumOrders
+    if (event.target.value === "")
+    {
+      newNumOrders = 1
+    }
+    else {
+      newNumOrders = event.target.value
+    }
+    newTime.numOrders = newNumOrders
+    setTime(newTime)
+ };
 
   return (
-        <FormControl className={classes.formControl}>
-                <InputLabel shrink htmlFor="age-label-placeholder">
+        <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel shrink>
                 No. of swaps
                 </InputLabel>
                 <Select
-                value={values.age}
-                onChange={handleChange}
-                inputProps={{
-                    name: 'age',
-                    id: 'age-label-placeholder',
-                }}
-                displayEmpty
-                name="age"
-                className={classes.selectEmpty}
+                  htmlFor="outlined-age-simple"
+                  value={time.numOrders}
+                  onChange={handleChange}
+                  displayEmpty
+                  name="numOrders"
+                  className={classes.selectEmpty}
                 >
-                <MenuItem value="">1</MenuItem>
-                <MenuItem value={10}>2</MenuItem>
-                <MenuItem value={20}>3</MenuItem>
-                <MenuItem value={30}>4</MenuItem>
-                <MenuItem value={30}>5</MenuItem>
+                <MenuItem selected value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
                 </Select>
                 {/* <FormHelperText>Label + placeholder</FormHelperText> */}
             </FormControl>

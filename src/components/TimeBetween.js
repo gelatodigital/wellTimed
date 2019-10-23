@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+// Context
+import TimeContext from '../contexts/TimeContext'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,41 +26,40 @@ const useStyles = makeStyles(theme => ({
 
 export default function TimeBetween() {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
-    age: '',
-    name: 'hai',
-  });
 
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
-    // setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
+  const timeContext = useContext(TimeContext)
+
+  const time = timeContext.time
+  const setTime = timeContext.setTime
 
   const handleChange = event => {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
-  };
+    const newTime = {...time}
+    let newNumOrders
+    if (event.target.value === "")
+    {
+      newNumOrders = 1
+    }
+    else {
+      newNumOrders = event.target.value
+    }
+    newTime.intervalTime = newNumOrders
+    setTime(newTime)
+ };
 
   return (
-        <FormControl className={classes.formControl}>
+        <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel shrink htmlFor="age-label-placeholder">
                 When?
             </InputLabel>
             <Select
-                value={values.age}
+                htmlFor="outlined-age-simple"
+                value={time.intervalTime}
                 onChange={handleChange}
-                inputProps={{
-                    name: 'age',
-                    id: 'age-label-placeholder',
-                }}
                 displayEmpty
-                name="age"
+                name="intervalTime"
                 className={classes.selectEmpty}
                 >
-                <MenuItem value="">1</MenuItem>
+                <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={10}>15</MenuItem>
                 <MenuItem value={20}>30</MenuItem>
                 <MenuItem value={30}>45</MenuItem>

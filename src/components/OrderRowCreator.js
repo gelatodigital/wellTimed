@@ -11,7 +11,7 @@ import ERC20Input from "./ERC20Input";
 import TokenInput from "./TokenInput";
 import NoOfSwaps from "./NoOfSwaps";
 import TimeBetween from "./TimeBetween";
-import Interval from "./Interval";
+import Interval from "./TimeInterval";
 import Grid from '@material-ui/core/Grid';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
