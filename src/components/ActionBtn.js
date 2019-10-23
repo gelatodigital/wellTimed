@@ -32,7 +32,10 @@ function ActionBtn(props) {
     const context = useWeb3Context();
     const proxyStatus = useContext(ProxyContext)
     const coins = useContext(CoinContext)
-    const orders = useContext(OrderContext)
+    const ordersContext = useContext(OrderContext)
+    const orders = ordersContext['orders']
+    const setOrders = ordersContext['setOrders']
+
     // State
     const updateProxyStatus = props.updateProxyStatus
 
@@ -190,9 +193,29 @@ function ActionBtn(props) {
         })
     }
 
-    function createRow() {
-        console.log("here")
+    function createRow(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount,          actionSellToken, actionSellAmount, actionBuyToken, isBigger) {
+
+        const testRow = {
+            ifThis: "10000 WETH >= 2000 DAI", thenSwap: "200 KNC => 2000 DAI", created: "10/20/19 - 19:02:43", status: "open", action: "cancel"
+        }
+
+        const sign = isBigger ? ">=" : "<="
+
+        const newOrder = {
+            ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
+        }
+
+        let newOrders;
+        // check the page's state, if it is still default or we already fetched orders from localStorage
+        console.log("preOrders")
         console.log(orders)
+        orders === 0 ? newOrders = [] : newOrders = [...orders];
+        newOrders.push(newOrder)
+        // Push new order into local storage
+        localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
+        // Set state including new order
+        setOrders(newOrders)
+
     }
 
 
@@ -201,15 +224,21 @@ function ActionBtn(props) {
         // Trigger Vars
         console.log(coins)
         const triggerSellToken = coins['triggerFrom']['address']
+        const triggerSellTokenSymbol = coins['triggerFrom']['symbol']
         const triggerSellAmount = coins['amountTriggerFrom']
+
         const triggerBuyToken =  coins['triggerTo']['address']
+        const triggerBuyTokenSymbol =  coins['triggerTo']['symbol']
         const triggerBuyAmount = coins['amountTriggerTo']
         const isBigger = coins['bigger'] 
 
         // Action vars
         const actionSellToken = coins['actionFrom']['address']
+        const actionSellTokenSymbol = coins['actionFrom']['symbol']
         const actionSellAmount = coins['amountActionFrom']
+
         const actionBuyToken = coins['actionTo']['address']
+        const actionBuyTokenSymbol = coins['actionTo']['symbol']
         const actionBuyAmount = coins['amountActionTo']
         const minAmount = 0;
 
@@ -280,6 +309,8 @@ function ActionBtn(props) {
                     console.log("Execution Claim successfully minted")
                     setWaitingForTX(false)
                     console.log(tx)
+
+                    createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
             })
         }, (error) => {
             console.log("Sorry")
@@ -318,7 +349,6 @@ function ActionBtn(props) {
                     Connect Metamask
                 </Button>
             }
-
         </React.Fragment>
     )
 

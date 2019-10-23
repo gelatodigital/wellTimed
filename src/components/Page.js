@@ -1,15 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import ReactDOM from 'react-dom';
+
 
 // Import Components
-import LockFrom from "./LockFrom";
-import LockTo from "./LockTo";
-import ConditionialSwitch from "./ConditionSwitch";
-import ActionBtn from "./ActionBtn";
-import ConnectBtn from "./ConnectBtn";
+import OrderRowCreator from './OrderRowCreator'
 
 import CoinContext, { CoinProvider } from "../contexts/CoinContext";
 
 import { OrderProvider } from "../contexts/OrderContext";
+
+import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
+
+// ABIs
+import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
+import dsProxyABI from "../constants/ABIs/ds-proxy.json";
 
 
 // Import ContextParents
@@ -29,14 +33,14 @@ import {
 } from "../constants/contractAddresses";
 
 import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
-import Order from "./orders";
+import Order from "./Orders";
 import ApproveBtn from "./ApproveBtn";
 import ERC20Input from "./ERC20Input";
 import SwapTo from "./SwapTo";
 
 const style = makeStyles({
   card: {
-    margin: "50px"
+    margin: "25px"
   },
   arrow: {
     marginTop: "20px"
@@ -53,6 +57,40 @@ function Page() {
   // State
   // Activate the current ERC20 Token
   const [erc20, setERC20] = React.useState(null);
+
+  let ordersFromLocalStorage
+  if (context.active) {
+    console.log("isActive")
+    let fetchedLocalStorage = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
+    if (fetchedLocalStorage !== null)
+    {
+      ordersFromLocalStorage = fetchedLocalStorage
+    }
+    else {
+      ordersFromLocalStorage = []
+    }
+    console.log(ordersFromLocalStorage)
+  } else {
+    console.log("isNotActive")
+    ordersFromLocalStorage = []
+  }
+
+  // Used to display orders Table in orders
+  const [orders, setOrders] = React.useState(ordersFromLocalStorage)
+
+  const ordersContext = {
+    orders: orders,
+    setOrders: setOrders
+  }
+  console.log(orders.length)
+  if (context.active && orders.length === 0 && ordersFromLocalStorage.length > 0) {
+    console.log("SetState")
+    setOrders(ordersFromLocalStorage)
+  } else {
+    console.log("Not the case")
+
+  }
+
   const [activeCoins, setActivCoins] = React.useState({
     triggerFrom: {
       symbol: "KNC",
@@ -92,8 +130,6 @@ function Page() {
   });
   const [needAllowance, setNeedAllowance] = React.useState(false)
 
-  const [rows, setRows] = React.useState()
-
 
   // Used to display tx hash
   const [transactionHash, setTransactionHash] = React.useState(undefined);
@@ -102,9 +138,22 @@ function Page() {
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
 
+  console.log(orders)
+  // const [rows, setRows] = React.useState(0)
+
+  // function handleChange (newProxyStatus, newRows) {
+  //   Promise.resolve().then(() => {
+  //     ReactDOM.unstable_batchedUpdates(() => {
+  //       setProxyStatus(newProxyStatus);
+  //       setRows(newRows)
+  //     })
+  //   })
+  // };
+
+
   function updateProxyStatus(newProxyStatus) {
-    console.log(`Setting new Proxy Status in Page.js`);
-    console.log(`${newProxyStatus}`);
+    // console.log(`Setting new Proxy Status in Page.js`);
+    // console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
   }
 
@@ -120,57 +169,28 @@ function Page() {
     setNeedAllowance(bool);
   }
 
-  async function test() {
-    const signer = context.library.getSigner();
-    const dummyContract = new ethers.Contract(
-      example["dummy"],
-      dummyABI,
-      signer
-    );
-    const dummyTransactionPromise = dummyContract.increment();
+  // function updateRows(newRows) {
+  //   setRows(newRows)
+  // }
 
-    dummyTransactionPromise.then(function(txReceipt) {
-      console.log(txReceipt["hash"]);
-      signer.provider
-        .waitForTransaction(txReceipt["hash"])
-        .then(function(transaction) {
-          // console.log('Transaction Mined: ' + transaction.hash);
-          console.log(transaction);
-          console.log("mined");
-        });
-    });
+
+  function fetchOrderFromLocalStorage() {
+    console.log("fetchOrderFromLocalStorage")
+    if (localStorage.getItem(`triggered-${context.account}`) !== null) {
+      const ordersInStorage = localStorage.getItem(`triggered-${context.account}`)
+      return(ordersInStorage)
+
+    }
   }
 
   return (
     <React.Fragment>
       <ProxyProvider value={proxyStatus}>
         <CoinProvider value={activeCoins}>
-          <OrderProvider value={setRows, rows}>
-            <ConnectBtn updateProxyStatus={updateProxyStatus} />
-            <h1>TriggeredX</h1>
-            <h3>Cross-Token Conditional Limit Orders for DEXs</h3>
-            <Card className={classes.card} raised>
-              <CardContent>
-                <h4 className={classes.title}>If this condition is true</h4>
-                <LockFrom></LockFrom>
-                <ConditionialSwitch></ConditionialSwitch>
-                <LockTo></LockTo>
-              </CardContent>
-            </Card>
-            <Icon>arrow_downward</Icon>
-            <Card className={classes.card} raised>
-              <CardContent>
-                <h4 className={classes.title}>Then swap these coins</h4>
-                <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
-                <br></br>
-                <ApproveBtn updateAllowance={updateAllowance} needAllowance={needAllowance}></ApproveBtn>
-                <br></br>
-                <Icon className={classes.arrow}>arrow_downward</Icon>
-                <SwapTo></SwapTo>
-              </CardContent>
-            </Card>
-            <ActionBtn updateProxyStatus={updateProxyStatus}></ActionBtn>
-            <Order></Order>
+          <OrderProvider value={ordersContext}>
+            <OrderRowCreator proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
+            </OrderRowCreator>
+
           </OrderProvider>
         </CoinProvider>
       </ProxyProvider>
