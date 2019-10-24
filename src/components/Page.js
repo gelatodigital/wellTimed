@@ -4,6 +4,8 @@ import React, { useContext, useEffect } from "react";
 // Import Components
 import OrderRowCreator from './OrderRowCreator'
 
+import TimeOrderWrapper from './TimeOrderWrapper'
+
 import CoinContext, { CoinProvider } from "../contexts/CoinContext";
 
 import {TimeProvider} from "../contexts/TimeContext"
@@ -111,18 +113,13 @@ function Page() {
   });
   const [needAllowance, setNeedAllowance] = React.useState(false)
 
-
-  // Used to display tx hash
-  const [transactionHash, setTransactionHash] = React.useState(undefined);
-  // Used for reacting to successfull txs
-  const [waitingForTX, setWaitingForTX] = React.useState(false);
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
 
   const [time, setTime] = React.useState({
-    numOrders: 0,
-    intervalTime: 0,
-    intervalType: ''
+    numOrders: 2,
+    intervalTime: 10,
+    intervalType: 'seconds'
   });
 
   const timePackage = {time, setTime}
@@ -180,8 +177,8 @@ function Page() {
         <CoinProvider value={activeCoins}>
           <OrderProvider value={ordersContext}>
             <TimeProvider value={timePackage}>
-              <OrderRowCreator proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
-              </OrderRowCreator>
+              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
+              </TimeOrderWrapper>
             </TimeProvider>
           </OrderProvider>
         </CoinProvider>

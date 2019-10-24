@@ -23,11 +23,16 @@ const useStyles = makeStyles(theme => ({
 	},
 	img: {
 		width: "24px",
-		height: "24px"
+		height: "24px",
+		marginLeft: '3px'
 	},
 	coins: {
 		display: "flex",
 		justifyContent: "space-between"
+	},
+	buttonPadding: {
+		marginTop: '1.5px',
+		width: '32px'
 	}
 }));
 
@@ -91,7 +96,7 @@ function TokenInputNoAmount(props) {
 		if (state.coin) {
 			return (
 				<span className={classes.coins}>
-					{state.coin.name}
+					{state.coin.symbol}
 					<img
 						src={state.coin.logo(state.coin.mainnet)}
 						alt="coin logo"
@@ -102,7 +107,7 @@ function TokenInputNoAmount(props) {
 		} else {
 			return (
 					<span className={classes.coins}>
-					{"Kyber Network"}
+					{"KNC"}
 					<img
 					src={
 						"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"
@@ -124,8 +129,9 @@ function TokenInputNoAmount(props) {
 	return (
 		<div className={classes.container}>
 			<Button
-				color={state.coin ? "primary" : "secondary"}
+				// color={state.coin ? "primary" : "secondary"}
 				onClick={handleClickOpen}
+				className={classes.buttonPadding}
 			>
 				{userChoice()}
 			</Button>

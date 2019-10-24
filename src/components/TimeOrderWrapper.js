@@ -19,7 +19,7 @@ import Test from "./Test";
 
 
 // Style
-import { Icon, makeStyles, Card, CardContent } from "@material-ui/core";
+import { Divider, Icon, makeStyles, Card, CardContent } from "@material-ui/core";
 
 
 const style = makeStyles({
@@ -28,14 +28,16 @@ const style = makeStyles({
       flexWrap: 'wrap',
     },
     card: {
-      margin: "25px"
+      // margin: "25px"
+      marginTop: "50px",
+      marginBottom: "25px"
     },
     cardContent: {
       display: 'flex',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center'
+      alignItems: 'stretch',
+      justifyContent: 'space-between'
     },
     arrow: {
       marginTop: "20px"
@@ -45,11 +47,15 @@ const style = makeStyles({
     },
     inputs: {
       textAlign: "center"
+    },
+    dividerClass: {
+      marginTop: '20px',
+      marginBottom: '10px'
     }
   });
 
 
-function OrderRowCreator(props) {
+function TimeOrderWrapper(props) {
 
     const context = useWeb3Context()
     const classes = style();
@@ -162,80 +168,31 @@ function OrderRowCreator(props) {
         <React.Fragment>
             <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
               <h1>Well Timed 🐎</h1>
-              <h3>Time-based order splitting on Kyber Network</h3>
+              <h3>Time-based order splitting on Kyber</h3>
+
               <Card className={classes.card} raised>
                 <CardContent className={classes.cardContent}>
                   {/* <h4 className={classes.title}>Title</h4> */}
-                    <Test></Test>
-                </CardContent>
-              </Card>
-              <Card className={classes.card} raised>
-                <CardContent className={classes.cardContent}>
-                  {/* <h4 className={classes.title}>Title</h4> */}
-                    <p className={classes.inputs}>PLACE</p>
-                    <NoOfSwaps></NoOfSwaps>
-                    <p className={classes.inputs}>ORDERS SELLING</p>
-                        <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
+                    <p className={classes.inputs}>Split my</p>
+                    <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
                     <p className={classes.inputs}>to</p>
                     <TokenInputNoAmount inputData={actionTo}></TokenInputNoAmount>
-                    <p className={classes.inputs}>EVERY</p>
+                    <p className={classes.inputs}>order over</p>
                     <TimeBetween ></TimeBetween>
                     <Interval></Interval>
+                    <p className={classes.inputs}>using</p>
+                    <NoOfSwaps></NoOfSwaps>
+                    <p className={classes.inputs}>trades</p>
                 </CardContent>
               </Card>
 
 
-              <Card className={classes.card} raised>
-                <CardContent>
-                  <h4 className={classes.title}>Swap</h4>
-                  <Grid container spacing={1}>
-                      <Grid item xs={5}>
-                        <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
-                      </Grid>
-                      <Grid item xs={2}>
-                        <SwapHorizIcon></SwapHorizIcon>
-                      </Grid>
-                      <Grid item xs={5}>
-                        <TokenInputNoAmount inputData={actionTo}></TokenInputNoAmount>
-                      </Grid>
-                  </Grid>
-                  <ApproveBtn updateAllowance={updateAllowance} needAllowance={needAllowance}></ApproveBtn>
-
-                  {/* <TokenInput inputData={actionFrom}></TokenInput> */}
-                  {/* <br></br>
-                  <br></br> */}
-
-                  {/* <SwapTo></SwapTo> */}
-
-                </CardContent>
-              </Card>
-              <Icon>arrow_downward</Icon>
-              <Card className={classes.card} raised>
-                <CardContent>
-
-
-                  <h4 className={classes.title}>How often?</h4>
-                  {/* <TokenInput inputData={actionTo}></TokenInput> */}
-                  <form className={classes.root} autoComplete="off">
-                    <Grid container spacing={3}>
-                      <Grid item xs={6}>
-                        <NoOfSwaps></NoOfSwaps>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <TimeBetween ></TimeBetween>
-                        <Interval></Interval>
-                      </Grid>
-                      {/* <Grid item xs={4}>
-                      </Grid> */}
-                    </Grid>
-                  </form>
-
-                </CardContent>
-              </Card>
               <ActionBtn   updateProxyStatus={updateProxyStatus}></ActionBtn>
+              <Divider variant="middle" className={classes.dividerClass}/>
+              <h3>Your orders</h3>
               <Order orderRows={orderRows}></Order>
         </React.Fragment>
     )
 }
 
-export default OrderRowCreator
+export default TimeOrderWrapper

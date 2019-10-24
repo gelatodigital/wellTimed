@@ -15,10 +15,10 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 60,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: '1.5px'
   },
 }));
 
@@ -32,24 +32,17 @@ export default function TimeInterval() {
 
   const handleChange = event => {
     const newTime = {...time}
-    let newNumOrders
-    if (event.target.value === "")
-    {
-      newNumOrders = 1
-    }
-    else {
-      newNumOrders = event.target.value
-    }
-    newTime.intervalType = newNumOrders
+    newTime.intervalType = event.target.value
     setTime(newTime)
  };
 
   return (
-        <FormControl  variant="outlined" className={classes.formControl}>
+        <FormControl className={classes.formControl}>
             {/* <InputLabel shrink htmlFor="age-label-placeholder">
                 Interval Type
             </InputLabel> */}
             <Select
+                disableUnderline={true}
                 htmlFor="outlined-age-simple"
                 value={time.intervalType}
                 onChange={handleChange}
@@ -61,9 +54,9 @@ export default function TimeInterval() {
                 name="age"
                 className={classes.selectEmpty}
                 >
-                <MenuItem value={"seconds"}>seconds</MenuItem>
                 <MenuItem value={"minutes"}>minutes</MenuItem>
                 <MenuItem value={"hours"}>hours</MenuItem>
+                <MenuItem value={"seconds"}>days</MenuItem>
 
             </Select>
                 {/* <FormHelperText>Label + placeholder</FormHelperText> */}

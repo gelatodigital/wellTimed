@@ -17,10 +17,10 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 60,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: '2px',
   },
 }));
 
@@ -46,20 +46,27 @@ export default function NoOfSwaps() {
     setTime(newTime)
  };
 
+ function renderDefaultValue() {
+   return time.numOrders;
+ }
+
   return (
-        <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel shrink>
+        <FormControl className={classes.formControl}>
+                {/* <InputLabel shrink>
                 No. of swaps
-                </InputLabel>
+                </InputLabel> */}
                 <Select
+                  disableUnderline={true}
                   htmlFor="outlined-age-simple"
                   value={time.numOrders}
                   onChange={handleChange}
-                  displayEmpty
                   name="numOrders"
                   className={classes.selectEmpty}
+                  placeholder={time.numOrders}
+                  displayEmpty={true}
+                  renderValue={renderDefaultValue}
                 >
-                <MenuItem selected value={1}>1</MenuItem>
+                <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
                 <MenuItem value={4}>4</MenuItem>

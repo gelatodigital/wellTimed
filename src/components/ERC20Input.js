@@ -24,21 +24,38 @@ import { getTokenBalance, getTokenAllowance } from "../helpers";
 import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    width: '32px'
+  },
   container: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    paddingLeft: '4px',
+
+
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
+
+  },
+  amountInput: {
+    marginTop: '2px',
+    width: '50px',
+    textAlign: 'right'
   },
   img: {
     width: "24px",
-    height: "24px"
+    height: "24px",
+    marginLeft: '3px'
   },
   coins: {
     display: "flex",
     justifyContent: "space-between"
+  },
+  buttonPadding: {
+    marginTop: '1.5px',
+    width: '32px'
   }
 }));
 
@@ -90,7 +107,7 @@ function ERC20Input(props) {
     if (state.coin) {
       return (
         <span className={classes.coins}>
-          {state.coin.name}
+          {state.coin.symbol}
           <img
             src={state.coin.logo(state.coin.mainnet)}
             alt="coin logo"
@@ -100,7 +117,7 @@ function ERC20Input(props) {
       );
     } else {
       return  (<span className={classes.coins}>
-        {"Chain Link"}
+        {"LINK"}
         <img
           src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
           alt="coin logo"
@@ -178,13 +195,17 @@ function ERC20Input(props) {
   return (
     <div className={classes.container}>
       <Input
+        className={classes.amountInput}
+        disableUnderline={true}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
         placeholder="0"
       />
       <Button
-        color={state.coin ? "primary" : "secondary"}
+        className={classes.buttonPadding}
+        // color={state.coin ? "primary" : "secondary"}
+        // color={state.coin ? "primary" : "secondary"}
         onClick={handleClickOpen}
       >
         {" "}

@@ -17,10 +17,10 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 60,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    marginTop: '1.5px',
   },
 }));
 
@@ -34,36 +34,57 @@ export default function TimeBetween() {
 
   const handleChange = event => {
     const newTime = {...time}
-    let newNumOrders
-    if (event.target.value === "")
-    {
-      newNumOrders = 1
-    }
-    else {
-      newNumOrders = event.target.value
-    }
-    newTime.intervalTime = newNumOrders
+    let  newIntervalTime = event.target.value
+    newTime.intervalTime = newIntervalTime
     setTime(newTime)
- };
+  };
+
+ function renderDefaultValue() {
+  return time.intervalTime;
+  }
 
   return (
-        <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel shrink htmlFor="age-label-placeholder">
+        <FormControl  className={classes.formControl}>
+            {/* <InputLabel shrink htmlFor="age-label-placeholder">
                 When?
-            </InputLabel>
+            </InputLabel> */}
             <Select
                 htmlFor="outlined-age-simple"
                 value={time.intervalTime}
                 onChange={handleChange}
-                displayEmpty
                 name="intervalTime"
                 className={classes.selectEmpty}
+                displayEmpty={true}
+                renderValue={renderDefaultValue}
+                disableUnderline={true}
                 >
+
                 <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={10}>15</MenuItem>
-                <MenuItem value={20}>30</MenuItem>
-                <MenuItem value={30}>45</MenuItem>
-                <MenuItem value={30}>60</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={6}>6</MenuItem>
+                <MenuItem value={7}>7</MenuItem>
+                <MenuItem value={8}>8</MenuItem>
+                <MenuItem value={9}>9</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={11}>11</MenuItem>
+                <MenuItem value={12}>12</MenuItem>
+                <MenuItem value={13}>13</MenuItem>
+                <MenuItem value={14}>14</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+                <MenuItem value={16}>16</MenuItem>
+                <MenuItem value={17}>17</MenuItem>
+                <MenuItem value={18}>18</MenuItem>
+                <MenuItem value={19}>19</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={21}>21</MenuItem>
+                <MenuItem value={22}>22</MenuItem>
+                <MenuItem value={23}>23</MenuItem>
+                <MenuItem value={24}>24</MenuItem>
+
+
             </Select>
                 {/* <FormHelperText>Label + placeholder</FormHelperText> */}
         </FormControl>
