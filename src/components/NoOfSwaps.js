@@ -62,7 +62,7 @@ export default function NoOfSwaps() {
                   onChange={handleChange}
                   name="numOrders"
                   className={classes.selectEmpty}
-                  placeholder={time.numOrders}
+                  // placeholder={`${time.numOrders}`}
                   displayEmpty={true}
                   renderValue={renderDefaultValue}
                 >

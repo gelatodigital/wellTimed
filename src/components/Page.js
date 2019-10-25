@@ -109,7 +109,28 @@ function Page() {
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }},
-    actionTo: ""
+    actionTo: {
+      symbol: "KNC",
+      name: "KyberNetwork",
+      address: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
+      decimals: 18,
+      id: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      },
+      reserves_src: [
+        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
+        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
+        "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7",
+        "0xA467b88BBF9706622be2784aF724C4B44a9d26F4"
+      ],
+      reserves_dest: [
+        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
+        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
+        "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7",
+        "0xA467b88BBF9706622be2784aF724C4B44a9d26F4"
+      ]
+    }
   });
   const [needAllowance, setNeedAllowance] = React.useState(false)
 
@@ -119,7 +140,7 @@ function Page() {
   const [time, setTime] = React.useState({
     numOrders: 2,
     intervalTime: 10,
-    intervalType: 'seconds'
+    intervalType: 'minutes'
   });
 
   const timePackage = {time, setTime}

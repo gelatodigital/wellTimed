@@ -117,10 +117,10 @@ function ApproveBtn(probs) {
   return (
     <div>
       { (needAllowance && !waitingForTX) &&
-        <Button onClick={approveToken} color={loading ? "pending" : "primary"}>Approve</Button>
+        <Button onClick={approveToken} color={"primary"}>Approve</Button>
       }
       { (needAllowance && waitingForTX) &&
-        <Button onClick={approveToken} color={loading ? "pending" : "primary"}>Waiting...</Button>
+        <Button onClick={approveToken} color={"secondary"}>Waiting...</Button>
       }
     </div>
   );

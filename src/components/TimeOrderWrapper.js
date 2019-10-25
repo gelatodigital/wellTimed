@@ -1,25 +1,21 @@
-import React, {useContext, useEffect} from 'react'
+import React from 'react'
 import { useWeb3Context } from "web3-react";
 
 // Import Components
-import ConditionialSwitch from "./ConditionSwitch";
 import ActionBtn from "./ActionBtn";
+import ApproveBtn from "./ApproveBtn";
 import ConnectBtn from "./ConnectBtn";
 import Order from "./Orders";
-import ApproveBtn from "./ApproveBtn";
 import ERC20Input from "./ERC20Input";
 import TokenInputNoAmount from "./TokenInputNoAmount";
 import NoOfSwaps from "./NoOfSwaps";
 import TimeBetween from "./TimeBetween";
 import Interval from "./TimeInterval";
-import Grid from '@material-ui/core/Grid';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
-import Test from "./Test";
 
 
 // Style
-import { Divider, Icon, makeStyles, Card, CardContent } from "@material-ui/core";
+import { Divider, makeStyles, Card, CardContent } from "@material-ui/core";
 
 
 const style = makeStyles({
@@ -185,7 +181,6 @@ function TimeOrderWrapper(props) {
                     <p className={classes.inputs}>trades</p>
                 </CardContent>
               </Card>
-
 
               <ActionBtn   updateProxyStatus={updateProxyStatus}></ActionBtn>
               <Divider variant="middle" className={classes.dividerClass}/>

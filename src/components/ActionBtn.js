@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import ConditionialSwitch from "./ConditionSwitch";
 // web3 library
 import { ethers } from "ethers";
 
@@ -18,14 +17,18 @@ import dummyABI from '../constants/ABIs/dummyContract.json'
 import gelatoCoreABI from '../constants/ABIs/gelatoCore.json'
 
 // import helpers
-import { getEncodedFunction } from '../helpers'
+import { encodePayload, encodeWithFunctionSelector, decoder } from '../helpers'
 
 
 // Import addresses
-import { DS_PROXY_REGISTRY, DS_GUARD_FACTORY, GELATO_CORE, TRIGGER, KYBER_ACTION, EXECUTOR, KYBER_TRIGGER } from '../constants/contractAddresses';
-import { AbiCoder } from 'ethers/utils';
+import { DS_PROXY_REGISTRY, GELATO_CORE, EXECUTOR, DUMMY } from '../constants/contractAddresses';
+import { triggerTimestampPassed } from '../constants/triggers'
+import { kyberTrade } from '../constants/actions'
+import { multiMintKyberTrade } from '../constants/scripts'
 
-import { Icon, Button } from "@material-ui/core";
+
+
+import {  Button } from "@material-ui/core";
 
 
 function ActionBtn(props) {
@@ -34,6 +37,7 @@ function ActionBtn(props) {
     const coins = useContext(CoinContext)
     const ordersContext = useContext(OrderContext)
     const timeContext = useContext(TimeContext)
+    const time = timeContext.time
     const orders = ordersContext['orders']
     const setOrders = ordersContext['setOrders']
 
@@ -48,13 +52,6 @@ function ActionBtn(props) {
     const [guardAddress, setGuardAddress] = React.useState(undefined)
     //console.log(proxyStatus)
 
-
-    // If we want to activate metamask when the page loads, we need to use useEffect()
-    // useEffect(() => {
-    //     console.log("effect")
-
-    // }, [])
-
     function CreateTransactButton() {
         switch(proxyStatus) {
             case 1:
@@ -62,13 +59,13 @@ function ActionBtn(props) {
 
             case 2:
                 // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button variant="contained" color='primary' onClick={deployAndSetGuard}>Connect your Proxy</Button>);
+                return (<Button variant="contained" color='primary' onClick={deployAndSetGuard}>Connect your Account</Button>);
 
             case 3:
-                return (<Button variant="contained" color='primary' onClick={setAuthority}>Approve TriggeredX</Button>);
+                return (<Button variant="contained" color='primary' onClick={setAuthority}>Connect your Account</Button>);
 
             case 4:
-                return (<Button variant="contained" color='primary' onClick={placeOrder}>Place Order</Button>);
+                return (<Button variant="contained" color='primary' onClick={mintSplitSell}>Place Order</Button>);
 
             default:
                 return (<Button variant="contained" color='primary' >Place Order</Button>);
@@ -184,39 +181,239 @@ function ActionBtn(props) {
         })
     }
 
-    function createRow(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount,          actionSellToken, actionSellAmount, actionBuyToken, isBigger) {
+    /*
+    function createRowLegacyTrade(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, actionSellToken, actionSellAmount, actionBuyToken, isBigger) {
+    */
 
-        const testRow = {
-            ifThis: "10000 WETH >= 2000 DAI", thenSwap: "200 KNC => 2000 DAI", created: "10/20/19 - 19:02:43", status: "open", action: "cancel"
+    function createRowLegacyTrade(actionSellToken, actionBuyToken, actionSellAmount, interval, noOfOrders, timestamp) {
+
+        const testRow = [{
+            swap: "100 KNC => DAI", when: "20.12.2019 - 18:04", status: "open"
+        }]
+
+        const orderCopy = [...orders]
+
+
+        for (let i=0; i < noOfOrders; i++)
+        {
+            timestamp = timestamp + (interval * i)
+            let date = new Date(timestamp*1000)
+            const timestampString =  `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+
+            const newOrder = {
+                swap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, when: timestampString, status: 'open'
+            }
+
+            orderCopy.push(newOrder)
         }
 
-        const sign = isBigger ? ">=" : "<="
 
-        const newOrder = {
-            ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
-        }
 
-        let newOrders;
-        // check the page's state, if it is still default or we already fetched orders from localStorage
-        console.log("preOrders")
-        console.log(orders)
-        orders === 0 ? newOrders = [] : newOrders = [...orders];
-        newOrders.push(newOrder)
-        // Push new order into local storage
-        localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
+
+
+
+        // const sign = isBigger ? ">=" : "<="
+
+        // const newOrder = {
+        //     ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
+        // }
+
+        // let newOrders;
+        // // check the page's state, if it is still default or we already fetched orders from localStorage
+        // console.log("preOrders")
+        // console.log(orders)
+        // orders === 0 ? newOrders = [] : newOrders = [...orders];
+        // newOrders.push(newOrder)
+        // // Push new order into local storage
+        // localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
         // Set state including new order
-        setOrders(newOrders)
+        setOrders(orderCopy)
 
     }
 
 
+    async function testEncoding() {
+        const dummyAddress = DUMMY[context.networkId]
+        const signer = context.library.getSigner()
+        const dummyContract = new ethers.Contract(dummyAddress, dummyABI, signer)
+
+        const payload = encodeWithFunctionSelector('getCounter',[{type: 'uint256', name:'num'}], [100])
+
+        console.log(payload)
+
+        const success = await dummyContract.testEncoding(payload)
+        console.log(success)
+        console.log(success.toString())
+
+    }
+
+    async function mintSplitSell() {
+        setWaitingForTX(true)
+        // Function to call
+        // splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment) d
+
+
+
+
+        let timestamp = Math.floor(Date.now() / 1000)
+        let multiplier
+        switch(time.intervalType)
+        {
+            case('minutes'):
+                multiplier = 60;
+                break;
+
+            case('hours'):
+                multiplier = 3600;
+                break;
+
+            case('days'):
+                multiplier = 86400;
+                break;
+
+        }
+        let interval = time.intervalTime * multiplier / time.numOrders
+
+        // encode action
+        const actionSellToken = coins['actionFrom']['address']
+        const actionSellTokenSymbol = coins['actionFrom']['symbol']
+        const actionSellAmount = coins['amountActionFrom']
+
+        const actionBuyToken = coins['actionTo']['address']
+        const actionBuyTokenSymbol = coins['actionTo']['symbol']
+
+        // actionData
+        const actionData = [actionSellToken, actionBuyToken, actionSellAmount, 0]
+        console.log(actionData)
+
+        // Fetch prepayment
+        const signer = context.library.getSigner()
+        const gelatoCoreAddress = GELATO_CORE[context.networkId]
+        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+
+
+        const timeTriggerAddress = triggerTimestampPassed.address
+        const kyberTradeAddress = kyberTrade.address
+        const actionPayload = encodePayload(kyberTrade.dataTypes, actionData)
+        const executorAddress = EXECUTOR[context.networkId]
+        const startingTime = timestamp
+        const intervalTime = interval
+        const noOfOrders = time.numOrders
+        const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(kyberTradeAddress, executorAddress)
+
+        console.log(kyberSwapPrepayment.toString())
+
+        const prepayment = parseInt(kyberSwapPrepayment.toString()) * noOfOrders
+        console.log(`Needed Prepayment: ${prepayment}`)
+
+
+        // Override tx values
+        let overrides = {
+
+            // The maximum units of gas for the transaction to use
+            gasLimit: 800000,
+
+            // The price (in wei) per unit of gas
+            gasPrice: ethers.utils.parseUnits('3.0', 'gwei'),
+
+            // The nonce to use in the transaction
+            // nonce: 123,
+
+            // The amount to send with the transaction (i.e. msg.value)
+            value: ethers.utils.bigNumberify(prepayment.toString())
+
+            // The chain ID (or network ID) to use
+            // chainId: 3
+
+        };
+
+        /*
+        address _timeTrigger,
+        uint256 _startTime,  // will be encoded here
+        address _action,
+        bytes calldata _specificActionParams,
+        address payable _selectedExecutor,
+        // MultiMintTimeBased params
+        uint256 _intervalSpan,
+        uint256 _numberOfMints
+        */
+
+
+
+        const multiMintPayload = encodeWithFunctionSelector(multiMintKyberTrade.funcSelector, multiMintKyberTrade.dataTypesWithName, [timeTriggerAddress, startingTime, kyberTradeAddress, actionPayload, executorAddress, intervalTime, noOfOrders])
+
+        decoder(multiMintPayload, multiMintKyberTrade.dataTypesWithName)
+
+        console.log(`About to mint:
+            kyber Action address: ${kyberTradeAddress},
+            timeTriggerAddress: ${timeTriggerAddress},
+            executorAddress: ${executorAddress}
+            StartingTime: ${startingTime},
+            intervalTime: ${intervalTime},
+            noOfOrders: ${noOfOrders},
+            kyberSwapPrepayment: ${kyberSwapPrepayment.toString()},
+            FuncSelector: ${multiMintKyberTrade.funcSelector},
+            DataTypes: ${multiMintKyberTrade.dataTypesWithName},
+            Action Payload: ${actionPayload}
+
+
+
+
+
+            Payload: ${multiMintPayload},
+        `)
+
+        console.log(multiMintKyberTrade.dataTypesWithName)
+
+        // Fetch user proxy address
+        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
+        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+
+        const proxyAddress = await proxyRegistryContract.proxies(context.account)
+        const proxyContract = await new ethers.Contract(proxyAddress, dsProxyABI, signer)
+
+        // address _target, bytes memory _data
+
+        // Send Tx to Proxy registry
+
+        // createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
+        // proxyContract.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
+        // .then( function(txReceipt) {
+        //     console.log("waiting for tx to get mined ...")
+        //     signer.provider.waitForTransaction(txReceipt['hash'])
+        //     .then(async function(tx) {
+        //             console.log("Execution Claim successfully minted")
+        //             setWaitingForTX(false)
+        //             console.log(tx)
+        //             createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
+
+        //             // createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
+        //     })
+        // }, (error) => {
+        //     console.log("Sorry")
+        //     console.log(error)
+        //     setWaitingForTX(false)
+        // })
+
+
+    }
+
     async function placeOrder() {
+        // 1. Check which trigger / action the user selected
 
+        // 2. Convert user input into ready to be encoded data
+        // Goal: [timestamp]
+        // 1. Convert current timestamp from milliseconds to seconds
 
-        // TRIGGER: Time Input
-        const numOrders = timeContext.time.numOrders
-        const intervalTime = timeContext.time.intervalTime
-        const intervalType = timeContext.time.intervalType
+        // const triggerDataArray = convertUserInput()
+        // let triggerPayload;
+        // triggerDataArray.forEach(triggerData => {
+        //     console.log(triggerData)
+        //     triggerPayload = encodePayload(triggerTimestampPassed['dataTypes'], triggerData)
+        // })
+
+        // console.log(triggerDataArray)
+        // console.log(triggerPayload)
 
         // ACTION: Token SWAP INPUT
         const actionSellToken = coins['actionFrom']['address']
@@ -226,7 +423,7 @@ function ActionBtn(props) {
         const actionBuyToken = coins['actionTo']['address']
         const actionBuyTokenSymbol = coins['actionTo']['symbol']
 
-        console.log(numOrders, intervalTime, intervalType)
+        // console.log(numOrders, intervalTime, intervalType)
 
 
 
@@ -322,7 +519,11 @@ function ActionBtn(props) {
                         <CreateTransactButton></CreateTransactButton>
                     }
                     { waitingForTX &&
-                        <button> Please wait ...</button>
+                        <Button
+                            color="secondary"
+                        >
+                            Please wait ...
+                        </Button>
                     }
                     {transactionHash &&
                         <p>Tx Hash: {transactionHash}</p>

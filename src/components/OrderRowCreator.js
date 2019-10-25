@@ -1,8 +1,7 @@
-import React, {useContext, useEffect} from 'react'
+import React from 'react'
 import { useWeb3Context } from "web3-react";
 
 // Import Components
-import ConditionialSwitch from "./ConditionSwitch";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
 import Order from "./Orders";
@@ -89,7 +88,6 @@ function OrderRowCreator(props) {
 
     // Props
     const proxyStatus = props.proxyStatus
-    const networkId = context.networkId
     const updateProxyStatus = props.updateProxyStatus
 
     const updateAllowance = props.updateAllowance

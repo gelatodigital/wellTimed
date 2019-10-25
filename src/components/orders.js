@@ -49,8 +49,8 @@ function getSorting(order, orderBy) {
 
 const headCells = [
   { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
-  { id: "when", numeric: true, disablePadding: false, label: "When" },
-  { id: "status", numeric: true, disablePadding: false, label: "Status" }
+  { id: "when", numeric: false, disablePadding: false, label: "When" },
+  { id: "status", numeric: false, disablePadding: false, label: "Status" }
 ];
 
 function EnhancedTableHead(props) {
