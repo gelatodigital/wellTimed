@@ -376,24 +376,24 @@ function ActionBtn(props) {
 
         // Send Tx to Proxy registry
 
-        // createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
-        // proxyContract.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
-        // .then( function(txReceipt) {
-        //     console.log("waiting for tx to get mined ...")
-        //     signer.provider.waitForTransaction(txReceipt['hash'])
-        //     .then(async function(tx) {
-        //             console.log("Execution Claim successfully minted")
-        //             setWaitingForTX(false)
-        //             console.log(tx)
-        //             createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
+        createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
+        proxyContract.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
+        .then( function(txReceipt) {
+            console.log("waiting for tx to get mined ...")
+            signer.provider.waitForTransaction(txReceipt['hash'])
+            .then(async function(tx) {
+                    console.log("Execution Claim successfully minted")
+                    setWaitingForTX(false)
+                    console.log(tx)
+                    createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
 
-        //             // createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
-        //     })
-        // }, (error) => {
-        //     console.log("Sorry")
-        //     console.log(error)
-        //     setWaitingForTX(false)
-        // })
+                    // createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
+            })
+        }, (error) => {
+            console.log("Sorry")
+            console.log(error)
+            setWaitingForTX(false)
+        })
 
 
     }
