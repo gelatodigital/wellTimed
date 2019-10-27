@@ -1,333 +1,402 @@
 import React, { useContext } from "react";
+
 // web3 library
 import { ethers } from "ethers";
 
 // Contexts
 // Context so we access the users account & provider
-import { useWeb3Context, Connectors } from 'web3-react'
-import ProxyContext from '../contexts/ProxyContext'
+import { useWeb3Context } from "web3-react";
+import ProxyContext from "../contexts/ProxyContext";
 import CoinContext from "../contexts/CoinContext";
 import OrderContext from "../contexts/OrderContext";
-import TimeContext from "../contexts/TimeContext"
+import TimeContext from "../contexts/TimeContext";
 
 // Import ABIs
-import proxyRegistryABI from '../constants/ABIs/proxy-registry.json';
-import dsProxyABI from '../constants/ABIs/ds-proxy.json';
-import dummyABI from '../constants/ABIs/dummyContract.json'
-import gelatoCoreABI from '../constants/ABIs/gelatoCore.json'
+import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
+import dsProxyABI from "../constants/ABIs/ds-proxy.json";
+import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
 
 // import helpers
-import { encodePayload, encodeWithFunctionSelector, decoder } from '../helpers'
-
+import { encodePayload, encodeWithFunctionSelector } from "../helpers";
 
 // Import addresses
-import { DS_PROXY_REGISTRY, GELATO_CORE, EXECUTOR, DUMMY } from '../constants/contractAddresses';
-import { triggerTimestampPassed } from '../constants/triggers'
-import { kyberTrade } from '../constants/actions'
-import { multiMintKyberTrade } from '../constants/scripts'
+import {
+	DS_PROXY_REGISTRY,
+	GELATO_CORE,
+	EXECUTOR
+} from "../constants/contractAddresses";
+import { triggerTimestampPassed } from "../constants/triggers";
+import { kyberTrade } from "../constants/actions";
+import { multiMintKyberTrade } from "../constants/scripts";
 
+// Import Components
+import CircularDeterminate from './CircularDeterminate'
 
-
-import {  Button } from "@material-ui/core";
+// Material UI
+import { Button } from "@material-ui/core";
 
 
 function ActionBtn(props) {
-    const context = useWeb3Context();
-    const proxyStatus = useContext(ProxyContext)
-    const coins = useContext(CoinContext)
-    const ordersContext = useContext(OrderContext)
-    const timeContext = useContext(TimeContext)
-    const time = timeContext.time
-    const orders = ordersContext['orders']
-    const setOrders = ordersContext['setOrders']
+	const context = useWeb3Context();
+	const proxyStatus = useContext(ProxyContext);
+	const coins = useContext(CoinContext);
+	const ordersContext = useContext(OrderContext);
+	const timeContext = useContext(TimeContext);
+	const time = timeContext.time;
+	const orders = ordersContext["orders"];
+	const setOrders = ordersContext["setOrders"];
+	const standardOverrides =
+		// Override tx values
+		{
+			// The maximum units of gas for the transaction to use
+			gasLimit: 3000000,
 
-    // State
-    const updateProxyStatus = props.updateProxyStatus
+			// The price (in wei) per unit of gas
+			gasPrice: ethers.utils.parseUnits("5.0", "gwei")
+		};
 
-    // Used to display tx hash
-    const [transactionHash, setTransactionHash] = React.useState(undefined);
-    // Used for reacting to successfull txs
-    const [waitingForTX, setWaitingForTX] = React.useState(false);
-    // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-    const [guardAddress, setGuardAddress] = React.useState(undefined)
-    //console.log(proxyStatus)
+	// State
+	const updateProxyStatus = props.updateProxyStatus;
 
-    function CreateTransactButton() {
-        switch(proxyStatus) {
-            case 1:
-                return (<Button variant="contained" color='primary' onClick={devirginize}>Create Account</Button>);
+	// Used to display tx hash
+	const [transactionHash] = React.useState(undefined);
+	// Used for reacting to successfull txs
+	const [waitingForTX, setWaitingForTX] = React.useState(false);
+	// Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
+	const [guardAddress, setGuardAddress] = React.useState(undefined);
+	//console.log(proxyStatus)
 
-            case 2:
-                // return (<Button color='primary' onClick={test}>Test</Button>);
-                return (<Button variant="contained" color='primary' onClick={deployAndSetGuard}>Connect your Account</Button>);
+	function CreateTransactButton() {
+		switch (proxyStatus) {
+			case 1:
+				return (
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={devirginize}
+					>
+						Create Account
+					</Button>
+				);
 
-            case 3:
-                return (<Button variant="contained" color='primary' onClick={setAuthority}>Connect your Account</Button>);
+			case 2:
+				// return (<Button color='primary' onClick={test}>Test</Button>);
+				return (
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={deployAndSetGuard}
+					>
+						Connect your Account
+					</Button>
+				);
 
-            case 4:
-                return (<Button variant="contained" color='primary' onClick={mintSplitSell}>Place Order</Button>);
+			case 3:
+				return (
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={setAuthority}
+					>
+						Connect your Account
+					</Button>
+				);
 
-            default:
-                return (<Button variant="contained" color='primary' >Place Order</Button>);
-          }
+			case 4:
+				return (<Button variant="contained" color='primary' onClick={mintSplitSell}>Split Sell Now</Button>);
 
-    }
+			default:
+				return (
+					<Button variant="contained" color="primary">
+						Split Sell Now
+					</Button>
+				);
+		}
+	}
 
-    async function devirginize() {
-        console.log("Deploying new Proxy for user")
-        setWaitingForTX(true)
-        const signer = context.library.getSigner()
-        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
-        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
-        const gelatoCoreAddress = GELATO_CORE[context.networkId]
-        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+	async function devirginize() {
+		console.log("Deploying new Proxy for user");
+        setWaitingForTX(true);
 
-        let guardAddress;
-        gelatoCoreContract.on("LogDevirginize", (oldValue, newValue, event) => {
-            console.log(`Old Value: ${oldValue}`)
-            console.log(`New Value: ${newValue}`)
-            guardAddress = newValue
-            setGuardAddress(guardAddress)
-            localStorage.setItem('guardAddress', guardAddress)
-            console.log(event)
-        })
+		const signer = context.library.getSigner();
+		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
+		const proxyRegistryContract = new ethers.Contract(
+			proxyRegistryAddress,
+			proxyRegistryABI,
+			signer
+		);
+		const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
 
-        // Devirginize user
-        // 1st Tx
-        gelatoCoreContract.devirginize()
-        .then(function(txReceipt) {
-            signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
-                setWaitingForTX(false)
-                updateProxyStatus(3)
-                console.log("ProxySuccessfully deployed")
-                // Fetch guard contract
+		let guardAddress;
+		gelatoCoreContract.on("LogDevirginize", (oldValue, newValue, event) => {
+			console.log(`Old Value: ${oldValue}`);
+			console.log(`New Value: ${newValue}`);
+			guardAddress = newValue;
+			setGuardAddress(guardAddress);
+			localStorage.setItem("guardAddress", guardAddress);
+			console.log(event);
+		});
 
+		// Devirginize user
+		// 1st Tx
+		gelatoCoreContract.devirginize(standardOverrides).then(
+			function(txReceipt) {
+				signer.provider
+					.waitForTransaction(txReceipt["hash"])
+					.then(async function(tx) {
+						setWaitingForTX(false);
+						updateProxyStatus(3);
+						console.log("ProxySuccessfully deployed");
+						// Fetch guard contract
 
-                const proxyAddress = await proxyRegistryContract.proxies(context.account)
-                console.log(`Deployed Proxy Address: ${proxyAddress}`)
-                console.log("Transaction:")
-                console.log(tx)
-                if(proxyAddress !== ethers.constants.AddressZero)
-                {
-                    // 2nd Tx
-                    const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
+						const proxyAddress = await proxyRegistryContract.proxies(
+							context.account
+						);
+						console.log(`Deployed Proxy Address: ${proxyAddress}`);
+						console.log("Transaction:");
+						console.log(tx);
+						if (proxyAddress !== ethers.constants.AddressZero) {
+							// 2nd Tx
+							const proxyContract = new ethers.Contract(
+								proxyAddress,
+								dsProxyABI,
+								signer
+							);
+						} else {
+							console.log("Proxy not found");
+						}
+					});
+			},
+			error => {
+				console.log("Sorry");
+				setWaitingForTX(false);
+			}
+		);
+	}
 
-                } else {
-                    console.log("Proxy not found")
-                }
-            })
-        }, (error) => {
-            console.log("Sorry")
-            setWaitingForTX(false)
-        })
+	async function deployAndSetGuard() {
+		console.log("Deploying new guard");
+		setWaitingForTX(true);
+		const signer = context.library.getSigner();
 
-    }
+		const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
 
-    async function deployAndSetGuard() {
-        console.log("Deploying new guard")
-        setWaitingForTX(true)
-        const signer = context.library.getSigner()
+		let guardAddress;
+		gelatoCoreContract.on("LogGuard", _guardAddress => {
+			setGuardAddress(_guardAddress);
+			console.log(`Guard Address: ${_guardAddress}`);
+			localStorage.setItem("guardAddress", guardAddress);
+		});
+		// Devirginize user
+		gelatoCoreContract.guard(standardOverrides).then(
+			function(txReceipt) {
+				signer.provider
+					.waitForTransaction(txReceipt["hash"])
+					.then(async function(tx) {
+						console.log("Guard successfully deployed");
+						setWaitingForTX(false);
+						updateProxyStatus(3);
+					});
+			},
+			error => {
+				console.log("Sorry");
+				setWaitingForTX(false);
+			}
+		);
+	}
 
-        const gelatoCoreAddress = GELATO_CORE[context.networkId]
-        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
+	async function setAuthority() {
+		setWaitingForTX(true);
+		console.log("Setting Authority");
+		const signer = context.library.getSigner();
+		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
+		const proxyRegistryContract = new ethers.Contract(
+			proxyRegistryAddress,
+			proxyRegistryABI,
+			signer
+		);
 
-        let guardAddress;
-        gelatoCoreContract.on("LogGuard", (_guardAddress) => {
-            setGuardAddress(_guardAddress)
-            console.log(`Guard Address: ${_guardAddress}`)
-            localStorage.setItem('guardAddress', guardAddress)
-        })
-        // Devirginize user
-        gelatoCoreContract.guard()
-        .then(function(txReceipt) {
-            signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
-                console.log("Guard successfully deployed")
-                setWaitingForTX(false)
-                updateProxyStatus(3)
-            })
-        }, (error) => {
-            console.log("Sorry")
-            setWaitingForTX(false)
-        })
-    }
+		const proxyAddress = await proxyRegistryContract.proxies(
+			context.account
+		);
+		const proxyContract = new ethers.Contract(
+			proxyAddress,
+			dsProxyABI,
+			signer
+		);
+		let guardAddressCopy = guardAddress;
+		if (guardAddressCopy === undefined) {
+			guardAddressCopy = localStorage.getItem("guardAddress");
+		}
 
+		console.log(
+			`Setting Guard ${guardAddressCopy} as authority for Proxy: ${proxyAddress}`
+		);
+		setWaitingForTX(true);
 
-    async function setAuthority() {
-        setWaitingForTX(true)
-        console.log("Setting Authority")
-        const signer = context.library.getSigner()
-        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
-        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+		proxyContract.setAuthority(guardAddressCopy, standardOverrides).then(
+			function(txReceipt) {
+				signer.provider
+					.waitForTransaction(txReceipt["hash"])
+					.then(async function(tx) {
+						console.log("Authority successfully setted");
+						setWaitingForTX(false);
+						updateProxyStatus(4);
+					});
+			},
+			error => {
+				console.log("Sorry");
+				setWaitingForTX(false);
+			}
+		);
+	}
 
-
-        const proxyAddress = await proxyRegistryContract.proxies(context.account)
-        const proxyContract = new ethers.Contract(proxyAddress, dsProxyABI, signer)
-        let guardAddressCopy = guardAddress
-        if (guardAddressCopy === undefined) {guardAddressCopy = localStorage.getItem('guardAddress')}
-
-        console.log(`Setting Guard ${guardAddressCopy} as authority for Proxy: ${proxyAddress}`)
-        setWaitingForTX(true)
-
-        proxyContract.setAuthority(guardAddressCopy)
-        .then(function(txReceipt) {
-            signer.provider.waitForTransaction(txReceipt['hash']).then(async function(tx) {
-                console.log("Authority successfully setted")
-                setWaitingForTX(false)
-                updateProxyStatus(4)
-            })
-        }, (error) => {
-            console.log("Sorry")
-            setWaitingForTX(false)
-        })
-    }
-
-    /*
+	/*
     function createRowLegacyTrade(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, actionSellToken, actionSellAmount, actionBuyToken, isBigger) {
     */
 
-    function createRowLegacyTrade(actionSellToken, actionBuyToken, actionSellAmount, interval, noOfOrders, timestamp) {
+	function createRowLegacyTrade(
+		actionSellToken,
+		actionBuyToken,
+		actionSellAmount,
+		interval,
+		noOfOrders,
+		timestamp
+	) {
+		const orderCopy = [...orders];
 
-        const testRow = [{
-            swap: "100 KNC => DAI", when: "20.12.2019 - 18:04", status: "open"
-        }]
+		for (let i = 0; i < noOfOrders; i++) {
+			timestamp = timestamp + interval * i;
+			let date = new Date(timestamp * 1000);
+			const timestampString = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
-        const orderCopy = [...orders]
+			const newOrder = {
+				swap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`,
+				when: timestampString,
+				status: "open"
+			};
 
+			orderCopy.push(newOrder);
+		}
 
-        for (let i=0; i < noOfOrders; i++)
-        {
-            timestamp = timestamp + (interval * i)
-            let date = new Date(timestamp*1000)
-            const timestampString =  `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+		// const sign = isBigger ? ">=" : "<="
 
-            const newOrder = {
-                swap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, when: timestampString, status: 'open'
-            }
+		// const newOrder = {
+		//     ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
+		// }
 
-            orderCopy.push(newOrder)
-        }
+		// let newOrders;
+		// // check the page's state, if it is still default or we already fetched orders from localStorage
+		// console.log("preOrders")
+		// console.log(orders)
+		// orders === 0 ? newOrders = [] : newOrders = [...orders];
+		// newOrders.push(newOrder)
+		// // Push new order into local storage
+		// localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
+		// Set state including new order
+		setOrders(orderCopy);
+	}
 
+	async function mintSplitSell() {
+        setWaitingForTX(true);
 
+		// Function to call
+		// splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment) d
 
+		let timestamp = Math.floor(Date.now() / 1000);
+		let multiplier;
+		switch (time.intervalType) {
+			case "minutes":
+				multiplier = 60;
+				break;
 
+			case "hours":
+				multiplier = 3600;
+				break;
 
+			case "days":
+				multiplier = 86400;
+				break;
 
-        // const sign = isBigger ? ">=" : "<="
+			default:
+				multiplier = 60;
+				break;
+		}
+		let interval = (time.intervalTime * multiplier) / time.numOrders;
 
-        // const newOrder = {
-        //     ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
-        // }
+		// encode action
+		const actionSellToken = coins["actionFrom"]["address"];
+		const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
+		const actionSellAmount = coins["amountActionFrom"];
 
-        // let newOrders;
-        // // check the page's state, if it is still default or we already fetched orders from localStorage
-        // console.log("preOrders")
-        // console.log(orders)
-        // orders === 0 ? newOrders = [] : newOrders = [...orders];
-        // newOrders.push(newOrder)
-        // // Push new order into local storage
-        // localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
-        // Set state including new order
-        setOrders(orderCopy)
+		const actionBuyToken = coins["actionTo"]["address"];
+		const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
 
-    }
+		// actionData
+		const actionData = [
+			actionSellToken,
+			actionBuyToken,
+			actionSellAmount,
+			0
+		];
+		console.log(actionData);
 
+		// Fetch prepayment
+		const signer = context.library.getSigner();
+		const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
 
-    async function testEncoding() {
-        const dummyAddress = DUMMY[context.networkId]
-        const signer = context.library.getSigner()
-        const dummyContract = new ethers.Contract(dummyAddress, dummyABI, signer)
+		const timeTriggerAddress = triggerTimestampPassed.address;
+		const kyberTradeAddress = kyberTrade.address;
+		const actionPayload = encodePayload(kyberTrade.dataTypes, actionData);
+		const executorAddress = EXECUTOR[context.networkId];
+		const startingTime = timestamp;
+		const intervalTime = interval;
+		const noOfOrders = time.numOrders;
+		const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(
+			kyberTradeAddress,
+			executorAddress
+		);
 
-        const payload = encodeWithFunctionSelector('getCounter',[{type: 'uint256', name:'num'}], [100])
+		console.log(kyberSwapPrepayment.toString());
 
-        console.log(payload)
+		const prepayment =
+			parseInt(kyberSwapPrepayment.toString()) * noOfOrders;
+		console.log(`Needed Prepayment: ${prepayment}`);
 
-        const success = await dummyContract.testEncoding(payload)
-        console.log(success)
-        console.log(success.toString())
+		// Override tx values
+		let overrides = {
+			// The maximum units of gas for the transaction to use
+			gasLimit: 800000,
 
-    }
+			// The price (in wei) per unit of gas
+			gasPrice: ethers.utils.parseUnits("3.0", "gwei"),
 
-    async function mintSplitSell() {
-        setWaitingForTX(true)
-        // Function to call
-        // splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment) d
+			// The nonce to use in the transaction
+			// nonce: 123,
 
+			// The amount to send with the transaction (i.e. msg.value)
+			value: ethers.utils.bigNumberify(prepayment.toString())
 
+			// The chain ID (or network ID) to use
+			// chainId: 3
+		};
 
-
-        let timestamp = Math.floor(Date.now() / 1000)
-        let multiplier
-        switch(time.intervalType)
-        {
-            case('minutes'):
-                multiplier = 60;
-                break;
-
-            case('hours'):
-                multiplier = 3600;
-                break;
-
-            case('days'):
-                multiplier = 86400;
-                break;
-
-        }
-        let interval = time.intervalTime * multiplier / time.numOrders
-
-        // encode action
-        const actionSellToken = coins['actionFrom']['address']
-        const actionSellTokenSymbol = coins['actionFrom']['symbol']
-        const actionSellAmount = coins['amountActionFrom']
-
-        const actionBuyToken = coins['actionTo']['address']
-        const actionBuyTokenSymbol = coins['actionTo']['symbol']
-
-        // actionData
-        const actionData = [actionSellToken, actionBuyToken, actionSellAmount, 0]
-        console.log(actionData)
-
-        // Fetch prepayment
-        const signer = context.library.getSigner()
-        const gelatoCoreAddress = GELATO_CORE[context.networkId]
-        const gelatoCoreContract = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer);
-
-
-        const timeTriggerAddress = triggerTimestampPassed.address
-        const kyberTradeAddress = kyberTrade.address
-        const actionPayload = encodePayload(kyberTrade.dataTypes, actionData)
-        const executorAddress = EXECUTOR[context.networkId]
-        const startingTime = timestamp
-        const intervalTime = interval
-        const noOfOrders = time.numOrders
-        const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(kyberTradeAddress, executorAddress)
-
-        console.log(kyberSwapPrepayment.toString())
-
-        const prepayment = parseInt(kyberSwapPrepayment.toString()) * noOfOrders
-        console.log(`Needed Prepayment: ${prepayment}`)
-
-
-        // Override tx values
-        let overrides = {
-
-            // The maximum units of gas for the transaction to use
-            gasLimit: 800000,
-
-            // The price (in wei) per unit of gas
-            gasPrice: ethers.utils.parseUnits('3.0', 'gwei'),
-
-            // The nonce to use in the transaction
-            // nonce: 123,
-
-            // The amount to send with the transaction (i.e. msg.value)
-            value: ethers.utils.bigNumberify(prepayment.toString())
-
-            // The chain ID (or network ID) to use
-            // chainId: 3
-
-        };
-
-        /*
+		/*
         address _timeTrigger,
         uint256 _startTime,  // will be encoded here
         address _action,
@@ -338,13 +407,23 @@ function ActionBtn(props) {
         uint256 _numberOfMints
         */
 
+		const multiMintPayload = encodeWithFunctionSelector(
+			multiMintKyberTrade.funcSelector,
+			multiMintKyberTrade.dataTypesWithName,
+			[
+				timeTriggerAddress,
+				startingTime,
+				kyberTradeAddress,
+				actionPayload,
+				executorAddress,
+				intervalTime,
+				noOfOrders
+			]
+		);
 
+		// decoder(multiMintPayload, multiMintKyberTrade.dataTypesWithName)
 
-        const multiMintPayload = encodeWithFunctionSelector(multiMintKyberTrade.funcSelector, multiMintKyberTrade.dataTypesWithName, [timeTriggerAddress, startingTime, kyberTradeAddress, actionPayload, executorAddress, intervalTime, noOfOrders])
-
-        decoder(multiMintPayload, multiMintKyberTrade.dataTypesWithName)
-
-        console.log(`About to mint:
+		console.log(`About to mint:
             kyber Action address: ${kyberTradeAddress},
             timeTriggerAddress: ${timeTriggerAddress},
             executorAddress: ${executorAddress}
@@ -361,43 +440,69 @@ function ActionBtn(props) {
 
 
             Payload: ${multiMintPayload},
-        `)
+        `);
 
-        console.log(multiMintKyberTrade.dataTypesWithName)
+		// Fetch user proxy address
+		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
+		const proxyRegistryContract = new ethers.Contract(
+			proxyRegistryAddress,
+			proxyRegistryABI,
+			signer
+		);
 
-        // Fetch user proxy address
-        const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId]
-        const proxyRegistryContract = new ethers.Contract(proxyRegistryAddress, proxyRegistryABI, signer);
+		const proxyAddress = await proxyRegistryContract.proxies(
+			context.account
+		);
+		const proxyContract = await new ethers.Contract(
+			proxyAddress,
+			dsProxyABI,
+			signer
+		);
 
-        const proxyAddress = await proxyRegistryContract.proxies(context.account)
-        const proxyContract = await new ethers.Contract(proxyAddress, dsProxyABI, signer)
+		// address _target, bytes memory _data
 
-        // address _target, bytes memory _data
+		// Send Tx to Proxy registry
 
-        // Send Tx to Proxy registry
+		createRowLegacyTrade(
+			actionSellTokenSymbol,
+			actionBuyTokenSymbol,
+			actionSellAmount,
+			intervalTime,
+			noOfOrders,
+			timestamp
+		);
+		proxyContract
+			.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
+			.then(
+				function(txReceipt) {
+					console.log("waiting for tx to get mined ...");
+					signer.provider
+						.waitForTransaction(txReceipt["hash"])
+						.then(async function(tx) {
+							console.log("Execution Claim successfully minted");
+							setWaitingForTX(false);
+							console.log(tx);
+							createRowLegacyTrade(
+								actionSellTokenSymbol,
+								actionBuyTokenSymbol,
+								actionSellAmount,
+								intervalTime,
+								noOfOrders,
+								timestamp
+							);
 
-        createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
-        proxyContract.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
-        .then( function(txReceipt) {
-            console.log("waiting for tx to get mined ...")
-            signer.provider.waitForTransaction(txReceipt['hash'])
-            .then(async function(tx) {
-                    console.log("Execution Claim successfully minted")
-                    setWaitingForTX(false)
-                    console.log(tx)
-                    createRowLegacyTrade(actionSellTokenSymbol, actionBuyTokenSymbol, actionSellAmount, intervalTime, noOfOrders, timestamp)
+							// createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
+						});
+				},
+				error => {
+					console.log("Sorry");
+					console.log(error);
+					setWaitingForTX(false);
+				}
+			);
+	}
 
-                    // createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
-            })
-        }, (error) => {
-            console.log("Sorry")
-            console.log(error)
-            setWaitingForTX(false)
-        })
-
-
-    }
-
+	/*
     async function placeOrder() {
         // 1. Check which trigger / action the user selected
 
@@ -424,10 +529,6 @@ function ActionBtn(props) {
         const actionBuyTokenSymbol = coins['actionTo']['symbol']
 
         // console.log(numOrders, intervalTime, intervalType)
-
-
-
-        /*
 
         if( triggerSellToken === ""|| coins['actionTo'] === ""|| coins['actionFrom'] === ""|| isBigger === "") {return}
 
@@ -504,46 +605,36 @@ function ActionBtn(props) {
             setWaitingForTX(false)
         })
 
-    */
     }
+   */
 
-    return (
-        <React.Fragment>
-            {/* <ShowProxyStatus></ShowProxyStatus> */}
-            {/* <div><button onClick={createRow} ></button></div> */}
+	return (
+		<React.Fragment>
+			{(context.active || (context.error && context.connectorName)) && (
+				<div>
+					{!waitingForTX && (
+						<CreateTransactButton></CreateTransactButton>
+					)}
+                    {waitingForTX && (
+                        <CircularDeterminate></CircularDeterminate>
+                    )}
 
-            { (context.active || (context.error && context.connectorName)) &&
-                <div>
 
-                    { !waitingForTX &&
-                        <CreateTransactButton></CreateTransactButton>
-                    }
-                    { waitingForTX &&
-                        <Button
-                            color="secondary"
-                        >
-                            Please wait ...
-                        </Button>
-                    }
-                    {transactionHash &&
-                        <p>Tx Hash: {transactionHash}</p>
-                    }
-                </div>
-            }
+				</div>
+			)}
 
-            { !context.active &&
-                <Button
-                    color="primary"
-                    onClick={() => {
-                    context.setFirstValidConnector(["MetaMask", "Infura"]);
-                    }}
-                >
-                    Connect Metamask
-                </Button>
-            }
-        </React.Fragment>
-    )
-
+			{!context.active && (
+				<Button
+					color="primary"
+					onClick={() => {
+						context.setFirstValidConnector(["MetaMask", "Infura"]);
+					}}
+				>
+					Connect Metamask
+				</Button>
+			)}
+		</React.Fragment>
+	);
 }
 
 export default ActionBtn;

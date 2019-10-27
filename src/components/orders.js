@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 
-import { useWeb3Context } from "web3-react";
+// import { useWeb3Context } from "web3-react";
 import OrderContext from "../contexts/OrderContext";
 
 function desc(a, b, orderBy) {
@@ -131,14 +131,12 @@ export default function Order(props) {
   const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const context = useWeb3Context()
   const ordersContext = useContext(OrderContext)
   const rows = ordersContext['orders']
 
-  console.log(rows)
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -213,7 +211,7 @@ export default function Order(props) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.when);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  {/* const labelId = `enhanced-table-checkbox-${index}`; */}
 
                   return (
                     <TableRow

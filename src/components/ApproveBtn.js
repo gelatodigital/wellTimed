@@ -17,7 +17,7 @@ function ApproveBtn(probs) {
 
   const needAllowance = probs.needAllowance
   const updateAllowance = probs.updateAllowance
-  const [state, setState] = React.useState(null);
+  // const [state, setState] = React.useState(null);
 
   async function userHasToken() {
     if (context.active && !!coinContext.ERC20.address) {
@@ -45,7 +45,7 @@ function ApproveBtn(probs) {
       !!coinContext.ERC20.address &&
       userToken._hex !== "0x00"
     ) {
-      setState({ cool: true });
+      // setState({ cool: true });
       return (
         <Button
           color={loading ? "pending" : "primary"}
@@ -73,10 +73,10 @@ function ApproveBtn(probs) {
         </Button>
       );
     } else if (context.active && !!coinContext.ERC20.address) {
-      setState({ cool: true });
+      // setState({ cool: true });
       return <Button>You got insufficient token amount</Button>;
     } else {
-      setState({ cool: true });
+      // setState({ cool: true });
       return <Button>yes</Button>;
     }
   };

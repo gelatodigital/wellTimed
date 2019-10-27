@@ -27,10 +27,10 @@ function ConnectBtn(props) {
   const proxyStatus = useContext(ProxyContext)
 
   const updateProxyStatus = props.updateProxyStatus
-  const fetchOrderFromLocalStorage = props.fetchOrderFromLocalStorage
-  const handleChangeInPage = props.handleChange
-  const updateRows = props.updateRows
-  const rows = props.rows
+  // const fetchOrderFromLocalStorage = props.fetchOrderFromLocalStorage
+  // const handleChangeInPage = props.handleChange
+  // const updateRows = props.updateRows
+  // const rows = props.rows
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
 
   function LogIn() {

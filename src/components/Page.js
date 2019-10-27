@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 
 
 // Import Components
-import OrderRowCreator from './OrderRowCreator'
 
 import TimeOrderWrapper from './TimeOrderWrapper'
 
-import CoinContext, { CoinProvider } from "../contexts/CoinContext";
+import { CoinProvider } from "../contexts/CoinContext";
 
 import {TimeProvider} from "../contexts/TimeContext"
 
@@ -21,29 +20,21 @@ import { ProxyProvider } from "../contexts/ProxyContext";
 import { useWeb3Context } from "web3-react";
 
 
-
-import { makeStyles } from "@material-ui/core";
-
-
-const style = makeStyles({
-  card: {
-    margin: "25px"
-  },
-  arrow: {
-    marginTop: "20px"
-  },
-  title: {
-    textAlign: "left"
-  }
-});
+// const style = makeStyles({
+//   card: {
+//     margin: "25px"
+//   },
+//   arrow: {
+//     marginTop: "20px"
+//   },
+//   title: {
+//     textAlign: "left"
+//   }
+// });
 
 function Page() {
   const context = useWeb3Context();
-  const classes = style();
-  const coinContext = useContext(CoinContext);
-  // State
-  // Activate the current ERC20 Token
-  const [erc20, setERC20] = React.useState(null);
+
 
   let ordersFromLocalStorage
   if (context.active) {
@@ -145,9 +136,7 @@ function Page() {
 
   const timePackage = {time, setTime}
 
-  console.log(time)
 
-  console.log(orders)
   // const [rows, setRows] = React.useState(0)
 
   // function handleChange (newProxyStatus, newRows) {
@@ -183,14 +172,14 @@ function Page() {
   // }
 
 
-  function fetchOrderFromLocalStorage() {
-    console.log("fetchOrderFromLocalStorage")
-    if (localStorage.getItem(`triggered-${context.account}`) !== null) {
-      const ordersInStorage = localStorage.getItem(`triggered-${context.account}`)
-      return(ordersInStorage)
+  // function fetchOrderFromLocalStorage() {
+  //   console.log("fetchOrderFromLocalStorage")
+  //   if (localStorage.getItem(`triggered-${context.account}`) !== null) {
+  //     const ordersInStorage = localStorage.getItem(`triggered-${context.account}`)
+  //     return(ordersInStorage)
 
-    }
-  }
+  //   }
+  // }
 
   return (
     <React.Fragment>

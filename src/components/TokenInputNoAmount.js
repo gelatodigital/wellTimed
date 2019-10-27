@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-	Input,
 	Button,
 	DialogTitle,
 	Dialog,
@@ -8,7 +7,6 @@ import {
 	MenuItem
 } from "@material-ui/core";
 
-import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
 import { getCorrectImageLink } from "../helpers";
 
@@ -41,16 +39,12 @@ function TokenInputNoAmount(props) {
 	// fetch params
 	const inputData = props.inputData
     const tokenType = inputData.tokenType
-    const amountType = inputData.amountType
-    const amountPlaceholder = inputData.amountPlaceholder
-    const disabledAmount = inputData.disabledAmount
-	const defaultToken = inputData.defaultToken
+
 
 
     // defaultToken => none if 'Select a Token'
     // const defaultToken = props.defaultToken
     // value for coinContext => e.g. 'triggerFrom' or 'actionTp'
-    const selectType = props.selectType
 
 	const classes = useStyles();
 	const coinContext = useContext(CoinContext);
@@ -121,10 +115,10 @@ function TokenInputNoAmount(props) {
 		}
 	};
 
-	const handleAmount = name => event => {
-		setState({ ...state, [name]: event.target.value || "" });
-		coinContext[amountType] = event.target.value;
-	};
+	// const handleAmount = name => event => {
+	// 	setState({ ...state, [name]: event.target.value || "" });
+	// 	coinContext[amountType] = event.target.value;
+	// };
 
 	return (
 		<div className={classes.container}>

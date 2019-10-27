@@ -3,7 +3,6 @@ import { useWeb3Context } from "web3-react";
 
 // Import Components
 import ActionBtn from "./ActionBtn";
-import ApproveBtn from "./ApproveBtn";
 import ConnectBtn from "./ConnectBtn";
 import Order from "./Orders";
 import ERC20Input from "./ERC20Input";
@@ -100,52 +99,52 @@ function TimeOrderWrapper(props) {
 
     // Props for <TokenInputNoAmount>
     // // TriggerFrom
-    const triggerFrom = {
-      tokenType: 'triggerFrom',
-      amountType: 'amountTriggerFrom',
-      amountPlaceholder: '0',
-      disabledAmount: false,
-      defaultToken: (
-        <span className={"makeStyles-coins-78"}>
-        {"Kyber Network"}
-        <img
-          src={
-            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"
-          }
-          alt="coin logo"
-          className={"makeStyles-img-77"}
-        />
-        </span>
-      )
-    }
-    // // TriggerTo
-    const triggerTo = {
-      tokenType: 'triggerTo',
-      amountType: 'amountTriggerTo',
-      amountPlaceholder: '0',
-      disabledAmount: false,
-      defaultToken: (
-        <span>Select a Token</span>
-      )
-    }
+    // const triggerFrom = {
+    //   tokenType: 'triggerFrom',
+    //   amountType: 'amountTriggerFrom',
+    //   amountPlaceholder: '0',
+    //   disabledAmount: false,
+    //   defaultToken: (
+    //     <span className={"makeStyles-coins-78"}>
+    //     {"Kyber Network"}
+    //     <img
+    //       src={
+    //         "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"
+    //       }
+    //       alt="coin logo"
+    //       className={"makeStyles-img-77"}
+    //     />
+    //     </span>
+    //   )
+    // }
+    // // // TriggerTo
+    // const triggerTo = {
+    //   tokenType: 'triggerTo',
+    //   amountType: 'amountTriggerTo',
+    //   amountPlaceholder: '0',
+    //   disabledAmount: false,
+    //   defaultToken: (
+    //     <span>Select a Token</span>
+    //   )
+    // }
 
-    // // ActionFrom
-    const actionFrom = {
-      tokenType: 'actionFrom',
-      amountType: 'amountActionTo',
-      amountPlaceholder: '0',
-      disabledAmount: false,
-      defaultToken: (
-        <span className={"makeStyles-coins-78"}>
-        {"Chain Link"}
-        <img
-          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
-          alt="coin logo"
-          className={"makeStyles-img-77"}
-        />
-      </span>
-      )
-    }
+    // // // ActionFrom
+    // const actionFrom = {
+    //   tokenType: 'actionFrom',
+    //   amountType: 'amountActionTo',
+    //   amountPlaceholder: '0',
+    //   disabledAmount: false,
+    //   defaultToken: (
+    //     <span className={"makeStyles-coins-78"}>
+    //     {"Chain Link"}
+    //     <img
+    //       src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
+    //       alt="coin logo"
+    //       className={"makeStyles-img-77"}
+    //     />
+    //   </span>
+    //   )
+    // }
 
      // // ActionTo
      const actionTo = {
