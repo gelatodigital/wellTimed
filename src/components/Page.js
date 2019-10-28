@@ -153,14 +153,14 @@ function Page() {
   }
 
   function updateActiveCoins(coins) {
-    console.log(`Setting coins in Page.js`);
-    console.log(`${coins}`);
+    // console.log(`Setting coins in Page.js`);
+    // console.log(`${coins}`);
     setActivCoins(coins);
   }
 
   function updateSelectedTokenDetails(newSelectedTokenDetails) {
-    console.log(`Updating Selected Token Details`);
-    console.log(`${newSelectedTokenDetails}`);
+    // console.log(`Updating Selected Token Details`);
+    // console.log(`${newSelectedTokenDetails}`);
     setSelectedTokenDetails(newSelectedTokenDetails)
   }
 
@@ -355,7 +355,6 @@ function Page() {
         orderCopy.push(newOrder)
       })
 
-      console.log(orders)
       return setOrders(orderCopy)
 
   }
@@ -363,7 +362,8 @@ function Page() {
 
   const ordersContext = {
     orders: orders,
-    fetchExecutionClaims: fetchExecutionClaims
+    fetchExecutionClaims: fetchExecutionClaims,
+    setOrders: setOrders
   }
 
   // function updateRows(newRows) {
