@@ -90,15 +90,11 @@ function TimeOrderWrapper(props) {
 
     // console.log(dummy)
 
-    const [orderRows, setOrderRows] = React.useState(dummy)
+    const [orderRows] = React.useState(dummy)
 
     // Props
     const proxyStatus = props.proxyStatus
-    const networkId = context.networkId
     const updateProxyStatus = props.updateProxyStatus
-
-    const updateAllowance = props.updateAllowance
-    const needAllowance = props.needAllowance
     const updateActiveCoins = props.updateActiveCoins
 
     // Props for <TokenInputNoAmount>
@@ -166,7 +162,7 @@ function TimeOrderWrapper(props) {
     return (
         <React.Fragment>
             <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
-              <h1>Well Timed 🐎</h1>
+              <h1>Well Timed <span role="image">🐎</span></h1>
               <h3>Time-based order splitting on Kyber</h3>
 
               <Card className={classes.card} raised>

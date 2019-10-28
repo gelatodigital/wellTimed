@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ethers } from "ethers";
 
 // Import Components
@@ -15,7 +15,7 @@ import {TimeProvider} from "../contexts/TimeContext"
 import { OrderProvider } from "../contexts/OrderContext";
 
 // Helper
-import { simpleDecoder, simpleMultipleDecoder, decoder, encodeWithFunctionSelector } from '../helpers'
+import {  decoder } from '../helpers'
 
 // ABIS
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
@@ -24,8 +24,7 @@ import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 // Import addresses
 import {
 	DS_PROXY_REGISTRY,
-	GELATO_CORE,
-	EXECUTOR
+	GELATO_CORE
 } from "../constants/contractAddresses";
 
 import {triggerTimestampPassed} from '../constants/triggers'
@@ -329,7 +328,7 @@ function Page() {
           let triggerPayload = claim[0].triggerPayload
 
           // WHEN:
-          // let decodedTimestamp = simpleDecoder(triggerPayload, triggerTimestampPassed.dataTypes)
+          // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
           let decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
 
           // SWAP:

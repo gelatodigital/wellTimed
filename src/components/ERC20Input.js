@@ -4,12 +4,8 @@ import {
   Button,
   DialogTitle,
   Dialog,
-  DialogContent,
+
   makeStyles,
-  FormControl,
-  InputLabel,
-  Select,
-  DialogActions,
   MenuItem
 } from "@material-ui/core";
 
@@ -19,7 +15,6 @@ import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
 import { getCorrectImageLink } from "../helpers";
-import ApproveBtn from './ApproveBtn'
 import { getTokenBalance, getTokenAllowance } from "../helpers";
 import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
 
@@ -79,19 +74,12 @@ function ERC20Input(props) {
   const handleChange = coin => {
     const newState = { ...state };
 		newState["coin"] = coin;
-		setState({ ...state, ["coin"]: coin, open: false });
+		setState({ ...state, "coin": coin, open: false });
     coinContext.actionFrom = coin;
     checkERC20ApprovalStatus()
   };
 
-  // const handleChange = coin => {
-	// 	console.log(coin);
-	// 	const newState = { ...state };
-	// 	newState["coin"] = coin;
-	// 	setState({ ...state, ["coin"]: coin, open: false });
-	// 	coinContext[tokenType] = coin;
-	// 	// handleClose()
-	// };
+
 
   const handleClickOpen = () => {
     setState({ ...state, open: true });

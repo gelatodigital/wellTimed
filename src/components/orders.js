@@ -9,11 +9,9 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import {ethers} from 'ethers'
 
 // import { useWeb3Context } from "web3-react";
 import OrderContext from "../contexts/OrderContext";
-import CoinContext from "../contexts/CoinContext";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -224,8 +222,6 @@ export default function Order(props) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.when);
-                  {/* const labelId = `enhanced-table-checkbox-${index}`; */}
-
                   return (
                     <TableRow
                       hover

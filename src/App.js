@@ -6,7 +6,6 @@ import "./App.css";
 import { MuiThemeProvider, createMuiTheme, Container } from "@material-ui/core";
 import Page from "./components/Page";
 
-import ConnectBtn from "./components/ConnectBtn";
 import { green, pink, red } from "@material-ui/core/colors";
 
 // const dotenv = require('dotenv');

@@ -18,7 +18,7 @@ import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
 import ERC20_ABI from "../constants/ABIs/erc20.json";
 
 // import helpers
-import { encodePayload, encodeWithFunctionSelector } from "../helpers";
+import { encodeWithFunctionSelector } from "../helpers";
 
 // Import addresses
 import {
@@ -61,8 +61,6 @@ function ActionBtn(props) {
 	// State
 	const updateProxyStatus = props.updateProxyStatus;
 
-	// Used to display tx hash
-	const [transactionHash] = React.useState(undefined);
 	// Used for reacting to successfull txs
 	const [waitingForTX, setWaitingForTX] = React.useState(false);
 	// Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
@@ -208,18 +206,18 @@ function ActionBtn(props) {
 						console.log(tx);
 						if (proxyAddress !== ethers.constants.AddressZero) {
 							// 2nd Tx
-							const proxyContract = new ethers.Contract(
-								proxyAddress,
-								dsProxyABI,
-								signer
-							);
+							// const proxyContract = new ethers.Contract(
+							// 	proxyAddress,
+							// 	dsProxyABI,
+							// 	signer
+							// );
 						} else {
 							console.log("Proxy not found");
 						}
 					});
 			},
 			error => {
-				console.log("Sorry");
+				console.log(error);
 				setWaitingForTX(false);
 			}
 		);
@@ -348,7 +346,7 @@ function ActionBtn(props) {
 	async function approveToken() {
 		// Close modal
 		setWaitingForTX(true);
-		let copyModalState = {... modalState};
+		let copyModalState = {...modalState};
 		copyModalState.open = false;
 		setModalState(copyModalState);
 
@@ -439,21 +437,7 @@ function ActionBtn(props) {
 			orderCopy.push(newOrder);
 		}
 
-		// const sign = isBigger ? ">=" : "<="
 
-		// const newOrder = {
-		//     ifThis: `${triggerSellAmount.toString()} ${triggerSellToken.toString()} ${sign} ${triggerBuyAmount.toString()} ${triggerBuyToken.toString()}`, thenSwap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`, created: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`, status: 'open', action: 'cancel'
-		// }
-
-		// let newOrders;
-		// // check the page's state, if it is still default or we already fetched orders from localStorage
-		// console.log("preOrders")
-		// console.log(orders)
-		// orders === 0 ? newOrders = [] : newOrders = [...orders];
-		// newOrders.push(newOrder)
-		// // Push new order into local storage
-		// localStorage.setItem(`triggered-${context.account}`, JSON.stringify(newOrders))
-		// Set state including new order
 		setOrders(orderCopy);
     }
 
@@ -461,7 +445,7 @@ function ActionBtn(props) {
 
         const copyModalState = { ...modalState };
         const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
-		const actionSellTokenAddress = coins["actionFrom"]["address"];
+		// const actionSellTokenAddress = coins["actionFrom"]["address"];
         const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
         const actionSellAmount = coins["amountActionFrom"];
 
