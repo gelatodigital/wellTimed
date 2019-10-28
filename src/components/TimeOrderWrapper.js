@@ -4,7 +4,6 @@ import { useWeb3Context } from "web3-react";
 // Import Components
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
-import Order from "./Orders";
 import ERC20Input from "./ERC20Input";
 import TokenInputNoAmount from "./TokenInputNoAmount";
 import NoOfSwaps from "./NoOfSwaps";
