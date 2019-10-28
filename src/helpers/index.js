@@ -18,6 +18,27 @@ export async function getTokenAllowance(tokenAddress, proxyAddress, signer, user
   return erc20Contract.allowance(userAddress, proxyAddress);
 }
 
+export async function approveToken(signer, beneficiary, tokenAddress) {
+
+  const erc20Contract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
+
+  // Send approve TX
+  erc20Contract.approve(beneficiary, ethers.constants.MaxUint256)
+  .then( function(txReceipt) {
+    console.log("waiting for tx to get mined ...")
+    signer.provider.waitForTransaction(txReceipt['hash'])
+    .then(async function(tx) {
+      console.log("ERC20 Token successfully approved")
+      console.log(tx)
+    })
+  }, (error) => {
+      console.log("Sorry")
+
+  })
+}
+
+
+
 export function getCorrectImageLink() {
   const table1 = {};
   const table2 = {};

@@ -54,7 +54,8 @@ function TimeOrderWrapper(props) {
 
     const context = useWeb3Context()
     const classes = style();
-
+    const selectedTokenDetails = props.selectedTokenDetails
+    const updateSelectedTokenDetails = props.updateSelectedTokenDetails
 
 
     let ordersInStorage;
@@ -169,7 +170,7 @@ function TimeOrderWrapper(props) {
                 <CardContent className={classes.cardContent}>
                   {/* <h4 className={classes.title}>Title</h4> */}
                     <p className={classes.inputs}>Split my</p>
-                    <ERC20Input needAllowance={needAllowance} updateAllowance={updateAllowance} updateActiveCoins={updateActiveCoins}></ERC20Input>
+                    <ERC20Input selectedTokenDetails={selectedTokenDetails} updateSelectedTokenDetails={updateSelectedTokenDetails} updateActiveCoins={updateActiveCoins}></ERC20Input>
                     <p className={classes.inputs}>to</p>
                     <TokenInputNoAmount inputData={actionTo}></TokenInputNoAmount>
                     <p className={classes.inputs}>order over</p>
@@ -181,7 +182,7 @@ function TimeOrderWrapper(props) {
                 </CardContent>
               </Card>
 
-              <ActionBtn   updateProxyStatus={updateProxyStatus}></ActionBtn>
+              <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
               <Divider variant="middle" className={classes.dividerClass}/>
               <h3>Your orders</h3>
               <Order orderRows={orderRows}></Order>

@@ -123,7 +123,7 @@ function Page() {
       ]
     }
   });
-  const [needAllowance, setNeedAllowance] = React.useState(false)
+  const [selectedTokenDetails, setSelectedTokenDetails] = React.useState({needAllowance: false, sufficientBalance: false})
 
   // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
   const [proxyStatus, setProxyStatus] = React.useState(0);
@@ -161,10 +161,10 @@ function Page() {
     setActivCoins(coins);
   }
 
-  function updateAllowance(bool) {
-    console.log(`Setting allowance in Page.js`);
-    console.log(`${bool}`);
-    setNeedAllowance(bool);
+  function updateSelectedTokenDetails(newSelectedTokenDetails) {
+    console.log(`Updating Selected Token Details`);
+    console.log(`${newSelectedTokenDetails}`);
+    setSelectedTokenDetails(newSelectedTokenDetails)
   }
 
   // function updateRows(newRows) {
@@ -180,14 +180,13 @@ function Page() {
 
   //   }
   // }
-
   return (
     <React.Fragment>
       <ProxyProvider value={proxyStatus}>
         <CoinProvider value={activeCoins}>
           <OrderProvider value={ordersContext}>
             <TimeProvider value={timePackage}>
-              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateAllowance={updateAllowance} needAllowance={needAllowance} updateActiveCoins={updateActiveCoins} >
+              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateActiveCoins={updateActiveCoins} >
               </TimeOrderWrapper>
             </TimeProvider>
           </OrderProvider>

@@ -1,4 +1,4 @@
 export const kyberTrade = {
-    address: '0x8710aF1bC86a569c18Ec5b41A656B3aA9Eca9037',
+    address: '0x6449992895c36BE20b356D85E3A1411135D46a7b',
     dataTypes: ['address', 'address', 'uint256', 'uint256']
 }

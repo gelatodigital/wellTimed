@@ -64,8 +64,8 @@ function ERC20Input(props) {
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
 
-  const updateAllowance = props.updateAllowance
-  const needAllowance = props.needAllowance
+  const updateSelectedTokenDetails = props.updateSelectedTokenDetails
+  const selectedTokenDetails = props.selectedTokenDetails
   // State
 
   const [state, setState] = React.useState({
@@ -80,7 +80,7 @@ function ERC20Input(props) {
 		newState["coin"] = coin;
 		setState({ ...state, ["coin"]: coin, open: false });
     coinContext.actionFrom = coin;
-
+    checkERC20ApprovalStatus()
   };
 
   // const handleChange = coin => {
@@ -130,11 +130,12 @@ function ERC20Input(props) {
   const handleAmount = name => event => {
     setState({ ...state, [name]: event.target.value || "" });
     coinContext.amountActionFrom = event.target.value;
-    displayApproveBtn()
+    checkERC20ApprovalStatus()
   };
 
-  async function displayApproveBtn() {
+  async function checkERC20ApprovalStatus() {
     // check if context has an actionFrom
+    let copySelectedTokenDetails = {...selectedTokenDetails}
     if (context.active)
     {
       if (coinContext['actionFrom']['address']) {
@@ -147,9 +148,13 @@ function ERC20Input(props) {
 
 
         console.log(`SellTokenBalance: ${sellTokenBalance}`)
+        let sellAmount = coinContext['amountActionFrom']
 
-        if (parseInt(sellTokenBalance) !== 0)
+        // Check if user has sufficient Token Balance
+        if (parseInt(sellTokenBalance) >= parseInt(sellAmount))
         {
+          // Store that user has sufficinet balance
+          copySelectedTokenDetails.sufficientBalance = true
           // Check if proxy is approved
           const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
           const proxyRegistryContract = new ethers.Contract(
@@ -160,7 +165,6 @@ function ERC20Input(props) {
           const proxyAddress = await proxyRegistryContract.proxies(
             context.account)
 
-          let sellAmount = coinContext['amountActionFrom']
           if (sellAmount && parseInt(sellAmount) > 0)
           {
             let sellTokenAllowance = await getTokenAllowance(
@@ -174,18 +178,24 @@ function ERC20Input(props) {
             if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
             {
               // Render approve button
-              updateAllowance(true)
-
+              console.log("User has enough tokens, but needs allowance")
+              copySelectedTokenDetails.needAllowance = true
+              console.log(copySelectedTokenDetails)
+              updateSelectedTokenDetails(copySelectedTokenDetails)
+            } else {
+              console.log("has sufficient Tokens, and has sufficient balanece")
+              console.log("We can directly split sell")
+              copySelectedTokenDetails.needAllowance = false
+              updateSelectedTokenDetails(copySelectedTokenDetails)
             }
 
-          }
-          else {
-            updateAllowance(false)
           }
 
 
         } else {
-          updateAllowance(false)
+          copySelectedTokenDetails.sufficientBalance = false
+          console.log("Render Modal: You don't have enough balance of Token X")
+          updateSelectedTokenDetails(copySelectedTokenDetails)
         }
       }
 
