@@ -532,10 +532,10 @@ function ActionBtn(props) {
 
 		// actionData
 		const actionData = [
-			context.account,
 			actionSellToken,
-			actionBuyToken,
 			actionSellAmount,
+			actionBuyToken,
+			context.account,
 			0
 		];
 
@@ -590,7 +590,6 @@ function ActionBtn(props) {
 			// The chain ID (or network ID) to use
 			// chainId: 3
 		};
-
 		const multiMintPayload = encodeWithFunctionSelector(
 			multiMintKyberTrade.funcSelector,
 			multiMintKyberTrade.dataTypesWithName,
