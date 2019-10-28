@@ -73,7 +73,7 @@ function TokenInputNoAmount(props) {
 		console.log(coin);
 		const newState = { ...state };
 		newState["coin"] = coin;
-		setState({ ...state, ["coin"]: coin, open: false });
+		setState({ ...state, "coin": coin, open: false });
 		coinContext[tokenType] = coin;
 		// handleClose()
 	};

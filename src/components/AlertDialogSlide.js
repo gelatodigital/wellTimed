@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,7 +22,7 @@ export default function AlertDialogSlide(props) {
 
   const handleClose = () => {
     // If no function is passed
-    let copyModalState = {... modalState}
+    let copyModalState = {...modalState}
     if (modalState.func === undefined )
     {
       copyModalState.open = false
@@ -34,7 +34,7 @@ export default function AlertDialogSlide(props) {
 };
 
 function handleOnlyClose () {
-    let copyModalState = {... modalState}
+    let copyModalState = {...modalState}
     copyModalState.open = false
     setModalState(copyModalState);
 }
