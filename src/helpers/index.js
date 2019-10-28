@@ -109,6 +109,29 @@ export function encodeWithFunctionSelector(method, funcDataTypes, funcParameters
   }, funcParameters)
 }
 
+export function simpleDecoder(encodedPayload, dataTypesWithName)
+{
+
+  //  web3.eth.abi.decodeParameters(
+  //   dataTypesWithName,
+  //   encodePayload
+  // );
+  // console.log("Decoded Payload: decodedPayload ", decodedPayload);
+
+
+  let decodedPayload = web3.eth.abi.decodeParameter('uint256', encodedPayload);
+  // console.log(decodedPayload)
+  // console.log("Decoded Payload: decodedPayload ", decodedPayload);
+
+  return decodedPayload
+}
+
+export function simpleMultipleDecoder(encodedPayload, dataTypes) {
+  return web3.eth.abi.decodeParameters(dataTypes, encodedPayload)
+}
+
+
+
 export function decoder(encodedPayload, dataTypesWithName)
 {
   let decodedPayload
@@ -143,9 +166,8 @@ export function decoder(encodedPayload, dataTypesWithName)
     returnedDataPayload
   );
   // console.log("Decoded Payload: decodedPayload ", decodedPayload);
-  console.log(decodedPayload)
-  let encodedFuncSelec = web3.eth.abi.encodeFunctionSignature('multiMint(address,uint256,address,bytes,address,uint256,uint256)')
-  console.log(returnedFuncSelec)
-  console.log(encodedFuncSelec)
-  console.log("Decoded Payload: decodedPayload ", decodedPayload);
+  // console.log(decodedPayload)
+  // console.log(returnedFuncSelec)
+  // console.log("Decoded Payload: decodedPayload ", decodedPayload);
+  return decodedPayload
 }

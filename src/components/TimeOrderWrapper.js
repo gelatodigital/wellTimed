@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext }  from 'react'
 import { useWeb3Context } from "web3-react";
 
 // Import Components
@@ -11,10 +11,11 @@ import NoOfSwaps from "./NoOfSwaps";
 import TimeBetween from "./TimeBetween";
 import Interval from "./TimeInterval";
 
+import OrderContext from "../contexts/OrderContext";
 
 
 // Style
-import { Divider, makeStyles, Card, CardContent } from "@material-ui/core";
+import { Button, Divider, makeStyles, Card, CardContent } from "@material-ui/core";
 
 
 const style = makeStyles({
@@ -57,6 +58,7 @@ function TimeOrderWrapper(props) {
     const classes = style();
     const selectedTokenDetails = props.selectedTokenDetails
     const updateSelectedTokenDetails = props.updateSelectedTokenDetails
+    const ordersContext = useContext(OrderContext);
 
 
     let ordersInStorage;
@@ -186,6 +188,7 @@ function TimeOrderWrapper(props) {
               <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
               <Divider variant="middle" className={classes.dividerClass}/>
               <h3>Your orders</h3>
+              <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Execution Claims</Button>
               <Order orderRows={orderRows}></Order>
         </React.Fragment>
     )

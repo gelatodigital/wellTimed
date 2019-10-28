@@ -427,8 +427,11 @@ function ActionBtn(props) {
 			let date = new Date(timestamp * 1000);
 			const timestampString = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
+			const decimals = coins.actionFrom.decimals
+			let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
+
 			const newOrder = {
-				swap: `${actionSellToken.toString()} ${actionSellAmount.toString()} => ${actionBuyToken.toString()}`,
+				swap: `${actionSellToken.toString()} ${userfriendlyAmount.toString()} => ${actionBuyToken.toString()}`,
 				when: timestampString,
 				status: "open"
 			};
@@ -529,11 +532,19 @@ function ActionBtn(props) {
 
 		// actionData
 		const actionData = [
+			context.account,
 			actionSellToken,
 			actionBuyToken,
 			actionSellAmount,
 			0
 		];
+
+		console.log(`Action Payload:
+		${context.account}
+		${actionSellToken}
+		${actionBuyToken}
+		${actionSellAmount}
+		`)
 
 		// Fetch prepayment
 		const signer = context.library.getSigner();
@@ -546,9 +557,11 @@ function ActionBtn(props) {
 
 		const timeTriggerAddress = triggerTimestampPassed.address;
 		const kyberTradeAddress = kyberTrade.address;
-		const actionPayload = encodePayload(kyberTrade.dataTypes, actionData);
+		const actionPayload = encodeWithFunctionSelector(kyberTrade.method, kyberTrade.dataTypesWthNames, actionData);
+		// method, funcDataTypes, funcParameters
 		const executorAddress = EXECUTOR[context.networkId];
 		const startingTime = timestamp;
+		// const triggerPayload = encodeWithFunctionSelector(triggerTimestampPassed.method, triggerTimestampPassed.dataTypesWthNames, startingTime);
 		const intervalTime = interval;
 		const noOfOrders = time.numOrders;
 		const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(

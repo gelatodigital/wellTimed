@@ -9,9 +9,11 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
+import {ethers} from 'ethers'
 
 // import { useWeb3Context } from "web3-react";
 import OrderContext from "../contexts/OrderContext";
+import CoinContext from "../contexts/CoinContext";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -135,7 +137,11 @@ export default function Order(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const ordersContext = useContext(OrderContext)
-  const rows = ordersContext['orders']
+  let rows = ordersContext['orders']
+  if (rows === undefined) {
+    rows = []
+  }
+
 
 
   const handleRequestSort = (event, property) => {
@@ -184,8 +190,15 @@ export default function Order(props) {
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  let emptyRows
+
+  if (rows === undefined)
+  {
+    emptyRows = 0
+  } else {
+    emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  }
+
 
   return (
     <div className={classes.root}>
