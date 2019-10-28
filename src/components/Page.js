@@ -310,6 +310,7 @@ function Page() {
       const logs3 = await signer.provider.getLogs(filter3);
       logs3.forEach((log) => {
         userLogs2.forEach(log2 => {
+          console.log(log2)
           let returnedLog = iface3.parseLog(log)
           // console.log(returnedLog)
           let values = returnedLog.values;
@@ -319,6 +320,10 @@ function Page() {
           }
       });
       })
+
+
+      console.log(userLogs3)
+
 
 
       const userOrders = []

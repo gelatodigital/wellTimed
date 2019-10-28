@@ -125,7 +125,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Order(props) {
+export default function Orders(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("fat");
