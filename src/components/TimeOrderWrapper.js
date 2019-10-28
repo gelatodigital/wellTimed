@@ -5,6 +5,7 @@ import { useWeb3Context } from "web3-react";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
 import ERC20Input from "./ERC20Input";
+import Orders from "./Orders"
 import TokenInputNoAmount from "./TokenInputNoAmount";
 import NoOfSwaps from "./NoOfSwaps";
 import TimeBetween from "./TimeBetween";
@@ -184,7 +185,7 @@ function TimeOrderWrapper(props) {
               <Divider variant="middle" className={classes.dividerClass}/>
               <h3>Your orders</h3>
               <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Execution Claims</Button>
-              <Order orderRows={orderRows}></Order>
+              <Orders orderRows={orderRows}></Orders>
         </React.Fragment>
     )
 }
