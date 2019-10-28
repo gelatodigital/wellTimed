@@ -39,6 +39,8 @@ export async function approveToken(signer, beneficiary, tokenAddress) {
 
 
 
+
+
 export function getCorrectImageLink() {
   const table1 = {};
   const table2 = {};
@@ -50,16 +52,36 @@ export function getCorrectImageLink() {
   });
 
   const table3 = {};
+  const table4 = []
+
   for (let key in table1) {
     for (let key2 in table2) {
       if (key === key2) {
         table1[key]["mainnet"] = table2[key2];
-        table3[table1[key]["address"]] = table1[key];
+        table3[table1[key]["symbol"]] = table1[key];
+        table4.push(table1[key])
       }
     }
   }
-  return table3;
+
+  function compare( a, b ) {
+    if ( a.symbol < b.symbol ){
+      return -1;
+    }
+    if ( a.symbol > b.symbol ){
+      return 1;
+    }
+    return 0;
+  }
+
+  console.log(table4)
+  table4.sort(compare)
+  console.log(table4)
+  return table4
 }
+
+
+
 
 export async function getEncodedFunctionSellKyber(triggerSellToken, triggerSellAmount, triggerBuyToken, triggerBuyAmount, isBigger, actionSellToken,actionrSellAmount, actionBuyToken, slippage)
 {

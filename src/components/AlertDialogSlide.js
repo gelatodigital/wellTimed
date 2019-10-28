@@ -31,7 +31,13 @@ export default function AlertDialogSlide(props) {
       // If function is passed, execute
       modalState.func()
     }
-  };
+};
+
+function handleOnlyClose () {
+    let copyModalState = {... modalState}
+    copyModalState.open = false
+    setModalState(copyModalState);
+}
 
 
 
@@ -55,7 +61,7 @@ export default function AlertDialogSlide(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleOnlyClose} color="primary">
             {modalState.btn1}
           </Button>
           <Button onClick={handleClose} color="primary">

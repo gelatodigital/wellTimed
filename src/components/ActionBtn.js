@@ -116,7 +116,8 @@ function ActionBtn(props) {
 
 			case 4:
 				let executableFunc;
-				let buttonText;
+                let buttonText;
+                let color;
 				console.log(selectedTokenDetails);
 				if (selectedTokenDetails.sufficientBalance) {
 					// User has sufficient balance
@@ -124,22 +125,25 @@ function ActionBtn(props) {
 						// User has sufficient ERC20 Approval => Schedule
 						console.log("Sell button");
 						executableFunc = modalMintSplitSell;
-						buttonText = "Schedule Trades";
+                        buttonText = "Schedule Trades";
+                        color="primary"
 					} else {
 						// // User has insufficient ERC20 Approval => Approve ERC20 token first
 						console.log("approve & Sell button");
 						executableFunc = approveAndMint;
-						buttonText = "Approve + Schedule Trades";
+                        buttonText = "Approve + Schedule Trades";
+                        color="primary"
 					}
 				} else {
 					// Display insufficient balance modal
 					executableFunc = displayInsufficientBalance;
-					buttonText = "Insufficient Balance";
+                    buttonText = "Schedule Trades";
+                    color="secondary"
 				}
 				return (
 					<Button
 						variant="contained"
-						color="primary"
+						color={color}
 						onClick={executableFunc}
 					>
 						{buttonText}
@@ -149,7 +153,7 @@ function ActionBtn(props) {
 			default:
 				return (
 					<Button variant="contained" color="primary">
-						Schedule Trades Default
+						Schedule Trades
 					</Button>
 				);
 		}
@@ -381,9 +385,11 @@ function ActionBtn(props) {
 				function(txReceipt) {
 					console.log("waiting for tx to get mined ...");
                     console.log("Open modal again for scheduling trades");
-					copyModalState.open = true;
+                    const decimals = coins.actionFrom.decimals
+                    let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
+                    copyModalState.open = true;
 					copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
-					copyModalState.body = `Confirm swapping ${actionSellAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
+					copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
 					copyModalState.btn1 = "Cancel";
 					copyModalState.btn2 = "Schedule";
 					copyModalState.func = mintSplitSell;
@@ -456,10 +462,12 @@ function ActionBtn(props) {
         const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
         const actionSellAmount = coins["amountActionFrom"];
 
-
+        const decimals = coins.actionFrom.decimals
+        let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
+        copyModalState.open = true;
         copyModalState.open = true;
         copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
-        copyModalState.body = `Confirm swapping ${actionSellAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
+        copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
         copyModalState.btn1 = "Cancel";
         copyModalState.btn2 = "Schedule";
         copyModalState.func = mintSplitSell;

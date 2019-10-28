@@ -128,8 +128,20 @@ function ERC20Input(props) {
   };
 
   const handleAmount = name => event => {
-    setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountActionFrom = event.target.value;
+    const decimals = coinContext.actionFrom.decimals
+    let value = event.target.value
+    if (value === "") {
+      setState({ ...state, [name]: 0 || "" });
+      coinContext.amountActionFrom = 0;
+      checkERC20ApprovalStatus()
+    } else {
+      const selectedAmount = ethers.utils.parseUnits(value, decimals)
+      console.log(`Inputted Amout: ${value}
+                  Decimals: ${decimals}
+                  ACtual AMount: ${selectedAmount}`)
+      setState({ ...state, [name]: selectedAmount || "" });
+      coinContext.amountActionFrom = selectedAmount;
+    }
     checkERC20ApprovalStatus()
   };
 
@@ -232,7 +244,8 @@ function ERC20Input(props) {
 				<DialogTitle>Choose coin from dropdown</DialogTitle>
 				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
 				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
-				{state.availableCoins.map(coin => {
+				{state.availableCoins.map((coin, key) => {
+          console.log(coin)
 					return (
 						<MenuItem
 							// onChange={handleChange("coin")}
@@ -241,7 +254,7 @@ function ERC20Input(props) {
 								console.log(coin);
 								handleChange(coin);
 							}}
-							key={coin.id}
+							key={key}
 							value={coin}
 							className={classes.coins}
 						>
