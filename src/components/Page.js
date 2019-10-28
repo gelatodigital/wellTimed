@@ -326,9 +326,7 @@ function Page() {
       if (userLogs3.length === 0 && userLogs2.length > 0)
       {
         userLogs2.forEach(claim => {
-          console.log(claim[0])
           let triggerPayload = claim[0].triggerPayload
-          console.log(triggerPayload)
 
           // WHEN:
           // let decodedTimestamp = simpleDecoder(triggerPayload, triggerTimestampPassed.dataTypes)
@@ -359,7 +357,6 @@ function Page() {
       let orderCopy = [...orders];
 
       userOrders.forEach(order => {
-        console.log(order)
         let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when)
         orderCopy.push(newOrder)
       })
