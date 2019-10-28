@@ -51,7 +51,8 @@ const useStyles = makeStyles(theme => ({
   },
   coins: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    padding: '26px'
   },
   buttonPadding: {
     marginTop: '1.5px',
@@ -136,9 +137,7 @@ function ERC20Input(props) {
       checkERC20ApprovalStatus()
     } else {
       const selectedAmount = ethers.utils.parseUnits(value, decimals)
-      console.log(`Inputted Amout: ${value}
-                  Decimals: ${decimals}
-                  ACtual AMount: ${selectedAmount}`)
+
       setState({ ...state, [name]: selectedAmount || "" });
       coinContext.amountActionFrom = selectedAmount;
     }
@@ -245,7 +244,6 @@ function ERC20Input(props) {
 				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
 				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
 				{state.availableCoins.map((coin, key) => {
-          console.log(coin)
 					return (
 						<MenuItem
 							// onChange={handleChange("coin")}

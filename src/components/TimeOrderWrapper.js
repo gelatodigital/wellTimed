@@ -41,7 +41,8 @@ const style = makeStyles({
       textAlign: "left"
     },
     inputs: {
-      textAlign: "center"
+      textAlign: "center",
+      marginTop: '35px'
     },
     dividerClass: {
       marginTop: '20px',

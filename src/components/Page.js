@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { ethers } from "ethers";
 
 // Import Components
 
@@ -11,6 +11,15 @@ import {TimeProvider} from "../contexts/TimeContext"
 
 import { OrderProvider } from "../contexts/OrderContext";
 
+// ABIS
+import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
+
+// Import addresses
+import {
+	DS_PROXY_REGISTRY,
+	GELATO_CORE,
+	EXECUTOR
+} from "../constants/contractAddresses";
 
 
 // Import ContextParents
@@ -34,7 +43,6 @@ import { useWeb3Context } from "web3-react";
 
 function Page() {
   const context = useWeb3Context();
-
 
   let ordersFromLocalStorage
   if (context.active) {
@@ -135,6 +143,40 @@ function Page() {
   });
 
   const timePackage = {time, setTime}
+
+
+  async function fetchExecutionClaims() {
+    if (context.active) {
+
+      const signer = context.library.getSigner()
+      const gelatoCoreAddress = GELATO_CORE[context.networkId]
+      const gelatoCore = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer)
+      console.log(gelatoCore)
+
+      // Create Filter
+      let topic = ethers.utils.id(gelatoCore.interface.events.LogNewExecutionClaimMinted.signature);
+
+      let abi = [
+        "event LogNewExecutionClaimMinted(address indexed selectedExecutor, uint256 indexed executionClaimId, address indexed userProxy, bytes executePayload, uint256 executeGas, uint256 executionClaimExpiryDate, uint256 executorFee)"
+      ];
+
+      let iface = new ethers.utils.Interface(abi)
+
+      const filter = {
+        address: gelatoCoreAddress,
+        fromBlock: 6660070,
+        topics: [topic]
+      };
+      const logs = await signer.provider.getLogs(filter);
+      logs.forEach((log) => {
+        let decodedLogs = iface.parseLog(log).values;
+        console.log(decodedLogs)
+        // Do something with decoded data
+      });
+      }
+  }
+
+  fetchExecutionClaims()
 
 
   // const [rows, setRows] = React.useState(0)

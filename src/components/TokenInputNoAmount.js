@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
 	},
 	coins: {
 		display: "flex",
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		padding: '26px'
 	},
 	buttonPadding: {
 		marginTop: '1.5px',

@@ -74,9 +74,7 @@ export function getCorrectImageLink() {
     return 0;
   }
 
-  console.log(table4)
   table4.sort(compare)
-  console.log(table4)
   return table4
 }
 
