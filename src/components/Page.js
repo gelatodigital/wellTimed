@@ -15,7 +15,7 @@ import {TimeProvider} from "../contexts/TimeContext"
 import { OrderProvider } from "../contexts/OrderContext";
 
 // Helper
-import { simpleDecoder, simpleMultipleDecoder, decoder } from '../helpers'
+import { simpleDecoder, simpleMultipleDecoder, decoder, encodeWithFunctionSelector } from '../helpers'
 
 // ABIS
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
@@ -171,6 +171,14 @@ function Page() {
 		timestamp
 	) {
 
+
+    console.log(` SEll: ${actionSellToken}
+                  Buy: ${actionBuyToken}
+                  SellAmount: ${actionSellAmount}
+                  Time: ${timestamp}
+
+    `)
+
     let actionSellTokenSymbol
     let actionBuyTokenSymbol
     let decimals
@@ -189,9 +197,6 @@ function Page() {
         actionBuyTokenSymbol = coin.symbol
       }
     })
-
-
-    let orderCopy = [...orders];
 
 
     let date = new Date(timestamp * 1000);
@@ -321,18 +326,21 @@ function Page() {
       if (userLogs3.length === 0 && userLogs2.length > 0)
       {
         userLogs2.forEach(claim => {
+          console.log(claim[0])
           let triggerPayload = claim[0].triggerPayload
+          console.log(triggerPayload)
 
           // WHEN:
-          let decodedTimestamp = simpleDecoder(triggerPayload, triggerTimestampPassed.dataTypes)
+          // let decodedTimestamp = simpleDecoder(triggerPayload, triggerTimestampPassed.dataTypes)
+          let decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
 
           // SWAP:
           let actionPayload = claim[1][3].toString()
-          let dataTypes = ['address', 'address', 'address', 'uint256', 'uint256']
+          let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
           // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
           try {
             let decodedAction = decoder(actionPayload, dataTypes)
-            let order = {when: decodedTimestamp, swap: decodedAction, status: 'open'}
+            let order = {when: decodedTimestamp2[0], swap: decodedAction, status: 'open'}
             userOrders.push(order)
           } catch(err)
           {
@@ -351,7 +359,8 @@ function Page() {
       let orderCopy = [...orders];
 
       userOrders.forEach(order => {
-        let newOrder = createRows(order.swap[1], order.swap[2], order.swap[3], order.when)
+        console.log(order)
+        let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when)
         orderCopy.push(newOrder)
       })
 

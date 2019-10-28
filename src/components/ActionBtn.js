@@ -99,7 +99,7 @@ function ActionBtn(props) {
 						color="primary"
 						onClick={deployAndSetGuard}
 					>
-						Connect your Account
+						Deploy Proxy Guard
 					</Button>
 				);
 
@@ -110,7 +110,7 @@ function ActionBtn(props) {
 						color="primary"
 						onClick={setAuthority}
 					>
-						Connect your Account
+						Set Guard as Authority
 					</Button>
 				);
 
@@ -590,6 +590,12 @@ function ActionBtn(props) {
 			// The chain ID (or network ID) to use
 			// chainId: 3
 		};
+
+		console.log(`
+			Starting TIme: ${startingTime}
+			intervalTime: ${intervalTime}
+			`
+			)
 		const multiMintPayload = encodeWithFunctionSelector(
 			multiMintKyberTrade.funcSelector,
 			multiMintKyberTrade.dataTypesWithName,
