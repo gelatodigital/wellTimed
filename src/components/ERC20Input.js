@@ -24,21 +24,39 @@ import { getTokenBalance, getTokenAllowance } from "../helpers";
 import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    width: '32px'
+  },
   container: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    paddingLeft: '4px',
+
+
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
+
+  },
+  amountInput: {
+    marginTop: '2px',
+    width: '50px',
+    textAlign: 'right'
   },
   img: {
     width: "24px",
-    height: "24px"
+    height: "24px",
+    marginLeft: '3px'
   },
   coins: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    padding: '26px'
+  },
+  buttonPadding: {
+    marginTop: '1.5px',
+    width: '32px'
   }
 }));
 
@@ -47,8 +65,8 @@ function ERC20Input(props) {
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
 
-  const updateAllowance = props.updateAllowance
-  const needAllowance = props.needAllowance
+  const updateSelectedTokenDetails = props.updateSelectedTokenDetails
+  const selectedTokenDetails = props.selectedTokenDetails
   // State
 
   const [state, setState] = React.useState({
@@ -58,24 +76,39 @@ function ERC20Input(props) {
     availableCoins: Object.values(getCorrectImageLink())
   });
 
-  const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.value || "" });
-    coinContext.actionFrom = event.target.value;
+  const handleChange = coin => {
+    const newState = { ...state };
+		newState["coin"] = coin;
+		setState({ ...state, ["coin"]: coin, open: false });
+    coinContext.actionFrom = coin;
+    checkERC20ApprovalStatus()
   };
+
+  // const handleChange = coin => {
+	// 	console.log(coin);
+	// 	const newState = { ...state };
+	// 	newState["coin"] = coin;
+	// 	setState({ ...state, ["coin"]: coin, open: false });
+	// 	coinContext[tokenType] = coin;
+	// 	// handleClose()
+	// };
 
   const handleClickOpen = () => {
     setState({ ...state, open: true });
   };
 
   const handleClose = () => {
+    console.log("in close")
     setState({ ...state, open: false });
   };
+
+
 
   const userChoice = () => {
     if (state.coin) {
       return (
         <span className={classes.coins}>
-          {state.coin.name}
+          {state.coin.symbol}
           <img
             src={state.coin.logo(state.coin.mainnet)}
             alt="coin logo"
@@ -85,7 +118,7 @@ function ERC20Input(props) {
       );
     } else {
       return  (<span className={classes.coins}>
-        {"Chain Link"}
+        {"LINK"}
         <img
           src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
           alt="coin logo"
@@ -96,13 +129,24 @@ function ERC20Input(props) {
   };
 
   const handleAmount = name => event => {
-    setState({ ...state, [name]: event.target.value || "" });
-    coinContext.amountActionFrom = event.target.value;
-    displayApproveBtn()
+    const decimals = coinContext.actionFrom.decimals
+    let value = event.target.value
+    if (value === "") {
+      setState({ ...state, [name]: 0 || "" });
+      coinContext.amountActionFrom = 0;
+      checkERC20ApprovalStatus()
+    } else {
+      const selectedAmount = ethers.utils.parseUnits(value, decimals)
+
+      setState({ ...state, [name]: selectedAmount || "" });
+      coinContext.amountActionFrom = selectedAmount;
+    }
+    checkERC20ApprovalStatus()
   };
 
-  async function displayApproveBtn() {
+  async function checkERC20ApprovalStatus() {
     // check if context has an actionFrom
+    let copySelectedTokenDetails = {...selectedTokenDetails}
     if (context.active)
     {
       if (coinContext['actionFrom']['address']) {
@@ -115,9 +159,13 @@ function ERC20Input(props) {
 
 
         console.log(`SellTokenBalance: ${sellTokenBalance}`)
+        let sellAmount = coinContext['amountActionFrom']
 
-        if (parseInt(sellTokenBalance) !== 0)
+        // Check if user has sufficient Token Balance
+        if (parseInt(sellTokenBalance) >= parseInt(sellAmount))
         {
+          // Store that user has sufficinet balance
+          copySelectedTokenDetails.sufficientBalance = true
           // Check if proxy is approved
           const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
           const proxyRegistryContract = new ethers.Contract(
@@ -128,7 +176,6 @@ function ERC20Input(props) {
           const proxyAddress = await proxyRegistryContract.proxies(
             context.account)
 
-          let sellAmount = coinContext['amountActionFrom']
           if (sellAmount && parseInt(sellAmount) > 0)
           {
             let sellTokenAllowance = await getTokenAllowance(
@@ -142,18 +189,24 @@ function ERC20Input(props) {
             if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
             {
               // Render approve button
-              updateAllowance(true)
-
+              console.log("User has enough tokens, but needs allowance")
+              copySelectedTokenDetails.needAllowance = true
+              console.log(copySelectedTokenDetails)
+              updateSelectedTokenDetails(copySelectedTokenDetails)
+            } else {
+              console.log("has sufficient Tokens, and has sufficient balanece")
+              console.log("We can directly split sell")
+              copySelectedTokenDetails.needAllowance = false
+              updateSelectedTokenDetails(copySelectedTokenDetails)
             }
 
-          }
-          else {
-            updateAllowance(false)
           }
 
 
         } else {
-          updateAllowance(false)
+          copySelectedTokenDetails.sufficientBalance = false
+          console.log("Render Modal: You don't have enough balance of Token X")
+          updateSelectedTokenDetails(copySelectedTokenDetails)
         }
       }
 
@@ -163,59 +216,56 @@ function ERC20Input(props) {
   return (
     <div className={classes.container}>
       <Input
+        className={classes.amountInput}
+        disableUnderline={true}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="Set the amount"
+        placeholder="0"
       />
       <Button
-        color={state.coin ? "primary" : "secondary"}
+        className={classes.buttonPadding}
+        // color={state.coin ? "primary" : "secondary"}
+        // color={state.coin ? "primary" : "secondary"}
         onClick={handleClickOpen}
       >
         {" "}
         {userChoice()}
       </Button>
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
-        open={state.open}
-        onClose={handleClose}
-      >
-        <DialogTitle>Choose coin from dropdown</DialogTitle>
-        <DialogContent>
-          <form className={classes.container}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="coin-native-simple">Coin</InputLabel>
-              <Select value={state.coin} onChange={handleChange("coin")}>
-                {state.availableCoins.map(coin => {
-                  return (
-                    <MenuItem
-                      key={coin.id}
-                      value={coin}
-                      className={classes.coins}
-                    >
-                      {coin.name}
-                      <img
-                        className={classes.img}
-                        src={coin.logo(coin.mainnet)}
-                        alt="coin logo"
-                      />
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+				disableBackdropClick
+				disableEscapeKeyDown
+				open={state.open}
+				onClose={handleClose}
+				value={state.coin}
+				// onChange={handleChange("coin")}
+			>
+				<DialogTitle>Choose coin from dropdown</DialogTitle>
+				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
+				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+				{state.availableCoins.map((coin, key) => {
+					return (
+						<MenuItem
+							// onChange={handleChange("coin")}
+							// onClick={handleClose}
+							onClick={() => {
+								console.log(coin);
+								handleChange(coin);
+							}}
+							key={key}
+							value={coin}
+							className={classes.coins}
+						>
+							{coin.symbol}
+							<img
+								className={classes.img}
+								src={coin.logo(coin.mainnet)}
+								alt="coin logo"
+							/>
+						</MenuItem>
+					);
+				})}
+			</Dialog>
     </div>
   );
 }

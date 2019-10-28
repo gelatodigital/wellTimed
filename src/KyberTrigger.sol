@@ -3,6 +3,28 @@ pragma solidity ^0.5.10;
 contract GelatoTriggersStandard {
     bytes4 internal triggerSelector;
 
+
+    // Split Sell Mint func
+
+    // function splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment)
+    //     external
+    // {
+    //     uint256 prepaymentAmount = gelatoCore.getMintingDepositPayable(_kyberSwapAction, _excecutor);
+    //     require(msg.value == prepaymentAmount.mul(_noOfOrders));
+
+    //     for (uint256 counter; counter < _noOfOrders; counter ++)
+    //     {
+    //         _startingTime = _startingTime.add(_intervalTime.mul(counter));
+    //         bytes memory triggerPayload = abi.encodePacked(_startingTime);
+    //         gelatoCore.mintExecutionClaim(_timeTrigger, triggerPayload, _kyberSwapAction, _actionPayload, _excecutor).value(prepaymentAmount);
+
+    //     }
+
+
+    // }
+
+    // Split sell mint func end
+
     function getTriggerSelector()
         external
         view
