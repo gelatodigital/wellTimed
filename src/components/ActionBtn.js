@@ -378,8 +378,8 @@ function ActionBtn(props) {
 			)
 			.then(
 				function(txReceipt) {
-					console.log("waiting for tx to get mined ...");
-                    console.log("Open modal again for scheduling trades");
+					// console.log("waiting for tx to get mined ...");
+                    // console.log("Open modal again for scheduling trades");
                     const decimals = coins.actionFrom.decimals
                     let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
                     copyModalState.open = true;
@@ -394,7 +394,6 @@ function ActionBtn(props) {
 					signer.provider
 						.waitForTransaction(txReceipt["hash"])
 						.then(async function(tx) {
-							console.log("ERC20 Token successfully approved");
 							console.log(tx);
 							setWaitingForTX(false);
 						});

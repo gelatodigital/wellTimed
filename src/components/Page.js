@@ -337,8 +337,6 @@ function Page() {
         };
       })
 
-      console.log(userLogs2)
-
       const userOrders = []
 
       // userLogs2.forEach(claim => {
