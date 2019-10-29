@@ -116,18 +116,15 @@ function ActionBtn(props) {
 				let executableFunc;
                 let buttonText;
                 let color;
-				console.log(selectedTokenDetails);
 				if (selectedTokenDetails.sufficientBalance) {
 					// User has sufficient balance
 					if (!selectedTokenDetails.needAllowance) {
 						// User has sufficient ERC20 Approval => Schedule
-						console.log("Sell button");
 						executableFunc = modalMintSplitSell;
                         buttonText = "Schedule Trades";
                         color="primary"
 					} else {
 						// // User has insufficient ERC20 Approval => Approve ERC20 token first
-						console.log("approve & Sell button");
 						executableFunc = approveAndMint;
                         buttonText = "Approve + Schedule Trades";
                         color="primary"

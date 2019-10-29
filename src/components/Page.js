@@ -167,16 +167,9 @@ function Page() {
 		actionSellToken,
 		actionBuyToken,
 		actionSellAmount,
-		timestamp
+    timestamp,
+    status
 	) {
-
-
-    console.log(` SEll: ${actionSellToken}
-                  Buy: ${actionBuyToken}
-                  SellAmount: ${actionSellAmount}
-                  Time: ${timestamp}
-
-    `)
 
     let actionSellTokenSymbol
     let actionBuyTokenSymbol
@@ -206,7 +199,7 @@ function Page() {
     const newOrder = {
       swap: `${actionSellTokenSymbol.toString()} ${userfriendlyAmount.toString()} => ${actionBuyTokenSymbol.toString()}`,
       when: timestampString,
-      status: "open"
+      status: status
     };
 
     return newOrder
@@ -234,7 +227,7 @@ function Page() {
       // Create Filter
       let topic1 = ethers.utils.id(gelatoCore.interface.events.LogNewExecutionClaimMinted.signature);
       let topic2 = ethers.utils.id(gelatoCore.interface.events.LogTriggerActionMinted.signature);
-      let topic3 = ethers.utils.id('LogClaimExecutedBurnedAndDeleted(uint256,address,address,uint256,uint256,uint256,uint256)');
+      let topic3 = ethers.utils.id("LogClaimExecutedAndDeleted(uint256,address,address,uint256,uint256,uint256,uint256)");
 
       let abi1 = [
         "event LogNewExecutionClaimMinted(address indexed selectedExecutor, uint256 indexed executionClaimId, address indexed userProxy, bytes executePayload, uint256 executeGas, uint256 executionClaimExpiryDate, uint256 executorFee)"
@@ -243,7 +236,7 @@ function Page() {
         "event LogTriggerActionMinted(uint256 indexed executionClaimId, address indexed trigger, bytes triggerPayload, address indexed action)"
       ];
       let abi3 = [
-        "event LogClaimExecutedBurnedAndDeleted(uint256 indexed executionClaimId, address indexed userProxy, address indexed executor, uint256 gasUsedEstimate, uint256 gasPriceUsed, uint256 executionCostEstimate, uint256 executorPayout)"
+        "event LogClaimExecutedAndDeleted(uint256 indexed executionClaimId, address indexed userProxy, address indexed executor, uint256 gasUsedEstimate, uint256 gasPriceUsed, uint256 executionCostEstimate, uint256 executorPayout)"
       ];
 
 
@@ -284,7 +277,7 @@ function Page() {
 
 
 
-      const userLogs2 = []
+      const userLogs2 = {}
 
       const logs2 = await signer.provider.getLogs(filter2);
       logs2.forEach((log) => {
@@ -294,75 +287,93 @@ function Page() {
           let values = returnedLog.values;
 
           if (values[0].eq(log2[1])) {
-            let combinedEvent = [values, log2]
-            userLogs2.push(combinedEvent)
-          }
+            let executionClaimId = values[0]
 
+            userLogs2[executionClaimId.toString()] = [values, log2, 'open']
+
+          }
         })
         // Do something with decoded data
       });
 
+      console.log(userLogs2)
+
       // Minted execution claims of user
 
       // Now check which one already got executed
-      const userLogs3 = []
-
       const logs3 = await signer.provider.getLogs(filter3);
       logs3.forEach((log) => {
-        console.log(log)
-        userLogs2.forEach(log2 => {
+        // console.log(log)
+        // Claims that got minted
+        let returnedLog = iface3.parseLog(log)
+        let executionClaimId = returnedLog.values.executionClaimId
+        for (let execId in userLogs2) {
+        // userLogs2.forEach(claim => {
+          let order = {}
+          // console.log(claim[0].executionClaimId)
+          try {
+            if (executionClaimId.eq(userLogs2[execId][0].executionClaimId)) {
 
-          let returnedLog = iface3.parseLog(log)
-          // console.log(returnedLog)
-          let values = returnedLog.values;
-          if (!values[0].eq(log2[0][0])) {
-            let combinedEvent = [values, log2]
-            userLogs3.push(combinedEvent)
+              // // 1, Decode trigger payload
+              // let triggerPayload = claim[0].triggerPayload
+              // // WHEN:
+              // // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
+              // let decodedTimestamp = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
+
+              userLogs2[execId] = [userLogs2[execId][0], userLogs2[execId][1], 'executed']
+
+              // order['when'] = decodedTimestamp
+
+              // // 2. Decode action payload
+              // let actionPayload = claim[1][3].toString()
+              // let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
+              // // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
+              // let decodedAction = decoder(actionPayload, dataTypes)
+              // order['swap'] = decodedAction
+
+              // // status
+              // order['status'] = 'executed'
+              // userLogs3.push(order)
+            }
+          } catch(err) {
           }
-      });
+        };
       })
 
-
-      console.log(userLogs3)
-
-
+      console.log(userLogs2)
 
       const userOrders = []
-      if (userLogs3.length === 0 && userLogs2.length > 0)
-      {
-        userLogs2.forEach(claim => {
-          let triggerPayload = claim[0].triggerPayload
 
-          // WHEN:
-          // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
-          let decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
+      // userLogs2.forEach(claim => {
+      for (let execId in userLogs2) {
+        let triggerPayload = userLogs2[execId][0].triggerPayload
 
-          // SWAP:
-          let actionPayload = claim[1][3].toString()
-          let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
-          // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
-          try {
-            let decodedAction = decoder(actionPayload, dataTypes)
-            let order = {when: decodedTimestamp2[0], swap: decodedAction, status: 'open'}
-            userOrders.push(order)
-          } catch(err)
-          {
-            console.log(err)
-          }
+        // WHEN:
+        // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
+        let decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
 
-
-        })
-
+        // SWAP:
+        let actionPayload = userLogs2[execId][1][3].toString()
+        let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
+        // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
+        try {
+          let decodedAction = decoder(actionPayload, dataTypes)
+          let order = {when: decodedTimestamp2[0], swap: decodedAction, status: userLogs2[execId][2]}
+          userOrders.push(order)
+        } catch(err)
+        {
+          console.log(err)
+        }
       }
-      else {
-        // console.log("Logs3")
-        // console.log(userLogs3)
-      }
+
+
+      console.log(userOrders)
+
       // Store in orders
       let orderCopy = [...orders];
 
       userOrders.forEach(order => {
-        let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when)
+        let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when, order.status)
         orderCopy.push(newOrder)
       })
 

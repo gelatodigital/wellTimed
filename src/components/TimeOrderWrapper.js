@@ -184,7 +184,7 @@ function TimeOrderWrapper(props) {
               <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
               <Divider variant="middle" className={classes.dividerClass}/>
               <h3>Your orders</h3>
-              <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Execution Claims</Button>
+              <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Orders</Button>
               <Orders orderRows={orderRows}></Orders>
         </React.Fragment>
     )

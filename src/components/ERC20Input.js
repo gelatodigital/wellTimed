@@ -237,7 +237,6 @@ function ERC20Input(props) {
 							// onChange={handleChange("coin")}
 							// onClick={handleClose}
 							onClick={() => {
-								console.log(coin);
 								handleChange(coin);
 							}}
 							key={key}
