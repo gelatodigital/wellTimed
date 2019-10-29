@@ -72,6 +72,7 @@ function ERC20Input(props) {
   });
 
   const handleChange = coin => {
+
     const newState = { ...state };
 		newState["coin"] = coin;
 		setState({ ...state, "coin": coin, open: false });
@@ -86,7 +87,6 @@ function ERC20Input(props) {
   };
 
   const handleClose = () => {
-    console.log("in close")
     setState({ ...state, open: false });
   };
 
@@ -122,7 +122,6 @@ function ERC20Input(props) {
     if (value === "") {
       setState({ ...state, [name]: 0 || "" });
       coinContext.amountActionFrom = 0;
-      checkERC20ApprovalStatus()
     } else {
       const selectedAmount = ethers.utils.parseUnits(value, decimals)
 
@@ -146,7 +145,7 @@ function ERC20Input(props) {
         let sellTokenBalance = await getTokenBalance(sellTokenAddress, signer, signerAddress)
 
 
-        console.log(`SellTokenBalance: ${sellTokenBalance}`)
+        // console.log(`SellTokenBalance: ${sellTokenBalance}`)
         let sellAmount = coinContext['amountActionFrom']
 
         // Check if user has sufficient Token Balance
@@ -172,18 +171,18 @@ function ERC20Input(props) {
               signer,
               context.account
             );
-            console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
+            // console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
 
             if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
             {
               // Render approve button
-              console.log("User has enough tokens, but needs allowance")
+              // console.log("User has enough tokens, but needs allowance")
               copySelectedTokenDetails.needAllowance = true
-              console.log(copySelectedTokenDetails)
+              // console.log(copySelectedTokenDetails)
               updateSelectedTokenDetails(copySelectedTokenDetails)
             } else {
-              console.log("has sufficient Tokens, and has sufficient balanece")
-              console.log("We can directly split sell")
+              // console.log("has sufficient Tokens, and has sufficient balanece")
+              // console.log("We can directly split sell")
               copySelectedTokenDetails.needAllowance = false
               updateSelectedTokenDetails(copySelectedTokenDetails)
             }

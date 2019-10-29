@@ -156,7 +156,6 @@ function ActionBtn(props) {
 
 
 	async function devirginize() {
-		console.log("Deploying new Proxy for user");
 		setWaitingForTX(true);
 
 		const signer = context.library.getSigner();
@@ -175,12 +174,10 @@ function ActionBtn(props) {
 
 		let guardAddress;
 		gelatoCoreContract.on("LogDevirginize", (oldValue, newValue, event) => {
-			console.log(`Old Value: ${oldValue}`);
-			console.log(`New Value: ${newValue}`);
+
 			guardAddress = newValue;
 			setGuardAddress(guardAddress);
 			localStorage.setItem("guardAddress", guardAddress);
-			console.log(event);
 		});
 
 		// Devirginize user
@@ -192,14 +189,12 @@ function ActionBtn(props) {
 					.then(async function(tx) {
 						setWaitingForTX(false);
 						updateProxyStatus(3);
-						console.log("ProxySuccessfully deployed");
 						// Fetch guard contract
 
 						const proxyAddress = await proxyRegistryContract.proxies(
 							context.account
 						);
-						console.log(`Deployed Proxy Address: ${proxyAddress}`);
-						console.log("Transaction:");
+
 						console.log(tx);
 						if (proxyAddress !== ethers.constants.AddressZero) {
 							// 2nd Tx
@@ -221,7 +216,6 @@ function ActionBtn(props) {
 	}
 
 	async function deployAndSetGuard() {
-		console.log("Deploying new guard");
 		setWaitingForTX(true);
 		const signer = context.library.getSigner();
 
@@ -235,7 +229,6 @@ function ActionBtn(props) {
 		let guardAddress;
 		gelatoCoreContract.on("LogGuard", _guardAddress => {
 			setGuardAddress(_guardAddress);
-			console.log(`Guard Address: ${_guardAddress}`);
 			localStorage.setItem("guardAddress", guardAddress);
 		});
 		// Devirginize user
@@ -244,7 +237,6 @@ function ActionBtn(props) {
 				signer.provider
 					.waitForTransaction(txReceipt["hash"])
 					.then(async function(tx) {
-						console.log("Guard successfully deployed");
 						setWaitingForTX(false);
 						updateProxyStatus(3);
 					});
@@ -258,7 +250,6 @@ function ActionBtn(props) {
 
 	async function setAuthority() {
 		setWaitingForTX(true);
-		console.log("Setting Authority");
 		const signer = context.library.getSigner();
 		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
 		const proxyRegistryContract = new ethers.Contract(
@@ -280,9 +271,6 @@ function ActionBtn(props) {
 			guardAddressCopy = localStorage.getItem("guardAddress");
 		}
 
-		console.log(
-			`Setting Guard ${guardAddressCopy} as authority for Proxy: ${proxyAddress}`
-		);
 		setWaitingForTX(true);
 
 		proxyContract.setAuthority(guardAddressCopy, standardOverrides).then(
@@ -290,7 +278,6 @@ function ActionBtn(props) {
 				signer.provider
 					.waitForTransaction(txReceipt["hash"])
 					.then(async function(tx) {
-						console.log("Authority successfully setted");
 						setWaitingForTX(false);
 						updateProxyStatus(4);
 					});
@@ -327,9 +314,7 @@ function ActionBtn(props) {
 		const proxyAddress = await proxyRegistryContract.proxies(
 			context.account
 		);
-		console.log(
-			`Does user need Allowance: ${selectedTokenDetails.needAllowance}`
-		);
+
 		const copyModalState = { ...modalState };
 		copyModalState.open = true;
 		copyModalState.title = `Approve ${actionSellTokenSymbol}`;
@@ -389,7 +374,6 @@ function ActionBtn(props) {
 					copyModalState.btn2 = "Schedule";
 					copyModalState.func = mintSplitSell;
 					setModalState(copyModalState);
-					console.log("Modal should be open");
 					// Open Schedule Trade Modal
 					signer.provider
 						.waitForTransaction(txReceipt["hash"])
@@ -399,7 +383,6 @@ function ActionBtn(props) {
 						});
 				},
 				error => {
-                    console.log("Sorry");
                     setWaitingForTX(false);
 				}
 			);
@@ -455,7 +438,6 @@ function ActionBtn(props) {
         copyModalState.btn2 = "Schedule";
         copyModalState.func = mintSplitSell;
         setModalState(copyModalState);
-        console.log("Modal should be open");
     }
 
 	async function mintSplitSell() {
@@ -520,12 +502,6 @@ function ActionBtn(props) {
 			0
 		];
 
-		console.log(`Action Payload:
-		${context.account}
-		${actionSellToken}
-		${actionBuyToken}
-		${actionSellAmount}
-		`)
 
 		// Fetch prepayment
 		const signer = context.library.getSigner();
@@ -572,11 +548,6 @@ function ActionBtn(props) {
 			// chainId: 3
 		};
 
-		console.log(`
-			Starting TIme: ${startingTime}
-			intervalTime: ${intervalTime}
-			`
-			)
 		const multiMintPayload = encodeWithFunctionSelector(
 			multiMintKyberTrade.funcSelector,
 			multiMintKyberTrade.dataTypesWithName,
@@ -628,7 +599,6 @@ function ActionBtn(props) {
 			.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
 			.then(
 				function(txReceipt) {
-                    console.log("waiting for tx to get mined ...");
 
                     // Open new Modal
 					copyModalState.open = true;
@@ -638,11 +608,9 @@ function ActionBtn(props) {
 					copyModalState.btn2 = "";
 					copyModalState.func = undefined;
                     setModalState(copyModalState);
-                    console.log("Open MODAL in ACTION COMPONENT")
 					signer.provider
 						.waitForTransaction(txReceipt["hash"])
 						.then(async function(tx) {
-							console.log("Execution Claim successfully minted");
                             setWaitingForTX(false);
                             // Close Modal
                             // copyModalState.open = false;
@@ -669,7 +637,6 @@ function ActionBtn(props) {
 						});
 				},
 				error => {
-					console.log("Sorry");
 					console.log(error);
 					setWaitingForTX(false);
 				}
