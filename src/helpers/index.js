@@ -109,7 +109,7 @@ export function encodeWithFunctionSelector(method, funcDataTypes, funcParameters
   }, funcParameters)
 }
 
-export function simpleDecoder(encodedPayload, dataTypesWithName)
+export function timeStampDecoder(encodedPayload)
 {
 
   //  web3.eth.abi.decodeParameters(

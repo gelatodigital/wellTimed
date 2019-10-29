@@ -15,7 +15,7 @@ import {TimeProvider} from "../contexts/TimeContext"
 import { OrderProvider } from "../contexts/OrderContext";
 
 // Helper
-import {  decoder } from '../helpers'
+import {  decoder, timeStampDecoder } from '../helpers'
 
 // ABIS
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
@@ -347,10 +347,16 @@ function Page() {
       // userLogs2.forEach(claim => {
       for (let execId in userLogs2) {
         let triggerPayload = userLogs2[execId][0].triggerPayload
-
+        console.log(triggerPayload)
         // WHEN:
         // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
-        let decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
+        let decodedTimestamp2
+        if (triggerPayload[2] !== 0 || triggerPayload[3] !== 0 || triggerPayload[4] !== 0) {
+          decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
+        } else {
+          decodedTimestamp2 = timeStampDecoder(triggerPayload)
+        }
+
 
         // SWAP:
         let actionPayload = userLogs2[execId][1][3].toString()
