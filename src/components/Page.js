@@ -351,7 +351,7 @@ function Page() {
         // WHEN:
         // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
         let decodedTimestamp2
-        if (triggerPayload[2] !== 0 || triggerPayload[3] !== 0 || triggerPayload[4] !== 0) {
+        if (triggerPayload[2] !== "0" && triggerPayload[3] !== "0" ||triggerPayload[4] !== "0") {
           decodedTimestamp2 = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
         } else {
           decodedTimestamp2 = timeStampDecoder(triggerPayload)
