@@ -507,6 +507,7 @@ function ActionBtn(props) {
 		const actionSellToken = coins["actionFrom"]["address"];
 		const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
 		const actionSellAmount = coins["amountActionFrom"];
+		let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
 
 		const actionBuyToken = coins["actionTo"]["address"];
 		const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
@@ -514,7 +515,7 @@ function ActionBtn(props) {
 		// actionData
 		const actionData = [
 			actionSellToken,
-			actionSellAmount,
+			sellAmountPerSubOrder.toString(),
 			actionBuyToken,
 			context.account,
 			0
