@@ -108,7 +108,7 @@ function ActionBtn(props) {
 						color="primary"
 						onClick={setAuthority}
 					>
-						Set Guard as Authority
+						Authorize Well Timed
 					</Button>
 				);
 
@@ -660,7 +660,7 @@ function ActionBtn(props) {
 							createRows(
 								actionSellTokenSymbol,
 								actionBuyTokenSymbol,
-								actionSellAmount,
+								sellAmountPerSubOrder.toString(),
 								intervalTime,
 								noOfOrders,
 								timestamp

@@ -267,12 +267,10 @@ function Page() {
       const logs1 = await signer.provider.getLogs(filter1);
       logs1.forEach((log) => {
         let returnedLog = iface1.parseLog(log)
-        // console.log(returnedLog)
         let values = returnedLog.values;
         if (values[2] === proxyAddress) {
           userLogs1.push(values)
         }
-        // Do something with decoded data
       });
 
 
@@ -296,7 +294,6 @@ function Page() {
         // Do something with decoded data
       });
 
-      console.log(userLogs2)
 
       // Minted execution claims of user
 
@@ -347,7 +344,6 @@ function Page() {
       // userLogs2.forEach(claim => {
       for (let execId in userLogs2) {
         let triggerPayload = userLogs2[execId][0].triggerPayload
-        console.log(triggerPayload)
         // WHEN:
         // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
         let decodedTimestamp2
@@ -363,6 +359,7 @@ function Page() {
         let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
         // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
         try {
+
           let decodedAction = decoder(actionPayload, dataTypes)
           let order = {when: decodedTimestamp2[0], swap: decodedAction, status: userLogs2[execId][2]}
           userOrders.push(order)
@@ -371,9 +368,6 @@ function Page() {
           console.log(err)
         }
       }
-
-
-      console.log(userOrders)
 
       // Store in orders
       let orderCopy = [];
