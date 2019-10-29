@@ -370,7 +370,7 @@ function Page() {
       console.log(userOrders)
 
       // Store in orders
-      let orderCopy = [...orders];
+      let orderCopy = [];
 
       userOrders.forEach(order => {
         let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when, order.status)
