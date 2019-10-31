@@ -55,7 +55,7 @@ export default function TimeInterval() {
                 >
                 <MenuItem value={"minutes"}>minutes</MenuItem>
                 <MenuItem value={"hours"}>hours</MenuItem>
-                <MenuItem value={"seconds"}>days</MenuItem>
+                <MenuItem value={"days"}>days</MenuItem>
 
             </Select>
                 {/* <FormHelperText>Label + placeholder</FormHelperText> */}
