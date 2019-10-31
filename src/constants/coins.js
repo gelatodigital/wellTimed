@@ -197,24 +197,6 @@ export const coins = {
       }
     },
     {
-      symbol: "ENG",
-      name: "Enigma",
-      address: "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4",
-      decimals: 8,
-      id: "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4",
-      reserves_src: [
-        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
-        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
-      ],
-      reserves_dest: [
-        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
-        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
-      ],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
-    {
       symbol: "BQX",
       name: "Ethos",
       address: "0x5af2be193a6abca9c8817001f45744777db30756",
@@ -240,18 +222,6 @@ export const coins = {
         "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
         "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"
       ],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
-    {
-      symbol: "LINK",
-      name: "Chain Link",
-      address: "0x514910771af9ca656af840dff83e8264ecf986ca",
-      decimals: 18,
-      id: "0x514910771af9ca656af840dff83e8264ecf986ca",
-      reserves_src: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
-      reserves_dest: ["0x63825c174ab367968EC60f061753D3bbD36A0D8F"],
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
@@ -450,18 +420,6 @@ export const coins = {
       id: "0xf433089366899d83a9f26a773d59ec7ecf30355e",
       reserves_src: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
       reserves_dest: ["0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18"],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
-    {
-      symbol: "MOC",
-      name: "Moss Land",
-      address: "0x865ec58b06bf6305b886793aa20a2da31d034e68",
-      decimals: 18,
-      id: "0x865ec58b06bf6305b886793aa20a2da31d034e68",
-      reserves_src: ["0x742e8BB8e6bDE9CB2DF5449f8de7510798727fB1"],
-      reserves_dest: ["0x742e8BB8e6bDE9CB2DF5449f8de7510798727fB1"],
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
@@ -978,18 +936,7 @@ export const coins = {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
-    {
-      symbol: "POWR",
-      name: "Power Ledger",
-      address: "0xa577731515303f0c0d00e236041855a5c4f114dc",
-      decimals: 6,
-      id: "0xa577731515303f0c0d00e236041855a5c4f114dc",
-      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
+
     {
       symbol: "MANA",
       name: "Mana",
@@ -1087,35 +1034,11 @@ export const coins = {
       }
     },
     {
-      symbol: "BQX",
-      name: "Ethos",
-      address: "0x9504a86a881f63da06302fb3639d4582022097db",
-      decimals: 8,
-      id: "0x9504a86a881f63da06302fb3639d4582022097db",
-      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
-    {
       symbol: "ADX",
       name: "AdEx",
       address: "0x499990db50b34687cdafb2c8dabae4e99d6f38a7",
       decimals: 4,
       id: "0x499990db50b34687cdafb2c8dabae4e99d6f38a7",
-      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
-    {
-      symbol: "AST",
-      name: "AirSwap",
-      address: "0xef06f410c26a0ff87b3a43927459cce99268a2ef",
-      decimals: 4,
-      id: "0xef06f410c26a0ff87b3a43927459cce99268a2ef",
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       logo: function(address) {
@@ -1264,16 +1187,7 @@ export const coins = {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
-    {
-      symbol: "SPN",
-      name: "Sapien Network",
-      address: "0x7f7992a21e333baeeab065d54829122173caceb7",
-      decimals: 6,
-      id: "0x7f7992a21e333baeeab065d54829122173caceb7",
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
+
     {
       symbol: "HKN",
       name: "Hacken",
@@ -1364,16 +1278,7 @@ export const coins = {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     },
-    {
-      symbol: "TKN",
-      name: "Monolith",
-      address: "0xaa15075edf8e33867687428d0e49ae898e5b3513",
-      decimals: 8,
-      id: "0xaa15075edf8e33867687428d0e49ae898e5b3513",
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }
-    },
+
     {
       symbol: "FRECNX",
       name: "FreldoCoinX",

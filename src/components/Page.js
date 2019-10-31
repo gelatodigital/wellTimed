@@ -98,14 +98,14 @@ function Page() {
     },
     triggerTo: "",
     actionFrom: {
-      symbol: "LINK",
-      name: "Chain Link",
-      address: "0xb4f7332ed719eb4839f091eddb2a3ba309739521",
+      symbol: "DAI",
+      name: "DAI",
+      address: "0xad6d458402f60fd3bd25163575031acdce07538d",
       decimals: 18,
-      id: "0xb4f7332ed719eb4839f091eddb2a3ba309739521",
-      mainnet: "0x514910771af9ca656af840dff83e8264ecf986ca",
-      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
+      id: "0xad6d458402f60fd3bd25163575031acdce07538d",
+      mainnet: "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
       reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
+      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }},

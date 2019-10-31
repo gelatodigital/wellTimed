@@ -11,12 +11,13 @@ import {
 
 import { ethers } from "ethers";
 import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
+import kyberProxyABI from "../constants/ABIs/kyberProxy.json";
 
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
 import { getCorrectImageLink } from "../helpers";
 import { getTokenBalance, getTokenAllowance } from "../helpers";
-import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
+import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -72,6 +73,17 @@ function ERC20Input(props) {
   });
 
   const handleChange = coin => {
+    // Get expected rate check
+    // const signer = context.library.getSigner()
+    // console.log(coin)
+    // const kyperProxyContract = new ethers.Contract(KYBER_PROXY[context.networkId].address, kyberProxyABI, signer)
+    // console.log(kyperProxyContract)
+    // const daiAddress = '0xad6d458402f60fd3bd25163575031acdce07538d'
+    // const oneEth = ethers.utils.parseUnits("1.0", "ether")
+    // kyperProxyContract.getExpectedRate(coin.address, daiAddress, oneEth)
+    // .then(result => {console.log(result.expectedRate.toString())})
+    // .catch(error => {console.log(error)})
+
 
     const newState = { ...state };
 		newState["coin"] = coin;
@@ -106,9 +118,9 @@ function ERC20Input(props) {
       );
     } else {
       return  (<span className={classes.coins}>
-        {"LINK"}
+        {"DAI"}
         <img
-          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771af9ca656af840dff83e8264ecf986ca/logo.png"}
+          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359/logo.png"}
           alt="coin logo"
           className={classes.img}
         />

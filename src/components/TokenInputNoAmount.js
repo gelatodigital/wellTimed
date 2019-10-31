@@ -70,7 +70,6 @@ function TokenInputNoAmount(props) {
 	// };
 
 	const handleChange = coin => {
-		console.log(coin);
 		const newState = { ...state };
 		newState["coin"] = coin;
 		setState({ ...state, "coin": coin, open: false });
@@ -79,7 +78,6 @@ function TokenInputNoAmount(props) {
 	};
 
 	const handleClickOpen = async () => {
-		console.log("open");
 		setState({ ...state, open: true });
 	};
 
@@ -147,7 +145,6 @@ function TokenInputNoAmount(props) {
 							// onChange={handleChange("coin")}
 							// onClick={handleClose}
 							onClick={() => {
-								console.log(coin);
 								handleChange(coin);
 							}}
 							key={coin.id}

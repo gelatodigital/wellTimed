@@ -46,6 +46,13 @@ export const KYBER_ACTION= {
         }
 }
 
+export const KYBER_PROXY= {
+    3:
+        {
+            address: '0x818E6FECD516Ecc3849DAf6845e3EC868087B755'
+        }
+}
+
 export const EXECUTOR = {
     3: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72'
 }
