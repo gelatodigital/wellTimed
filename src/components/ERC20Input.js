@@ -18,7 +18,7 @@ import CoinContext from "../contexts/CoinContext";
 import TimeContext from "../contexts/TimeContext";
 
 import { getCorrectImageLink } from "../helpers";
-import { getTokenBalance, getTokenAllowance } from "../helpers";
+import { getTokenBalance, getTokenAllowance, updateEstimatedOrders } from "../helpers";
 import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
@@ -66,6 +66,7 @@ function ERC20Input(props) {
   const time = timeContext.time
   const updateSelectedTokenDetails = props.updateSelectedTokenDetails
   const selectedTokenDetails = props.selectedTokenDetails
+  const updateActiveCoins = props.updateActiveCoins
   // State
 
   const [state, setState] = React.useState({
@@ -81,35 +82,10 @@ function ERC20Input(props) {
 		newState["coin"] = coin;
     setState({ ...state, "coin": coin, open: false });
     coinContext.actionFrom = coin;
-    changeOrderDetails()
+    const updatedCoinContext = updateEstimatedOrders(coinContext, time)
+		updateActiveCoins(updatedCoinContext)
     checkERC20ApprovalStatus()
   };
-
-  function changeOrderDetails() {
-    // Change coinContext Orders
-    let newIntervalTime = time.intervalTime * 86400000
-    const actionSellToken = coinContext["actionFrom"]
-		const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
-    const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
-    const actionSellAmount = coinContext["amountActionFrom"];
-    let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
-    let newOrders = []
-    const decimals = coinContext.actionFrom.decimals
-    let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
-
-    for (let i = 0; i < time.numOrders; i++)
-    {
-      let timestamp = coinContext['timestamp'] + (i * newIntervalTime)
-      let date1 = new Date(timestamp);
-      let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
-      let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
-      newOrders.push(order)
-    }
-
-    coinContext.orders = newOrders;
-  }
-
-
 
   const handleClickOpen = () => {
     setState({ ...state, open: true });
@@ -157,8 +133,8 @@ function ERC20Input(props) {
       setState({ ...state, [name]: selectedAmount || "" });
       coinContext.amountActionFrom = selectedAmount;
     }
-    console.log(coinContext.amountActionFrom)
-    changeOrderDetails()
+    const updatedCoinContext = updateEstimatedOrders(coinContext, time)
+		updateActiveCoins(updatedCoinContext)
     checkERC20ApprovalStatus()
   };
 

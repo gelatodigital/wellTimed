@@ -9,6 +9,9 @@ import { ethers } from "ethers";
 import TimeContext from '../contexts/TimeContext'
 import CoinContext from "../contexts/CoinContext";
 
+// Helpers
+import { updateEstimatedOrders } from "../helpers";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,8 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function NoOfSwaps() {
+export default function NoOfSwaps(props) {
   const classes = useStyles();
+  const updateActiveCoins = props.updateActiveCoins
 
   const timeContext = useContext(TimeContext)
   const coinContext = useContext(CoinContext);
@@ -37,48 +41,38 @@ export default function NoOfSwaps() {
 
   const handleChange = event => {
     const newTime = {...time}
-    let newNumOrders
-    if (event.target.value === "")
-    {
-      newNumOrders = 1
-    }
-    else {
-      newNumOrders = event.target.value
-    }
+    let newNumOrders = event.target.value
     newTime.numOrders = newNumOrders
-    changeOrderDetails(newNumOrders)
+    const updatedCoinContext = updateEstimatedOrders(coinContext, newTime)
+		updateActiveCoins(updatedCoinContext)
     setTime(newTime)
  };
 
- function changeOrderDetails(newNumOrders = 2) {
-   console.log(newNumOrders)
-  // Change coinContext Orders
-  let newIntervalTime = time.intervalTime * 86400000
-  const actionSellToken = coinContext["actionFrom"]
-  const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
-  const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
-  const actionSellAmount = coinContext["amountActionFrom"];
-  console.log(actionSellAmount.toString())
+//  function changeOrderDetails(newNumOrders = 2) {
+//   // Change coinContext Orders
+//   let newIntervalTime = time.intervalTime * 86400000
+//   const actionSellToken = coinContext["actionFrom"]
+//   const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
+//   const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
+//   const actionSellAmount = coinContext["amountActionFrom"];
 
-  let sellAmountPerSubOrder =  actionSellAmount.div(ethers.utils.bigNumberify(newNumOrders))
-  let newOrders = []
-  const decimals = coinContext.actionFrom.decimals
-  let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
-  console.log(userfriendlyAmountPerSubOrder)
-  console.log(parseInt(userfriendlyAmountPerSubOrder).toFixed(4))
+//   let sellAmountPerSubOrder =  actionSellAmount.div(ethers.utils.bigNumberify(newNumOrders))
+//   let newOrders = []
+//   const decimals = coinContext.actionFrom.decimals
+//   let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellA
 
-  for (let i = 0; i < newNumOrders; i++)
-  {
-    let timestamp = coinContext['timestamp'] + (i * newIntervalTime)
-    let date1 = new Date(timestamp);
-    let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
-    let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
-    newOrders.push(order)
-  }
+//   for (let i = 0; i < newNumOrders; i++)
+//   {
+//     let timestamp = coinContext['timestamp'] + (i * newIntervalTime)
+//     let date1 = new Date(timestamp);
+//     let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
+//     let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
+//     newOrders.push(order)
+//   }
 
-  coinContext.orders = newOrders;
-  console.log(coinContext)
-}
+//   coinContext.orders = newOrders;
+//   console.log(coinContext)
+// }
 
  function renderDefaultValue() {
    return time.numOrders;

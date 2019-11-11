@@ -10,7 +10,7 @@ import {
 import { ethers } from "ethers";
 import CoinContext from "../contexts/CoinContext";
 import TimeContext from "../contexts/TimeContext";
-import { getCorrectImageLink } from "../helpers";
+import { getCorrectImageLink, updateEstimatedOrders } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -58,38 +58,15 @@ function TokenInputNoAmount(props) {
 		availableCoins: Object.values(getCorrectImageLink())
 	});
 
-	function changeOrderDetails(coinContextCopy) {
-		// Change coinContext Orders
-		let newIntervalTime = time.intervalTime * 86400000
-		const actionSellToken = coinContext["actionFrom"]
-		const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
-		const actionBuyTokenSymbol = coinContextCopy["actionTo"]["symbol"]
-		const actionSellAmount = coinContext["amountActionFrom"];
-		let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
-		let newOrders = []
-		const decimals = coinContext.actionFrom.decimals
-		let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
-
-		for (let i = 0; i < time.numOrders; i++)
-		{
-			let timestamp = coinContext['timestamp'] + (i * 86400000)
-			let date1 = new Date(timestamp);
-			let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
-			let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
-			newOrders.push(order)
-		}
-
-		coinContextCopy.orders = newOrders;
-		updateActiveCoins(coinContextCopy)
-	}
-
 	const handleChange = coin => {
 		const newState = { ...state };
 		newState["coin"] = coin;
 		setState({ ...state, "coin": coin, open: false });
 		const coinContextCopy = {...coinContext}
 		coinContextCopy['actionTo'] = coin;
-		changeOrderDetails(coinContextCopy)
+		// Call helper function to updated estimated orders
+		const updatedCoinContext = updateEstimatedOrders(coinContextCopy, time)
+		updateActiveCoins(updatedCoinContext)
 		// handleClose()
 	};
 

@@ -108,7 +108,7 @@ function TimeOrderWrapper(props) {
             <p className={classes.inputs}>Split into</p>
             <CardContent className={classes.cardContent}>
 
-              <NoOfSwaps></NoOfSwaps>
+              <NoOfSwaps updateActiveCoins={updateActiveCoins} ></NoOfSwaps>
               <p className={classes.inputs}>order(s)</p>
 
             </CardContent>

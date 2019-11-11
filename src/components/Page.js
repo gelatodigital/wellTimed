@@ -79,7 +79,7 @@ function Page() {
   let timestamp2 = timestamp1 + 86400000
   let date2 = new Date(timestamp2)
   const timestampString2 = `${date2.toLocaleDateString()} - ${date2.toLocaleTimeString()}`;
-  const  dummy = [{swap: '0.5 WETH => GNO', when: `${timestampString1}`}, {swap: '0.5 WETH => GNO', when: `${timestampString2}`}]
+  const  dummy = [{'#': 1, swap: '0.5 WETH => GNO', when: `${timestampString1}`}, {'#': 2, swap: '0.5 WETH => GNO', when: `${timestampString2}`}]
 
 
   const [activeCoins, setActivCoins] = React.useState({
@@ -128,7 +128,7 @@ function Page() {
 
   const [time, setTime] = React.useState({
     numOrders: 2,
-    intervalTime: 10,
+    intervalTime: 1,
     intervalType: 'minutes'
   });
 

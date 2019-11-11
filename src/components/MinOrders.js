@@ -50,6 +50,7 @@ function getSorting(order, orderBy) {
 // ];
 
 const headCells = [
+  { id: "#", numeric: true, disablePadding: false, label: "#" },
   { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
   { id: "when", numeric: false, disablePadding: false, label: "When" },
 
@@ -234,6 +235,7 @@ export default function MinOrders(props) {
                       selected={isItemSelected}
                     >
                       {/* { ifThis, thenSwap, created, status, action }; */}
+                      <TableCell align="center">{row['#']}</TableCell>
                       <TableCell align="center">{row.swap}</TableCell>
                       <TableCell align="center">{row.when}</TableCell>
                     </TableRow>

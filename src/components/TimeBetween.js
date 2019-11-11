@@ -6,6 +6,9 @@ import Select from '@material-ui/core/Select';
 
 import { ethers } from "ethers";
 
+// Helpers
+import { updateEstimatedOrders } from "../helpers";
+
 
 // Context
 import TimeContext from '../contexts/TimeContext'
@@ -42,8 +45,9 @@ export default function TimeBetween(props) {
     const newTime = {...time}
     let  newIntervalTime = event.target.value
     console.log(newIntervalTime)
-    changeOrderDetails(newIntervalTime * 86400000)
     newTime.intervalTime = newIntervalTime
+    const updatedCoinContext = updateEstimatedOrders(coinContext, newTime)
+		updateActiveCoins(updatedCoinContext)
     setTime(newTime)
   };
 
