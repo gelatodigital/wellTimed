@@ -48,7 +48,8 @@ export function getCorrectImageLink() {
     table1[coin["symbol"]] = coin;
   });
   coins[1].forEach(coin => {
-    table2[coin["symbol"]] = coin["address"];
+    table2[coin["symbol"]] = ethers.utils.getAddress(coin["address"]);
+
   });
 
   const table3 = {};

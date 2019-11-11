@@ -39,8 +39,7 @@ function TokenInputNoAmount(props) {
 
 	// fetch params
 	const inputData = props.inputData
-    const tokenType = inputData.tokenType
-
+	const tokenType = inputData.tokenType
 
 
     // defaultToken => none if 'Select a Token'
@@ -103,7 +102,7 @@ function TokenInputNoAmount(props) {
 					{"KNC"}
 					<img
 					src={
-						"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974d5c2e2928dea5f71b9825b8b646686bd200/logo.png"
+						"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974D5C2e2928deA5F71b9825b8b646686BD200/logo.png"
 					}
 					alt="coin logo"
 					className={classes.img}
