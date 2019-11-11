@@ -15,6 +15,8 @@ import kyberProxyABI from "../constants/ABIs/kyberProxy.json";
 
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
+import TimeContext from "../contexts/TimeContext";
+
 import { getCorrectImageLink } from "../helpers";
 import { getTokenBalance, getTokenAllowance } from "../helpers";
 import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
@@ -60,7 +62,8 @@ function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
-
+  const timeContext = useContext(TimeContext)
+  const time = timeContext.time
   const updateSelectedTokenDetails = props.updateSelectedTokenDetails
   const selectedTokenDetails = props.selectedTokenDetails
   // State
@@ -73,24 +76,38 @@ function ERC20Input(props) {
   });
 
   const handleChange = coin => {
-    // Get expected rate check
-    // const signer = context.library.getSigner()
-    // console.log(coin)
-    // const kyperProxyContract = new ethers.Contract(KYBER_PROXY[context.networkId].address, kyberProxyABI, signer)
-    // console.log(kyperProxyContract)
-    // const daiAddress = '0xad6d458402f60fd3bd25163575031acdce07538d'
-    // const oneEth = ethers.utils.parseUnits("1.0", "ether")
-    // kyperProxyContract.getExpectedRate(coin.address, daiAddress, oneEth)
-    // .then(result => {console.log(result.expectedRate.toString())})
-    // .catch(error => {console.log(error)})
-
 
     const newState = { ...state };
 		newState["coin"] = coin;
-		setState({ ...state, "coin": coin, open: false });
+    setState({ ...state, "coin": coin, open: false });
     coinContext.actionFrom = coin;
+    changeOrderDetails()
     checkERC20ApprovalStatus()
   };
+
+  function changeOrderDetails() {
+    // Change coinContext Orders
+    let newIntervalTime = time.intervalTime * 86400000
+    const actionSellToken = coinContext["actionFrom"]
+		const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
+    const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
+    const actionSellAmount = coinContext["amountActionFrom"];
+    let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
+    let newOrders = []
+    const decimals = coinContext.actionFrom.decimals
+    let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
+
+    for (let i = 0; i < time.numOrders; i++)
+    {
+      let timestamp = coinContext['timestamp'] + (i * newIntervalTime)
+      let date1 = new Date(timestamp);
+      let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
+      let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
+      newOrders.push(order)
+    }
+
+    coinContext.orders = newOrders;
+  }
 
 
 
@@ -140,6 +157,8 @@ function ERC20Input(props) {
       setState({ ...state, [name]: selectedAmount || "" });
       coinContext.amountActionFrom = selectedAmount;
     }
+    console.log(coinContext.amountActionFrom)
+    changeOrderDetails()
     checkERC20ApprovalStatus()
   };
 
@@ -209,7 +228,24 @@ function ERC20Input(props) {
         }
       }
 
+    } else {
+      updateSelectedTokenDetails(copySelectedTokenDetails)
     }
+  }
+
+  function renderDefaultValue() {
+    console.log(coinContext.amountActionFrom)
+    if (coinContext.amountActionFrom === undefined )
+    {
+      console.log("here")
+      return 1.0
+    } else {
+      const actionSellAmount = coinContext["amountActionFrom"];
+      const decimals = coinContext.actionFrom.decimals
+      let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
+      return userfriendlyAmount.toString()
+    }
+
   }
 
   return (
@@ -220,7 +256,7 @@ function ERC20Input(props) {
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="0"
+        value={renderDefaultValue()}
       />
       <Button
         className={classes.buttonPadding}
