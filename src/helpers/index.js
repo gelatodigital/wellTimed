@@ -37,10 +37,6 @@ export async function approveToken(signer, beneficiary, tokenAddress) {
   })
 }
 
-
-
-
-
 export function getCorrectImageLink() {
   const table1 = {};
   const table2 = {};
