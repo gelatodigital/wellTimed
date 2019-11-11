@@ -24,6 +24,10 @@ function desc(a, b, orderBy) {
 }
 
 function stableSort(array, cmp) {
+  console.log("IN STABLE SORT")
+  console.log(array)
+  console.log(cmp)
+  console.log("----")
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = cmp(a[0], b[0]);
@@ -36,7 +40,7 @@ function stableSort(array, cmp) {
 function getSorting(order, orderBy) {
   return order === "desc"
     ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => desc(a, b, orderBy);
+    : (a, b) => -desc(a, b, orderBy);
 }
 
 // const headCells = [
@@ -49,7 +53,7 @@ function getSorting(order, orderBy) {
 
 const headCells = [
   { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
-  { id: "when", numeric: false, disablePadding: false, label: "When" },
+  { id: "when", numeric: true, disablePadding: false, label: "When" },
   { id: "status", numeric: false, disablePadding: false, label: "Status" }
 ];
 
@@ -136,7 +140,7 @@ export default function Orders(props) {
 
   const ordersContext = useContext(OrderContext)
   let rows = ordersContext['orders']
-  if (rows === undefined) {
+  if (rows[0].swap === "") {
     rows = []
   }
 
@@ -158,6 +162,7 @@ export default function Orders(props) {
   };
 
   const handleClick = (event, name) => {
+
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -173,6 +178,7 @@ export default function Orders(props) {
         selected.slice(selectedIndex + 1)
       );
     }
+    console.log(newSelected)
 
     setSelected(newSelected);
   };
@@ -195,6 +201,12 @@ export default function Orders(props) {
     emptyRows = 0
   } else {
     emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  }
+
+
+  function stringifyTimestamp(timestamp) {
+    let date = new Date(timestamp * 1000);
+    return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
   }
 
 
@@ -233,7 +245,7 @@ export default function Orders(props) {
                     >
                       {/* { ifThis, thenSwap, created, status, action }; */}
                       <TableCell align="center">{row.swap}</TableCell>
-                      <TableCell align="center">{row.when}</TableCell>
+                      <TableCell align="center">{stringifyTimestamp(row.when)}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
                     </TableRow>
                   );

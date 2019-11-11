@@ -179,15 +179,11 @@ function Page() {
       }
     })
 
-
-    let date = new Date(timestamp * 1000);
-    const timestampString = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-
     let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
 
     const newOrder = {
       swap: `${actionSellTokenSymbol.toString()} ${userfriendlyAmount.toString()} => ${actionBuyTokenSymbol.toString()}`,
-      when: timestampString,
+      when: timestamp,
       status: status
     };
 
