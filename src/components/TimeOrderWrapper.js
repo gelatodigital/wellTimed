@@ -38,7 +38,8 @@ const style = makeStyles({
       // margin: "25px"
       marginTop: "10px",
       marginBottom: "10px",
-      width: '25%'
+      width: '25%',
+      // height: '10rem'
     },
     box: {
       display: 'flex',

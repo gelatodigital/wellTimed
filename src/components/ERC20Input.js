@@ -39,8 +39,10 @@ const useStyles = makeStyles(theme => ({
   },
   amountInput: {
     marginTop: '2px',
-    width: '50px',
-    textAlign: 'right'
+    width: '100px',
+  },
+  input: {
+    textAlign: 'center'
   },
   img: {
     width: "24px",
@@ -55,7 +57,7 @@ const useStyles = makeStyles(theme => ({
   buttonPadding: {
     marginTop: '1.5px',
     width: '32px'
-  }
+  },
 }));
 
 function ERC20Input(props) {
@@ -228,11 +230,16 @@ function ERC20Input(props) {
     <div className={classes.container}>
       <Input
         className={classes.amountInput}
+        classes={{
+          input: classes.input, // class name, e.g. `classes-nesting-root-x`
+        }}
         disableUnderline={true}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        value={renderDefaultValue()}
+        defaultValue="1"
+        // value={renderDefaultValue()}
+
       />
       <Button
         className={classes.buttonPadding}
