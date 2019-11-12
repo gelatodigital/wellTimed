@@ -18,7 +18,6 @@ import OrderContext from "../contexts/OrderContext";
 // Style
 import { Button, Divider, makeStyles, Card, CardContent } from "@material-ui/core";
 
-const backgroundColor = 'pink'
 const style = makeStyles({
     root: {
       display: 'flex',
@@ -79,8 +78,13 @@ const style = makeStyles({
       marginLeft: '25px'
     },
     dividerClass: {
-      marginTop: '20px',
-      marginBottom: '10px'
+      width: '100%',
+      marginTop: '30px',
+      marginBottom: '30px'
+    },
+    dividerMiddle: {
+      marginLeft: '0',
+      marginRight: '0',
     }
   });
 
@@ -140,10 +144,11 @@ function TimeOrderWrapper(props) {
           </Card>
 
         </div>
+        <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Resulting orders</h3>
         <MinOrders orders2={props.orders2}   ></MinOrders>
         <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
-        <Divider variant="middle" className={classes.dividerClass}/>
+        <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Your scheduled orders</h3>
         <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Orders</Button>
         <Orders></Orders>
