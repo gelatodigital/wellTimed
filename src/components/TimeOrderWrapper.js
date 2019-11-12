@@ -5,6 +5,7 @@ import { useWeb3Context } from "web3-react";
 import ActionBtn from "./ActionBtn";
 import ConnectBtn from "./ConnectBtn";
 import ERC20Input from "./ERC20Input";
+import TimeInterval from "./TimeInterval";
 import Orders from "./Orders"
 import TokenInputNoAmount from "./TokenInputNoAmount";
 import NoOfSwaps from "./NoOfSwaps";
@@ -132,7 +133,8 @@ function TimeOrderWrapper(props) {
             <CardContent className={classes.cardContent}>
 
               <TimeBetween updateActiveCoins={updateActiveCoins}></TimeBetween>
-              <p className={classes.inputs}>day(s)</p>
+              <TimeInterval updateActiveCoins={updateActiveCoins}></TimeInterval>
+              {/* <p className={classes.inputs}>day(s)</p> */}
 
             </CardContent>
           </Card>

@@ -180,9 +180,8 @@ function Page() {
     })
 
     let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
-
     const newOrder = {
-      swap: `${actionSellTokenSymbol.toString()} ${userfriendlyAmount.toString()} => ${actionBuyTokenSymbol.toString()}`,
+      swap: `${actionSellTokenSymbol.toString()} ${parseFloat(userfriendlyAmount).toFixed(4)} => ${actionBuyTokenSymbol.toString()}`,
       when: timestamp,
       status: status
     };

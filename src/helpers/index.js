@@ -12,7 +12,25 @@ export function updateEstimatedOrders(coinContext, time) {
   const actionSellAmount = coinContext["amountActionFrom"];
   let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
   let newOrders = []
-  let intervalTime = time.intervalTime * 86400000
+  let multiplier;
+  switch (time.intervalType) {
+    case "minutes":
+      multiplier = 60000;
+      break;
+
+    case "hours":
+      multiplier = 3600000;
+      break;
+
+    case "days":
+      multiplier = 86400000;
+      break;
+
+    default:
+      multiplier = 86400000;
+      break;
+  }
+  let intervalTime = time.intervalTime * multiplier
   console.log(intervalTime)
   const decimals = coinContext.actionFrom.decimals
   let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
