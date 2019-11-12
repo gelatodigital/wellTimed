@@ -25,8 +25,14 @@ const theme = createMuiTheme({
     primary: green,
     secondary: red,
     pending: pink
+  },
+  typography: {
+    fontFamily:  'Inconsolata, monospace',
   }
 });
+
+
+
 
 function App() {
   return (

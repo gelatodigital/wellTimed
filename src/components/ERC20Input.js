@@ -24,6 +24,7 @@ import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
 const useStyles = makeStyles(theme => ({
   root: {
     // width: '32px'
+    fontFamily: 'Cantarell, sans-serif',
   },
   container: {
     display: "flex",
