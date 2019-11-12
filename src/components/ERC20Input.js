@@ -15,18 +15,22 @@ import kyberProxyABI from "../constants/ABIs/kyberProxy.json";
 
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
+import TimeContext from "../contexts/TimeContext";
+
 import { getCorrectImageLink } from "../helpers";
-import { getTokenBalance, getTokenAllowance } from "../helpers";
+import { getTokenBalance, getTokenAllowance, updateEstimatedOrders } from "../helpers";
 import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '32px'
+    // width: '32px'
+    fontFamily: 'Cantarell, sans-serif',
   },
   container: {
     display: "flex",
     justifyContent: "center",
-    paddingLeft: '4px',
+    paddingLeft: '5px',
+    paddingRight: '10px',
 
 
   },
@@ -36,33 +40,51 @@ const useStyles = makeStyles(theme => ({
 
   },
   amountInput: {
-    marginTop: '2px',
-    width: '50px',
-    textAlign: 'right'
+    // marginTop: '2px',
+    width: '130px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    height: '35px',
+    marginRight: '10px',
+    borderRadius: '4px',
+
+  },
+  input: {
+    textAlign: 'right',
+    padding: '0'
+    // borderRadius: '4px'
+  },
+
+  coins: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: 'center',
+    // paddingTop: '6px',
+    // backgroundColor: 'pink',
+
+  },
+  buttonPadding: {
+    // marginTop: '1.5px',
+    minWidth: '32px',
+    height: '35px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    // paddingTop: '15px'
   },
   img: {
     width: "24px",
     height: "24px",
     marginLeft: '3px'
   },
-  coins: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: '26px'
-  },
-  buttonPadding: {
-    marginTop: '1.5px',
-    width: '32px'
-  }
 }));
 
 function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
-
+  const timeContext = useContext(TimeContext)
+  const time = timeContext.time
   const updateSelectedTokenDetails = props.updateSelectedTokenDetails
   const selectedTokenDetails = props.selectedTokenDetails
+  const updateActiveCoins = props.updateActiveCoins
   // State
 
   const [state, setState] = React.useState({
@@ -73,26 +95,15 @@ function ERC20Input(props) {
   });
 
   const handleChange = coin => {
-    // Get expected rate check
-    // const signer = context.library.getSigner()
-    // console.log(coin)
-    // const kyperProxyContract = new ethers.Contract(KYBER_PROXY[context.networkId].address, kyberProxyABI, signer)
-    // console.log(kyperProxyContract)
-    // const daiAddress = '0xad6d458402f60fd3bd25163575031acdce07538d'
-    // const oneEth = ethers.utils.parseUnits("1.0", "ether")
-    // kyperProxyContract.getExpectedRate(coin.address, daiAddress, oneEth)
-    // .then(result => {console.log(result.expectedRate.toString())})
-    // .catch(error => {console.log(error)})
-
 
     const newState = { ...state };
 		newState["coin"] = coin;
-		setState({ ...state, "coin": coin, open: false });
+    setState({ ...state, "coin": coin, open: false });
     coinContext.actionFrom = coin;
+    const updatedCoinContext = updateEstimatedOrders(coinContext, time)
+		updateActiveCoins(updatedCoinContext)
     checkERC20ApprovalStatus()
   };
-
-
 
   const handleClickOpen = () => {
     setState({ ...state, open: true });
@@ -140,6 +151,8 @@ function ERC20Input(props) {
       setState({ ...state, [name]: selectedAmount || "" });
       coinContext.amountActionFrom = selectedAmount;
     }
+    const updatedCoinContext = updateEstimatedOrders(coinContext, time)
+		updateActiveCoins(updatedCoinContext)
     checkERC20ApprovalStatus()
   };
 
@@ -209,6 +222,8 @@ function ERC20Input(props) {
         }
       }
 
+    } else {
+      updateSelectedTokenDetails(copySelectedTokenDetails)
     }
   }
 
@@ -216,11 +231,16 @@ function ERC20Input(props) {
     <div className={classes.container}>
       <Input
         className={classes.amountInput}
+        classes={{
+          input: classes.input,
+        }}
         disableUnderline={true}
         onChange={handleAmount("amount")}
         type="number"
         autoComplete="off"
-        placeholder="0"
+        defaultValue="1"
+        // value={renderDefaultValue()}
+
       />
       <Button
         className={classes.buttonPadding}
@@ -232,38 +252,41 @@ function ERC20Input(props) {
         {userChoice()}
       </Button>
       <Dialog
-				disableBackdropClick
-				disableEscapeKeyDown
-				open={state.open}
-				onClose={handleClose}
-				value={state.coin}
-				// onChange={handleChange("coin")}
-			>
-				<DialogTitle>Choose coin from dropdown</DialogTitle>
-				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
-				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
-				{state.availableCoins.map((coin, key) => {
-					return (
-						<MenuItem
-							// onChange={handleChange("coin")}
-							// onClick={handleClose}
-							onClick={() => {
-								handleChange(coin);
-							}}
-							key={key}
-							value={coin}
-							className={classes.coins}
-						>
-							{coin.symbol}
-							<img
-								className={classes.img}
-								src={coin.logo(coin.mainnet)}
-								alt="coin logo"
-							/>
-						</MenuItem>
-					);
-				})}
-			</Dialog>
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={state.open}
+        onClose={handleClose}
+        value={state.coin}
+        // onChange={handleChange("coin")}
+      >
+        <DialogTitle>Choose Token to sell</DialogTitle>
+        {/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
+        {/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+        {state.availableCoins.map((coin, key) => {
+          return (
+            <div>
+              <div style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+              <MenuItem
+                // onChange={handleChange("coin")}
+                // onClick={handleClose}
+                onClick={() => {
+                  handleChange(coin);
+                }}
+                key={key}
+                value={coin}
+                className={classes.coins}
+              >
+                {coin.symbol}
+                <img
+                  className={classes.img}
+                  src={coin.logo(coin.mainnet)}
+                  alt="coin logo"
+                />
+              </MenuItem>
+            </div>
+          );
+        })}
+      </Dialog>
     </div>
   );
 }

@@ -68,35 +68,24 @@ function Page() {
   //   ordersFromLocalStorage = []
   // }
 
+
+
   // Used to display orders Table in orders
   const [orders, setOrders] = React.useState([{swap: "", when: "", status: ""}])
 
+  let timestamp1 = Date.now();
+  let date1 = new Date(timestamp1);
+  const timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
+  let timestamp2 = timestamp1 + 86400000
+  let date2 = new Date(timestamp2)
+  const timestampString2 = `${date2.toLocaleDateString()} - ${date2.toLocaleTimeString()}`;
+  const  dummy = [{'#': 1, swap: '0.5 WETH => GNO', when: `${timestampString1}`}, {'#': 2, swap: '0.5 WETH => GNO', when: `${timestampString2}`}]
+
 
   const [activeCoins, setActivCoins] = React.useState({
-    triggerFrom: {
-      symbol: "KNC",
-      name: "KyberNetwork",
-      address: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
-      decimals: 18,
-      id: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
-      mainnet: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
-      logo: function(address) {
-        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      },
-      reserves_src: [
-        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
-        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
-        "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7",
-        "0xA467b88BBF9706622be2784aF724C4B44a9d26F4"
-      ],
-      reserves_dest: [
-        "0x63825c174ab367968EC60f061753D3bbD36A0D8F",
-        "0x21433Dec9Cb634A23c6A4BbcCe08c83f5aC2EC18",
-        "0xD6000fda0b38f4Bff4CfAb188E0bd18e8725a5e7",
-        "0xA467b88BBF9706622be2784aF724C4B44a9d26F4"
-      ]
-    },
-    triggerTo: "",
+    orders: dummy,
+    timestamp: timestamp1,
+    amountActionFrom: ethers.utils.parseUnits("1.0", "ether"),
     actionFrom: {
       symbol: "DAI",
       name: "DAI",
@@ -108,7 +97,7 @@ function Page() {
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-      }},
+    }},
     actionTo: {
       symbol: "KNC",
       name: "KyberNetwork",
@@ -139,7 +128,7 @@ function Page() {
 
   const [time, setTime] = React.useState({
     numOrders: 2,
-    intervalTime: 10,
+    intervalTime: 1,
     intervalType: 'minutes'
   });
 
@@ -190,15 +179,10 @@ function Page() {
       }
     })
 
-
-    let date = new Date(timestamp * 1000);
-    const timestampString = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-
     let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
-
     const newOrder = {
-      swap: `${actionSellTokenSymbol.toString()} ${userfriendlyAmount.toString()} => ${actionBuyTokenSymbol.toString()}`,
-      when: timestampString,
+      swap: `${actionSellTokenSymbol.toString()} ${parseFloat(userfriendlyAmount).toFixed(4)} => ${actionBuyTokenSymbol.toString()}`,
+      when: timestamp,
       status: status
     };
 
@@ -405,7 +389,7 @@ function Page() {
         <CoinProvider value={activeCoins}>
           <OrderProvider value={ordersContext}>
             <TimeProvider value={timePackage}>
-              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateActiveCoins={updateActiveCoins} fetchExecutionClaims={fetchExecutionClaims} >
+              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateActiveCoins={updateActiveCoins} fetchExecutionClaims={fetchExecutionClaims} orders2={activeCoins.orders} >
               </TimeOrderWrapper>
             </TimeProvider>
           </OrderProvider>

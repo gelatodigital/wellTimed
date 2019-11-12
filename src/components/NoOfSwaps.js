@@ -3,9 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { ethers } from "ethers";
 
 // Context
 import TimeContext from '../contexts/TimeContext'
+import CoinContext from "../contexts/CoinContext";
+
+// Helpers
+import { updateEstimatedOrders } from "../helpers";
 
 
 const useStyles = makeStyles(theme => ({
@@ -16,33 +21,32 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 60,
-    marginTop: '28px'
-
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    borderRadius: '4px',
   },
   selectEmpty: {
-    marginTop: '2px',
+    // marginTop: '2px',
+    // backgroundColor: 'rgb(220,220,220, 0.3)',
+    // borderRadius: '4px',
   },
 }));
 
-export default function NoOfSwaps() {
+export default function NoOfSwaps(props) {
   const classes = useStyles();
+  const updateActiveCoins = props.updateActiveCoins
 
   const timeContext = useContext(TimeContext)
+  const coinContext = useContext(CoinContext);
 
   const time = timeContext.time
   const setTime = timeContext.setTime
 
   const handleChange = event => {
     const newTime = {...time}
-    let newNumOrders
-    if (event.target.value === "")
-    {
-      newNumOrders = 1
-    }
-    else {
-      newNumOrders = event.target.value
-    }
+    let newNumOrders = event.target.value
     newTime.numOrders = newNumOrders
+    const updatedCoinContext = updateEstimatedOrders(coinContext, newTime)
+		updateActiveCoins(updatedCoinContext)
     setTime(newTime)
  };
 

@@ -1,4 +1,4 @@
-import React , {useContext} from "react";
+import React , {useContext, useEffect} from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -12,6 +12,8 @@ import Paper from "@material-ui/core/Paper";
 
 // import { useWeb3Context } from "web3-react";
 import OrderContext from "../contexts/OrderContext";
+import CoinContext from "../contexts/CoinContext";
+
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -48,9 +50,10 @@ function getSorting(order, orderBy) {
 // ];
 
 const headCells = [
+  { id: "#", numeric: true, disablePadding: false, label: "#" },
   { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
-  { id: "when", numeric: true, disablePadding: false, label: "When" },
-  { id: "status", numeric: false, disablePadding: false, label: "Status" }
+  { id: "when", numeric: false, disablePadding: false, label: "When" },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -70,6 +73,7 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              classes={{root: classes.headerText, icon: classes.icon}}
               active={orderBy === headCell.id}
               direction={order}
               onClick={createSortHandler(headCell.id)}
@@ -101,8 +105,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
-    paddingTop: '10px',
-    paddingBottom: '10px',
   },
   paper: {
     width: "100%",
@@ -124,25 +126,31 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: 20,
     width: 1
+  },
+  headerText: {
+    marginLeft: '9px',
+  },
+  icon: {
+    width: '0px'
   }
 }));
 
-export default function Orders(props) {
+export default function MinOrders(props) {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("desc");
-  const [orderBy, setOrderBy] = React.useState("when");
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense] = React.useState(false);
+  const [dense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+
   const ordersContext = useContext(OrderContext)
-  let rows = ordersContext['orders']
-  if (rows[0].swap === "") {
-    rows = []
-  }
+  const coinContext = useContext(CoinContext);
+  const contextOrders = coinContext.orders
 
-
+  let rows = contextOrders
+  // let rows = props.orders2
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -160,7 +168,6 @@ export default function Orders(props) {
   };
 
   const handleClick = (event, name) => {
-
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -201,12 +208,6 @@ export default function Orders(props) {
   }
 
 
-  function stringifyTimestamp(timestamp) {
-    let date = new Date(timestamp * 1000);
-    return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-  }
-
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -241,9 +242,9 @@ export default function Orders(props) {
                       selected={isItemSelected}
                     >
                       {/* { ifThis, thenSwap, created, status, action }; */}
+                      <TableCell align="center">{row['#']}</TableCell>
                       <TableCell align="center">{row.swap}</TableCell>
-                      <TableCell align="center">{stringifyTimestamp(row.when)}</TableCell>
-                      <TableCell align="center">{row.status}</TableCell>
+                      <TableCell align="center">{row.when}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -255,21 +256,7 @@ export default function Orders(props) {
             </TableBody>
           </Table>
         </div>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "previous page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "next page"
-          }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+
       </Paper>
     </div>
   );

@@ -4,8 +4,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { ethers } from "ethers";
+
+// Helpers
+import { updateEstimatedOrders } from "../helpers";
+
+
 // Context
 import TimeContext from '../contexts/TimeContext'
+import CoinContext from '../contexts/CoinContext'
 
 
 const useStyles = makeStyles(theme => ({
@@ -15,18 +22,22 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 60,
-    marginTop: '28px'
+    minWidth: '60px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    borderRadius: '4px',
   },
   selectEmpty: {
-    marginTop: '1.5px',
+    // marginTop: '1.5px',
   },
 }));
 
-export default function TimeBetween() {
+export default function TimeBetween(props) {
   const classes = useStyles();
 
+  const updateActiveCoins = props.updateActiveCoins
+
   const timeContext = useContext(TimeContext)
+  const coinContext = useContext(CoinContext)
 
   const time = timeContext.time
   const setTime = timeContext.setTime
@@ -34,9 +45,41 @@ export default function TimeBetween() {
   const handleChange = event => {
     const newTime = {...time}
     let  newIntervalTime = event.target.value
+    console.log(newIntervalTime)
     newTime.intervalTime = newIntervalTime
+    const updatedCoinContext = updateEstimatedOrders(coinContext, newTime)
+		updateActiveCoins(updatedCoinContext)
     setTime(newTime)
   };
+
+
+  function renderDefaultValue() {
+    return time.intervalTime;
+    }
+
+    function changeOrderDetails(newIntervalTime) {
+      // Change coinContext Orders
+      const actionSellToken = coinContext["actionFrom"]
+      const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
+      const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
+      const actionSellAmount = coinContext["amountActionFrom"];
+      let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
+      let newOrders = []
+      const decimals = coinContext.actionFrom.decimals
+      let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
+
+      for (let i = 0; i < time.numOrders; i++)
+      {
+        let timestamp = coinContext['timestamp'] + (i * newIntervalTime)
+        let date1 = new Date(timestamp);
+        let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
+        let order = {swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
+        newOrders.push(order)
+      }
+
+      coinContext.orders = newOrders;
+      updateActiveCoins(coinContext)
+    }
 
  function renderDefaultValue() {
   return time.intervalTime;

@@ -4,7 +4,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+// Helpers
+import { updateEstimatedOrders } from "../helpers";
+
+
+// Context
 import TimeContext from '../contexts/TimeContext'
+import CoinContext from '../contexts/CoinContext'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,25 +19,31 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 60,
-    marginTop: '28px'
+    minWidth: '90px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    borderRadius: '4px',
   },
   selectEmpty: {
-    marginTop: '1.5px'
+    // marginTop: '1.5px',
   },
 }));
 
-export default function TimeInterval() {
+export default function TimeInterval(props) {
   const classes = useStyles();
 
-  const timeContext = useContext(TimeContext)
+  const updateActiveCoins = props.updateActiveCoins
 
+  const timeContext = useContext(TimeContext)
+  const coinContext = useContext(CoinContext)
   const time = timeContext.time
   const setTime = timeContext.setTime
+
 
   const handleChange = event => {
     const newTime = {...time}
     newTime.intervalType = event.target.value
+    const updatedCoinContext = updateEstimatedOrders(coinContext, newTime)
+		updateActiveCoins(updatedCoinContext)
     setTime(newTime)
  };
 

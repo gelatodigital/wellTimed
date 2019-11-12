@@ -5,6 +5,48 @@ import Web3 from 'web3'
 const web3 = new Web3(Web3.givenProvider);
 
 
+export function updateEstimatedOrders(coinContext, time) {
+  // Change coinContext Orders
+  const actionSellTokenSymbol = coinContext["actionFrom"]["symbol"];
+  const actionBuyTokenSymbol = coinContext["actionTo"]["symbol"]
+  const actionSellAmount = coinContext["amountActionFrom"];
+  let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
+  let newOrders = []
+  let multiplier;
+  switch (time.intervalType) {
+    case "minutes":
+      multiplier = 60000;
+      break;
+
+    case "hours":
+      multiplier = 3600000;
+      break;
+
+    case "days":
+      multiplier = 86400000;
+      break;
+
+    default:
+      multiplier = 86400000;
+      break;
+  }
+  let intervalTime = time.intervalTime * multiplier
+  console.log(intervalTime)
+  const decimals = coinContext.actionFrom.decimals
+  let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
+
+  for (let i = 0; i < time.numOrders; i++)
+  {
+    let timestamp = coinContext['timestamp'] + (i * intervalTime)
+    let date1 = new Date(timestamp);
+    let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
+    let order = {'#': i+1, swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}
+    newOrders.push(order)
+  }
+
+  coinContext.orders = newOrders;
+  return coinContext
+}
 
 // get the token balance of an address
 export async function getTokenBalance(tokenAddress, signer, signerAddress) {
@@ -36,10 +78,6 @@ export async function approveToken(signer, beneficiary, tokenAddress) {
 
   })
 }
-
-
-
-
 
 export function getCorrectImageLink() {
   const table1 = {};
