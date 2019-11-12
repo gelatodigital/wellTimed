@@ -17,11 +17,14 @@ import OrderContext from "../contexts/OrderContext";
 // Style
 import { Button, Divider, makeStyles, Card, CardContent } from "@material-ui/core";
 
-
+const backgroundColor = 'pink'
 const style = makeStyles({
     root: {
       display: 'flex',
       flexWrap: 'wrap',
+      height: '10%',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     card: {
       // margin: "25px"
@@ -32,7 +35,7 @@ const style = makeStyles({
       // margin: "25px"
       marginTop: "10px",
       marginBottom: "10px",
-      width: '40%',
+      minWidth: '40%',
     },
     card3: {
       // margin: "25px"
@@ -45,15 +48,17 @@ const style = makeStyles({
       display: 'flex',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      alignItems: 'stretch',
+      alignItems: 'center',
       justifyContent: 'space-between'
     },
     cardContent: {
       display: 'flex',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      alignItems: 'stretch',
-      justifyContent: 'space-between'
+      justifyContent: 'start',
+      alignItems: 'center',
+      paddingBottom: '0px !important',
+      paddingTop: '0px !important'
     },
     arrow: {
       marginTop: "20px"
@@ -63,7 +68,14 @@ const style = makeStyles({
     },
     inputs: {
       textAlign: "center",
-      marginTop: '35px'
+      // marginTop: '35px',
+      marginRight: '10px',
+      backgroundColor: 'd3d3d3'
+    },
+    titles: {
+      textAlign: "left",
+      marginTop: '15px',
+      marginLeft: '25px'
     },
     dividerClass: {
       marginTop: '20px',
@@ -89,12 +101,12 @@ function TimeOrderWrapper(props) {
     return (
       <React.Fragment>
         <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
-        <h1>GelatoDX</h1>
-        <h3>Time-based order splitting on the DutchX</h3>
+        <h1>Well Timed <span role="image">🐎</span></h1>
+        <h3>Time-based order splitting on Kyber</h3>
         <div className={classes.box}>
           <Card className={classes.card2} raised>
           {/* <h4 className={classes.title}>Title</h4> */}
-            <p className={classes.inputs}>Total Sell Volume</p>
+            <p className={classes.titles}>Total Sell Volume</p>
             <CardContent className={classes.cardContent}>
 
 
@@ -106,7 +118,7 @@ function TimeOrderWrapper(props) {
           </Card>
 
           <Card className={classes.card3} raised>
-            <p className={classes.inputs}>Split into</p>
+            <p className={classes.titles}>Split into</p>
             <CardContent className={classes.cardContent}>
 
               <NoOfSwaps updateActiveCoins={updateActiveCoins} ></NoOfSwaps>
@@ -116,7 +128,7 @@ function TimeOrderWrapper(props) {
           </Card>
 
           <Card className={classes.card3} raised>
-            <p className={classes.inputs}>Interval between each order</p>
+            <p className={classes.titles}>Interval between orders</p>
             <CardContent className={classes.cardContent}>
 
               <TimeBetween updateActiveCoins={updateActiveCoins}></TimeBetween>

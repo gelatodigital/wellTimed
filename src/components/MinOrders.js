@@ -38,7 +38,7 @@ function stableSort(array, cmp) {
 function getSorting(order, orderBy) {
   return order === "desc"
     ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => desc(a, b, orderBy);
+    : (a, b) => -desc(a, b, orderBy);
 }
 
 // const headCells = [
@@ -73,6 +73,7 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              classes={{root: classes.headerText, icon: classes.icon}}
               active={orderBy === headCell.id}
               direction={order}
               onClick={createSortHandler(headCell.id)}
@@ -125,6 +126,12 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: 20,
     width: 1
+  },
+  headerText: {
+    marginLeft: '9px',
+  },
+  icon: {
+    width: '0px'
   }
 }));
 

@@ -23,12 +23,13 @@ import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '32px'
+    // width: '32px'
   },
   container: {
     display: "flex",
     justifyContent: "center",
-    paddingLeft: '4px',
+    paddingLeft: '5px',
+    paddingRight: '10px',
 
 
   },
@@ -38,25 +39,39 @@ const useStyles = makeStyles(theme => ({
 
   },
   amountInput: {
-    marginTop: '2px',
-    width: '100px',
+    // marginTop: '2px',
+    width: '130px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    height: '35px',
+    marginRight: '10px',
+    borderRadius: '4px',
+
   },
   input: {
-    textAlign: 'center'
+    textAlign: 'right',
+    padding: '0'
+    // borderRadius: '4px'
+  },
+
+  coins: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: 'center',
+    // paddingTop: '6px',
+    // backgroundColor: 'pink',
+
+  },
+  buttonPadding: {
+    // marginTop: '1.5px',
+    minWidth: '32px',
+    height: '35px',
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    // paddingTop: '15px'
   },
   img: {
     width: "24px",
     height: "24px",
     marginLeft: '3px'
-  },
-  coins: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: '26px'
-  },
-  buttonPadding: {
-    marginTop: '1.5px',
-    width: '32px'
   },
 }));
 
@@ -211,27 +226,12 @@ function ERC20Input(props) {
     }
   }
 
-  function renderDefaultValue() {
-    console.log(coinContext.amountActionFrom)
-    if (coinContext.amountActionFrom === undefined )
-    {
-      console.log("here")
-      return 1.0
-    } else {
-      const actionSellAmount = coinContext["amountActionFrom"];
-      const decimals = coinContext.actionFrom.decimals
-      let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
-      return userfriendlyAmount.toString()
-    }
-
-  }
-
   return (
     <div className={classes.container}>
       <Input
         className={classes.amountInput}
         classes={{
-          input: classes.input, // class name, e.g. `classes-nesting-root-x`
+          input: classes.input,
         }}
         disableUnderline={true}
         onChange={handleAmount("amount")}
@@ -251,38 +251,41 @@ function ERC20Input(props) {
         {userChoice()}
       </Button>
       <Dialog
-				disableBackdropClick
-				disableEscapeKeyDown
-				open={state.open}
-				onClose={handleClose}
-				value={state.coin}
-				// onChange={handleChange("coin")}
-			>
-				<DialogTitle>Choose coin from dropdown</DialogTitle>
-				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
-				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
-				{state.availableCoins.map((coin, key) => {
-					return (
-						<MenuItem
-							// onChange={handleChange("coin")}
-							// onClick={handleClose}
-							onClick={() => {
-								handleChange(coin);
-							}}
-							key={key}
-							value={coin}
-							className={classes.coins}
-						>
-							{coin.symbol}
-							<img
-								className={classes.img}
-								src={coin.logo(coin.mainnet)}
-								alt="coin logo"
-							/>
-						</MenuItem>
-					);
-				})}
-			</Dialog>
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={state.open}
+        onClose={handleClose}
+        value={state.coin}
+        // onChange={handleChange("coin")}
+      >
+        <DialogTitle>Choose Token to sell</DialogTitle>
+        {/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
+        {/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+        {state.availableCoins.map((coin, key) => {
+          return (
+            <div>
+              <div style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+              <MenuItem
+                // onChange={handleChange("coin")}
+                // onClick={handleClose}
+                onClick={() => {
+                  handleChange(coin);
+                }}
+                key={key}
+                value={coin}
+                className={classes.coins}
+              >
+                {coin.symbol}
+                <img
+                  className={classes.img}
+                  src={coin.logo(coin.mainnet)}
+                  alt="coin logo"
+                />
+              </MenuItem>
+            </div>
+          );
+        })}
+      </Dialog>
     </div>
   );
 }

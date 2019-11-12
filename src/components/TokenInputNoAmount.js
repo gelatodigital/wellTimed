@@ -15,26 +15,34 @@ import { getCorrectImageLink, updateEstimatedOrders } from "../helpers";
 const useStyles = makeStyles(theme => ({
 	container: {
 		display: "flex",
-		justifyContent: "center"
+		justifyContent: "center",
+		paddingRight: '10px',
 	},
 	formControl: {
 		margin: theme.spacing(1),
 		minWidth: 120
+	},
+
+	coins: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: 'center',
+		// paddingTop: '6px',
+		// backgroundColor: 'pink',
+
+	},
+	buttonPadding: {
+		// marginTop: '1.5px',
+		minWidth: '32px',
+		height: '35px',
+		backgroundColor: 'rgb(220,220,220, 0.3)',
+		// paddingTop: '15px'
 	},
 	img: {
 		width: "24px",
 		height: "24px",
 		marginLeft: '3px'
 	},
-	coins: {
-		display: "flex",
-		justifyContent: "space-between",
-		padding: '26px'
-	},
-	buttonPadding: {
-		marginTop: '1.5px',
-		width: '32px'
-	}
 }));
 
 function TokenInputNoAmount(props) {
@@ -129,28 +137,31 @@ function TokenInputNoAmount(props) {
 				value={state.coin}
 				// onChange={handleChange("coin")}
 			>
-				<DialogTitle>Choose coin from dropdown</DialogTitle>
+				<DialogTitle>Choose Token to buy</DialogTitle>
 				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
 				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
 				{state.availableCoins.map(coin => {
 					return (
-						<MenuItem
-							// onChange={handleChange("coin")}
-							// onClick={handleClose}
-							onClick={() => {
-								handleChange(coin);
-							}}
-							key={coin.id}
-							value={coin}
-							className={classes.coins}
-						>
-							{coin.symbol}
-							<img
-								className={classes.img}
-								src={coin.logo(coin.mainnet)}
-								alt="coin logo"
-							/>
-						</MenuItem>
+						<div>
+							<div style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+							<MenuItem
+								// onChange={handleChange("coin")}
+								// onClick={handleClose}
+								onClick={() => {
+									handleChange(coin);
+								}}
+								key={coin.id}
+								value={coin}
+								className={classes.coins}
+							>
+								{coin.symbol}
+								<img
+									className={classes.img}
+									src={coin.logo(coin.mainnet)}
+									alt="coin logo"
+								/>
+							</MenuItem>
+						</div>
 					);
 				})}
 			</Dialog>

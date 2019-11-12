@@ -24,10 +24,6 @@ function desc(a, b, orderBy) {
 }
 
 function stableSort(array, cmp) {
-  console.log("IN STABLE SORT")
-  console.log(array)
-  console.log(cmp)
-  console.log("----")
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = cmp(a[0], b[0]);
@@ -178,7 +174,6 @@ export default function Orders(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-    console.log(newSelected)
 
     setSelected(newSelected);
   };

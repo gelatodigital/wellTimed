@@ -23,10 +23,11 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 60,
-    marginTop: '28px'
+    backgroundColor: 'rgb(220,220,220, 0.3)',
+    borderRadius: '4px',
   },
   selectEmpty: {
-    marginTop: '1.5px',
+    // marginTop: '1.5px',
   },
 }));
 
