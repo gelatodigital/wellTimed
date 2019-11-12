@@ -141,7 +141,7 @@ export default function MinOrders(props) {
   const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense] = React.useState(false);
+  const [dense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 

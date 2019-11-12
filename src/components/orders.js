@@ -101,6 +101,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
+    paddingTop: '10px',
+    paddingBottom: '10px',
   },
   paper: {
     width: "100%",
