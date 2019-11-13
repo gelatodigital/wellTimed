@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 
 // Contexts
 import { useWeb3Context } from "web3-react";
@@ -25,6 +25,20 @@ function ConnectBtn(props) {
   const classes = useStyles();
   const context = useWeb3Context();
   const proxyStatus = useContext(ProxyContext)
+  const fetchExecutionClaims = props.fetchExecutionClaims
+
+  // Run only once
+  useEffect(() => {
+    context.setFirstValidConnector(["MetaMask", "Infura"]);
+  }, [])
+
+  // Run as long as context is false
+  useEffect(() => {
+
+    // Fetch Past events
+    fetchExecutionClaims()
+
+  }, [context.active])
 
   const updateProxyStatus = props.updateProxyStatus
   // const fetchOrderFromLocalStorage = props.fetchOrderFromLocalStorage
@@ -136,12 +150,15 @@ function ConnectBtn(props) {
         // console.log(`Guard already deployed, set Authority`)
         updateProxyStatus(3)
       }
-      else
+      else if (proxyStatus === 4)
       {
-        // console.log(`Guard contract found - address: ${guardAddress}`);
+        // proxyStatus already 4, no need to update state again.
+        return;
+
+      } else {
+         // console.log(`Guard contract found - address: ${guardAddress}`);
         // console.log("Purchase!");
         updateProxyStatus(4)
-
       }
     }
   }

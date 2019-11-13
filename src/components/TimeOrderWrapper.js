@@ -105,7 +105,7 @@ function TimeOrderWrapper(props) {
 
     return (
       <React.Fragment>
-        <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} />
+        <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} fetchExecutionClaims={ordersContext.fetchExecutionClaims} />
         <h1>Well Timed <span role="image">🐎</span></h1>
         <h3>Time-based order splitting on Kyber</h3>
         <div className={classes.box}>
@@ -147,10 +147,10 @@ function TimeOrderWrapper(props) {
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Resulting orders</h3>
         <MinOrders orders2={props.orders2}   ></MinOrders>
-        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
+        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus} fetchExecutionClaims={ordersContext.fetchExecutionClaims} ></ActionBtn>
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Your scheduled orders</h3>
-        <Button color={"secondary"} onClick={ordersContext.fetchExecutionClaims}>Fetch past Orders</Button>
+        <Button color={"primary"} onClick={ordersContext.fetchExecutionClaims}>Update</Button>
         <Orders></Orders>
       </React.Fragment>
     )

@@ -48,6 +48,7 @@ function ActionBtn(props) {
 	const orders = ordersContext["orders"];
 	const setOrders = ordersContext["setOrders"];
 	const selectedTokenDetails = props.selectedTokenDetails;
+	const fetchExecutionClaims = props.fetchExecutionClaims
 	const standardOverrides =
 		// Override tx values
 		{
@@ -116,24 +117,33 @@ function ActionBtn(props) {
 				let executableFunc;
                 let buttonText;
                 let color;
-				if (selectedTokenDetails.sufficientBalance) {
-					// User has sufficient balance
-					if (!selectedTokenDetails.needAllowance) {
-						// User has sufficient ERC20 Approval => Schedule
-						executableFunc = modalMintSplitSell;
-                        buttonText = "Schedule Trades";
-                        color="primary"
-					} else {
-						// // User has insufficient ERC20 Approval => Approve ERC20 token first
-						executableFunc = approveAndMint;
-                        buttonText = "Approve + Schedule Trades";
-                        color="primary"
-					}
+				// If amount is less than or equal to zero, render error modal
+				if (coins.amountActionFrom.lte(ethers.utils.bigNumberify(0))) {
+					executableFunc = noZeroOrders;
+					buttonText = "Schedule Trades";
+					color="primary"
+
+					// If amount is greater than zero
 				} else {
-					// Display insufficient balance modal
-					executableFunc = displayInsufficientBalance;
-                    buttonText = "Schedule Trades";
-                    color="secondary"
+					if (selectedTokenDetails.sufficientBalance) {
+						// User has sufficient balance
+						if (!selectedTokenDetails.needAllowance) {
+							// User has sufficient ERC20 Approval => Schedule
+							executableFunc = modalMintSplitSell;
+							buttonText = "Schedule Trades";
+							color="primary"
+						} else {
+							// // User has insufficient ERC20 Approval => Approve ERC20 token first
+							executableFunc = approveAndMint;
+							buttonText = "Approve + Schedule Trades";
+							color="primary"
+						}
+					} else {
+						// Display insufficient balance modal
+						executableFunc = displayInsufficientBalance;
+						buttonText = "Schedule Trades";
+						color="secondary"
+					}
 				}
 				return (
 					<Button
@@ -420,7 +430,7 @@ function ActionBtn(props) {
 		setOrders(orderCopy);
     }
 
-    function modalMintSplitSell() {
+	function noZeroOrders() {
 
         const copyModalState = { ...modalState };
         const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
@@ -431,6 +441,24 @@ function ActionBtn(props) {
         const decimals = coins.actionFrom.decimals
         let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
+        copyModalState.title = `Amount Cannot be Zero`;
+        copyModalState.body = `Please specify an amount greater than 0`;
+		copyModalState.btn1 = "Ok";
+		copyModalState.btn2 = "";
+        copyModalState.func = undefined;
+        setModalState(copyModalState);
+    }
+
+	function modalMintSplitSell() {
+
+        const copyModalState = { ...modalState };
+        const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
+		// const actionSellTokenAddress = coins["actionFrom"]["address"];
+        const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
+        const actionSellAmount = coins["amountActionFrom"];
+
+        const decimals = coins.actionFrom.decimals
+        let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
         copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
         copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
@@ -459,9 +487,6 @@ function ActionBtn(props) {
         // copyModalState.func = undefined;
         // setModalState(copyModalState);
         // console.log("OPEN MODAL in ACTION COMPONENT")
-
-		// Function to call
-		// splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment) d
 
 		let timestamp = Math.floor(Date.now() / 1000);
 		let multiplier;
@@ -562,22 +587,6 @@ function ActionBtn(props) {
 			]
 		);
 
-		// decoder(multiMintPayload, multiMintKyberTrade.dataTypesWithName)
-
-		// console.log(`About to mint:
-		//     kyber Action address: ${kyberTradeAddress},
-		//     timeTriggerAddress: ${timeTriggerAddress},
-		//     executorAddress: ${executorAddress}
-		//     StartingTime: ${startingTime},
-		//     intervalTime: ${intervalTime},
-		//     noOfOrders: ${noOfOrders},
-		//     kyberSwapPrepayment: ${kyberSwapPrepayment.toString()},
-		//     FuncSelector: ${multiMintKyberTrade.funcSelector},
-		//     DataTypes: ${multiMintKyberTrade.dataTypesWithName},
-		//     Action Payload: ${actionPayload}
-		//     Payload: ${multiMintPayload},
-		// `);
-
 		// Fetch user proxy address
 		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
 		const proxyRegistryContract = new ethers.Contract(
@@ -599,23 +608,10 @@ function ActionBtn(props) {
 			.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
 			.then(
 				function(txReceipt) {
-
-                    // Open new Modal
-					copyModalState.open = true;
-					copyModalState.title = `Waiting for tx to get mined`;
-					copyModalState.body = `Tx hash: ${txReceipt['hash']}`;
-					copyModalState.btn1 = "";
-					copyModalState.btn2 = "";
-					copyModalState.func = undefined;
-                    setModalState(copyModalState);
 					signer.provider
 						.waitForTransaction(txReceipt["hash"])
 						.then(async function(tx) {
                             setWaitingForTX(false);
-                            // Close Modal
-                            // copyModalState.open = false;
-                            // setModalState(copyModalState);
-                            // Open Modal
 							copyModalState.open = true;
 							copyModalState.title = `Success!`;
 							copyModalState.body = `Your orders have been scheduled`;
@@ -624,16 +620,7 @@ function ActionBtn(props) {
 							copyModalState.func = undefined;
 							setModalState(copyModalState);
 							console.log(tx);
-							createRows(
-								actionSellTokenSymbol,
-								actionBuyTokenSymbol,
-								sellAmountPerSubOrder.toString(),
-								intervalTime,
-								noOfOrders,
-								timestamp
-							);
-
-							// createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
+							fetchExecutionClaims()
 						});
 				},
 				error => {

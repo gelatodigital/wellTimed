@@ -15,7 +15,7 @@ import {TimeProvider} from "../contexts/TimeContext"
 import { OrderProvider } from "../contexts/OrderContext";
 
 // Helper
-import {  decoder, timeStampDecoder } from '../helpers'
+import {  decoder, timeStampDecoder, getTokenBalance, getTokenAllowance } from '../helpers'
 
 // ABIS
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
@@ -51,25 +51,6 @@ import { useWeb3Context } from "web3-react";
 function Page() {
   const context = useWeb3Context();
 
-
-  // let ordersFromLocalStorage
-  // if (context.active) {
-  //   console.log("isActive")
-  //   let fetchedLocalStorage = JSON.parse(localStorage.getItem(`triggered-${context.account}`))
-  //   if (fetchedLocalStorage !== null)
-  //   {
-  //     ordersFromLocalStorage = fetchedLocalStorage
-  //   }
-  //   else {
-  //     ordersFromLocalStorage = []
-  //   }
-  //   console.log(ordersFromLocalStorage)
-  // } else {
-  //   ordersFromLocalStorage = []
-  // }
-
-
-
   // Used to display orders Table in orders
   const [orders, setOrders] = React.useState([{swap: "", when: "", status: ""}])
 
@@ -103,6 +84,7 @@ function Page() {
       name: "KyberNetwork",
       address: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
       decimals: 18,
+      mainnet: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
       id: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
@@ -134,16 +116,110 @@ function Page() {
 
   const timePackage = {time, setTime}
 
-  function updateProxyStatus(newProxyStatus) {
+  async function checkERC20ApprovalStatus() {
+
+    // check if context has an actionFrom
+    let copySelectedTokenDetails = {...selectedTokenDetails}
+    if (context.active)
+    {
+      if (activeCoins['actionFrom']['address']) {
+        let sellTokenAddress = activeCoins['actionFrom']['address'];
+
+        // Check balance
+        const signerAddress = context.account;
+        const signer = context.library.getSigner();
+        let sellTokenBalance
+        await getTokenBalance(sellTokenAddress, signer, signerAddress)
+        .then(result => {
+          sellTokenBalance = result
+        })
+        .catch(error => console.log(error))
+
+
+        // console.log(`SellTokenBalance: ${sellTokenBalance}`)
+        let sellAmount = activeCoins['amountActionFrom']
+
+        // Check if user has sufficient Token Balance
+        if (parseInt(sellTokenBalance) >= parseInt(sellAmount))
+        {
+          // Store that user has sufficinet balance
+          copySelectedTokenDetails.sufficientBalance = true
+          // Check if proxy is approved
+          const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
+          const proxyRegistryContract = new ethers.Contract(
+            proxyRegistryAddress,
+            proxyRegistryABI,
+            signer
+          );
+          let proxyAddress
+          await proxyRegistryContract.proxies(
+            context.account)
+          .then(result => {
+              proxyAddress = result
+            })
+          .catch(error => console.log(error))
+
+          if (sellAmount && parseInt(sellAmount) > 0)
+          {
+            let sellTokenAllowance
+            await getTokenAllowance(
+              sellTokenAddress,
+              proxyAddress,
+              signer,
+              context.account
+            )
+            .then(result => {
+              sellTokenAllowance = result
+            })
+            .catch(error => console.log(error))
+            // console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
+
+            if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
+            {
+              // Render approve button
+              // console.log("User has enough tokens, but needs allowance")
+              copySelectedTokenDetails.needAllowance = true
+              // console.log(copySelectedTokenDetails)
+              return copySelectedTokenDetails
+            } else {
+              // console.log("has sufficient Tokens, and has sufficient balanece")
+              // console.log("We can directly split sell")
+              copySelectedTokenDetails.needAllowance = false
+              return copySelectedTokenDetails
+            }
+
+          }
+          else {
+            copySelectedTokenDetails.sufficientBalance = true
+            console.log("Cannot sell value equal to zero")
+            return copySelectedTokenDetails
+        } }
+          else {
+          copySelectedTokenDetails.sufficientBalance = false
+          // console.log("Render Modal: You don't have enough balance of Token X")
+          return copySelectedTokenDetails
+        }
+      }
+
+    } else {
+      return copySelectedTokenDetails
+    }
+  }
+
+  async function updateProxyStatus(newProxyStatus) {
     // console.log(`Setting new Proxy Status in Page.js`);
     // console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
+    const newSelectedTokenDetails = await checkERC20ApprovalStatus()
+    setSelectedTokenDetails(newSelectedTokenDetails)
   }
 
-  function updateActiveCoins(coins) {
+  async function updateActiveCoins(coins) {
     // console.log(`Setting coins in Page.js`);
     // console.log(`${coins}`);
     setActivCoins(coins);
+    const newSelectedTokenDetails = await checkERC20ApprovalStatus()
+    setSelectedTokenDetails(newSelectedTokenDetails)
   }
 
   function updateSelectedTokenDetails(newSelectedTokenDetails) {
@@ -151,6 +227,8 @@ function Page() {
     // console.log(`${newSelectedTokenDetails}`);
     setSelectedTokenDetails(newSelectedTokenDetails)
   }
+
+
 
   function createRows(
 		actionSellToken,

@@ -16,24 +16,6 @@ function ApproveBtn(probs) {
 
   const needAllowance = probs.needAllowance
   const updateAllowance = probs.updateAllowance
-  // const [state, setState] = React.useState(null);
-
-  // async function userHasToken() {
-  //   if (context.active && !!coinContext.ERC20.address) {
-  //     const signerAddress = context.account;
-  //     const signer = context.library.getSigner();
-  //     let tokens;
-  //     await getTokenBalance(
-  //       coinContext.actionFrom.address,
-  //       signer,
-  //       signerAddress
-  //     ).then(data => (tokens = data));
-  //     return tokens;
-  //   } else {
-  //     return;
-  //   }
-  // }
-
 
   async function approveToken() {
     setWaitingForTX(true)
