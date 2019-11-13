@@ -61,15 +61,11 @@ function TokenInputNoAmount(props) {
 
 	const [state, setState] = React.useState({
 		open: false,
-		coin: "",
-		amount: 0,
 		availableCoins: Object.values(getCorrectImageLink())
 	});
 
 	const handleChange = coin => {
-		const newState = { ...state };
-		newState["coin"] = coin;
-		setState({ ...state, "coin": coin, open: false });
+		setState({ ...state, open: false });
 		const coinContextCopy = {...coinContext}
 		coinContextCopy['actionTo'] = coin;
 		// Call helper function to updated estimated orders
@@ -87,12 +83,12 @@ function TokenInputNoAmount(props) {
 	};
 
 	const userChoice = () => {
-		if (state.coin) {
+		if (coinContext.actionTo) {
 			return (
 				<span className={classes.coins}>
-					{state.coin.symbol}
+					{coinContext.actionTo.symbol}
 					<img
-						src={state.coin.logo(state.coin.mainnet)}
+						src={coinContext.actionTo.logo(ethers.utils.getAddress(coinContext.actionTo.mainnet))}
 						alt="coin logo"
 						className={classes.img}
 					/>
@@ -134,16 +130,16 @@ function TokenInputNoAmount(props) {
 				disableEscapeKeyDown
 				open={state.open}
 				onClose={handleClose}
-				value={state.coin}
+				value={coinContext.actionTo}
 				// onChange={handleChange("coin")}
 			>
 				<DialogTitle>Choose Token to buy</DialogTitle>
 				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
 				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
-				{state.availableCoins.map(coin => {
+				{state.availableCoins.map((coin, key) => {
 					return (
-						<div>
-							<div style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+						<div key={key} >
+							<div key={key} style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
 							<MenuItem
 								// onChange={handleChange("coin")}
 								// onClick={handleClose}

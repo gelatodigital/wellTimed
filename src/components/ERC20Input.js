@@ -80,6 +80,7 @@ function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
+  console.log(coinContext)
   const timeContext = useContext(TimeContext)
   const time = timeContext.time
   const updateSelectedTokenDetails = props.updateSelectedTokenDetails
@@ -89,16 +90,13 @@ function ERC20Input(props) {
 
   const [state, setState] = React.useState({
     open: false,
-    coin: "",
-    amount: 0,
     availableCoins: Object.values(getCorrectImageLink())
   });
 
   const handleChange = coin => {
 
     const newState = { ...state };
-		newState["coin"] = coin;
-    setState({ ...state, "coin": coin, open: false });
+    setState({ ...state, open: false });
     coinContext.actionFrom = coin;
     const updatedCoinContext = updateEstimatedOrders(coinContext, time)
 		updateActiveCoins(updatedCoinContext)
@@ -116,13 +114,13 @@ function ERC20Input(props) {
 
 
   const userChoice = () => {
-    if (state.coin) {
+    if (coinContext.actionFrom) {
       return (
         <span className={classes.coins}>
-          {state.coin.symbol}
+          {coinContext.actionFrom.symbol}
           <img
-            src={state.coin.logo(state.coin.mainnet)}
-            alt="coin logo"
+            src={coinContext.actionFrom.logo(ethers.utils.getAddress(coinContext.actionFrom.mainnet))}
+            alt="logo"
             className={classes.img}
           />
         </span>
@@ -143,12 +141,9 @@ function ERC20Input(props) {
     const decimals = coinContext.actionFrom.decimals
     let value = event.target.value
     if (value === "") {
-      setState({ ...state, [name]: 0 || "" });
       coinContext.amountActionFrom = 0;
     } else {
       const selectedAmount = ethers.utils.parseUnits(value, decimals)
-
-      setState({ ...state, [name]: selectedAmount || "" });
       coinContext.amountActionFrom = selectedAmount;
     }
     const updatedCoinContext = updateEstimatedOrders(coinContext, time)
@@ -256,7 +251,7 @@ function ERC20Input(props) {
         disableEscapeKeyDown
         open={state.open}
         onClose={handleClose}
-        value={state.coin}
+        value={coinContext.actionFrom}
         // onChange={handleChange("coin")}
       >
         <DialogTitle>Choose Token to sell</DialogTitle>
@@ -264,8 +259,8 @@ function ERC20Input(props) {
         {/* // <div value={state.coin} onChange={handleChange("coin")}> */}
         {state.availableCoins.map((coin, key) => {
           return (
-            <div>
-              <div style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+            <div key={key}>
+              <div key={key} style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
               <MenuItem
                 // onChange={handleChange("coin")}
                 // onClick={handleClose}

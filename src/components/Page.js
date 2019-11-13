@@ -103,6 +103,7 @@ function Page() {
       name: "KyberNetwork",
       address: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
       decimals: 18,
+      mainnet: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
       id: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
