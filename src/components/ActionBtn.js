@@ -48,6 +48,7 @@ function ActionBtn(props) {
 	const orders = ordersContext["orders"];
 	const setOrders = ordersContext["setOrders"];
 	const selectedTokenDetails = props.selectedTokenDetails;
+	const fetchExecutionClaims = props.fetchExecutionClaims
 	const standardOverrides =
 		// Override tx values
 		{
@@ -487,9 +488,6 @@ function ActionBtn(props) {
         // setModalState(copyModalState);
         // console.log("OPEN MODAL in ACTION COMPONENT")
 
-		// Function to call
-		// splitSellMint(address _timeTrigger, address _kyberSwapAction, bytes calldata _actionPayload, address _excecutor, uint256 _startingTime, uint256 _intervalTime, uint256 _noOfOrders, uint256 _prepayment) d
-
 		let timestamp = Math.floor(Date.now() / 1000);
 		let multiplier;
 		switch (time.intervalType) {
@@ -589,22 +587,6 @@ function ActionBtn(props) {
 			]
 		);
 
-		// decoder(multiMintPayload, multiMintKyberTrade.dataTypesWithName)
-
-		// console.log(`About to mint:
-		//     kyber Action address: ${kyberTradeAddress},
-		//     timeTriggerAddress: ${timeTriggerAddress},
-		//     executorAddress: ${executorAddress}
-		//     StartingTime: ${startingTime},
-		//     intervalTime: ${intervalTime},
-		//     noOfOrders: ${noOfOrders},
-		//     kyberSwapPrepayment: ${kyberSwapPrepayment.toString()},
-		//     FuncSelector: ${multiMintKyberTrade.funcSelector},
-		//     DataTypes: ${multiMintKyberTrade.dataTypesWithName},
-		//     Action Payload: ${actionPayload}
-		//     Payload: ${multiMintPayload},
-		// `);
-
 		// Fetch user proxy address
 		const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
 		const proxyRegistryContract = new ethers.Contract(
@@ -626,23 +608,10 @@ function ActionBtn(props) {
 			.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
 			.then(
 				function(txReceipt) {
-
-                    // Open new Modal
-					copyModalState.open = true;
-					copyModalState.title = `Waiting for tx to get mined`;
-					copyModalState.body = `Tx hash: ${txReceipt['hash']}`;
-					copyModalState.btn1 = "";
-					copyModalState.btn2 = "";
-					copyModalState.func = undefined;
-                    setModalState(copyModalState);
 					signer.provider
 						.waitForTransaction(txReceipt["hash"])
 						.then(async function(tx) {
                             setWaitingForTX(false);
-                            // Close Modal
-                            // copyModalState.open = false;
-                            // setModalState(copyModalState);
-                            // Open Modal
 							copyModalState.open = true;
 							copyModalState.title = `Success!`;
 							copyModalState.body = `Your orders have been scheduled`;
@@ -651,16 +620,7 @@ function ActionBtn(props) {
 							copyModalState.func = undefined;
 							setModalState(copyModalState);
 							console.log(tx);
-							createRows(
-								actionSellTokenSymbol,
-								actionBuyTokenSymbol,
-								sellAmountPerSubOrder.toString(),
-								intervalTime,
-								noOfOrders,
-								timestamp
-							);
-
-							// createRow(triggerSellTokenSymbol, triggerSellAmount, triggerBuyTokenSymbol, triggerBuyAmount, actionSellTokenSymbol, actionSellAmount, actionBuyTokenSymbol, isBigger)
+							fetchExecutionClaims()
 						});
 				},
 				error => {

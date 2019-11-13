@@ -147,7 +147,7 @@ function TimeOrderWrapper(props) {
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Resulting orders</h3>
         <MinOrders orders2={props.orders2}   ></MinOrders>
-        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus}></ActionBtn>
+        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus} fetchExecutionClaims={ordersContext.fetchExecutionClaims} ></ActionBtn>
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Your scheduled orders</h3>
         <Button color={"primary"} onClick={ordersContext.fetchExecutionClaims}>Update</Button>
