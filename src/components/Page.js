@@ -118,7 +118,6 @@ function Page() {
 
   async function checkERC20ApprovalStatus() {
 
-    console.log(activeCoins)
     // check if context has an actionFrom
     let copySelectedTokenDetails = {...selectedTokenDetails}
     if (context.active)
@@ -208,7 +207,7 @@ function Page() {
   }
 
   async function updateProxyStatus(newProxyStatus) {
-    console.log(`Setting new Proxy Status in Page.js`);
+    // console.log(`Setting new Proxy Status in Page.js`);
     // console.log(`${newProxyStatus}`);
     setProxyStatus(newProxyStatus);
     const newSelectedTokenDetails = await checkERC20ApprovalStatus()
@@ -216,7 +215,7 @@ function Page() {
   }
 
   async function updateActiveCoins(coins) {
-    console.log(`Setting coins in Page.js`);
+    // console.log(`Setting coins in Page.js`);
     // console.log(`${coins}`);
     setActivCoins(coins);
     const newSelectedTokenDetails = await checkERC20ApprovalStatus()
@@ -224,7 +223,7 @@ function Page() {
   }
 
   function updateSelectedTokenDetails(newSelectedTokenDetails) {
-    console.log(`Updating Selected Token Details`);
+    // console.log(`Updating Selected Token Details`);
     // console.log(`${newSelectedTokenDetails}`);
     setSelectedTokenDetails(newSelectedTokenDetails)
   }

@@ -77,7 +77,6 @@ function ActionBtn(props) {
 	});
 
 	function CreateTransactButton() {
-		console.log(selectedTokenDetails)
 		switch (proxyStatus) {
 			case 1:
 				return (
@@ -117,7 +116,6 @@ function ActionBtn(props) {
 				let executableFunc;
                 let buttonText;
                 let color;
-				console.log(coins.actionFromAmount)
 				// If amount is less than or equal to zero, render error modal
 				if (coins.amountActionFrom.lte(ethers.utils.bigNumberify(0))) {
 					executableFunc = noZeroOrders;

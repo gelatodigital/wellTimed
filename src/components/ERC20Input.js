@@ -187,8 +187,8 @@ function ERC20Input(props) {
         {/* // <div value={state.coin} onChange={handleChange("coin")}> */}
         {state.availableCoins.map((coin, key) => {
           return (
-            <div key={key}>
-              <div key={key} style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
+            <div key={key+10}>
+              <div key={key+100} style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
               <MenuItem
                 // onChange={handleChange("coin")}
                 // onClick={handleClose}
