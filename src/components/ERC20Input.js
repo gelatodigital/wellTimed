@@ -80,14 +80,14 @@ function ERC20Input(props) {
   const context = useWeb3Context();
   const classes = useStyles();
   const coinContext = useContext(CoinContext);
-  console.log(coinContext)
   const timeContext = useContext(TimeContext)
   const time = timeContext.time
   const updateSelectedTokenDetails = props.updateSelectedTokenDetails
   const selectedTokenDetails = props.selectedTokenDetails
   const updateActiveCoins = props.updateActiveCoins
-  // State
+  const checkERC20ApprovalStatus = props.checkERC20ApprovalStatus
 
+  // State
   const [state, setState] = React.useState({
     open: false,
     availableCoins: Object.values(getCorrectImageLink())
@@ -95,12 +95,11 @@ function ERC20Input(props) {
 
   const handleChange = coin => {
 
-    const newState = { ...state };
     setState({ ...state, open: false });
     coinContext.actionFrom = coin;
     const updatedCoinContext = updateEstimatedOrders(coinContext, time)
 		updateActiveCoins(updatedCoinContext)
-    checkERC20ApprovalStatus()
+    // checkERC20ApprovalStatus()
   };
 
   const handleClickOpen = () => {
@@ -110,8 +109,6 @@ function ERC20Input(props) {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-
-
 
   const userChoice = () => {
     if (coinContext.actionFrom) {
@@ -148,79 +145,9 @@ function ERC20Input(props) {
     }
     const updatedCoinContext = updateEstimatedOrders(coinContext, time)
 		updateActiveCoins(updatedCoinContext)
-    checkERC20ApprovalStatus()
+    // checkERC20ApprovalStatus()
   };
 
-  async function checkERC20ApprovalStatus() {
-    // check if context has an actionFrom
-    let copySelectedTokenDetails = {...selectedTokenDetails}
-    if (context.active)
-    {
-      if (coinContext['actionFrom']['address']) {
-        let sellTokenAddress = coinContext['actionFrom']['address'];
-
-        // Check balance
-        const signerAddress = context.account;
-        const signer = context.library.getSigner();
-        let sellTokenBalance = await getTokenBalance(sellTokenAddress, signer, signerAddress)
-
-
-        // console.log(`SellTokenBalance: ${sellTokenBalance}`)
-        let sellAmount = coinContext['amountActionFrom']
-
-        // Check if user has sufficient Token Balance
-        if (parseInt(sellTokenBalance) >= parseInt(sellAmount))
-        {
-          // Store that user has sufficinet balance
-          copySelectedTokenDetails.sufficientBalance = true
-          // Check if proxy is approved
-          const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-          const proxyRegistryContract = new ethers.Contract(
-            proxyRegistryAddress,
-            proxyRegistryABI,
-            signer
-          );
-          const proxyAddress = await proxyRegistryContract.proxies(
-            context.account)
-
-          if (sellAmount && parseInt(sellAmount) > 0)
-          {
-            let sellTokenAllowance = await getTokenAllowance(
-              sellTokenAddress,
-              proxyAddress,
-              signer,
-              context.account
-            );
-            // console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
-
-            if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
-            {
-              // Render approve button
-              // console.log("User has enough tokens, but needs allowance")
-              copySelectedTokenDetails.needAllowance = true
-              // console.log(copySelectedTokenDetails)
-              updateSelectedTokenDetails(copySelectedTokenDetails)
-            } else {
-              // console.log("has sufficient Tokens, and has sufficient balanece")
-              // console.log("We can directly split sell")
-              copySelectedTokenDetails.needAllowance = false
-              updateSelectedTokenDetails(copySelectedTokenDetails)
-            }
-
-          }
-
-
-        } else {
-          copySelectedTokenDetails.sufficientBalance = false
-          console.log("Render Modal: You don't have enough balance of Token X")
-          updateSelectedTokenDetails(copySelectedTokenDetails)
-        }
-      }
-
-    } else {
-      updateSelectedTokenDetails(copySelectedTokenDetails)
-    }
-  }
 
   return (
     <div className={classes.container}>
@@ -229,6 +156,7 @@ function ERC20Input(props) {
         classes={{
           input: classes.input,
         }}
+        inputProps={{ min: 0 }}
         disableUnderline={true}
         onChange={handleAmount("amount")}
         type="number"

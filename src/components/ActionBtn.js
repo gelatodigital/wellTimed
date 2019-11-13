@@ -77,6 +77,7 @@ function ActionBtn(props) {
 	});
 
 	function CreateTransactButton() {
+		console.log(selectedTokenDetails)
 		switch (proxyStatus) {
 			case 1:
 				return (
@@ -116,24 +117,34 @@ function ActionBtn(props) {
 				let executableFunc;
                 let buttonText;
                 let color;
-				if (selectedTokenDetails.sufficientBalance) {
-					// User has sufficient balance
-					if (!selectedTokenDetails.needAllowance) {
-						// User has sufficient ERC20 Approval => Schedule
-						executableFunc = modalMintSplitSell;
-                        buttonText = "Schedule Trades";
-                        color="primary"
-					} else {
-						// // User has insufficient ERC20 Approval => Approve ERC20 token first
-						executableFunc = approveAndMint;
-                        buttonText = "Approve + Schedule Trades";
-                        color="primary"
-					}
+				console.log(coins.actionFromAmount)
+				// If amount is less than or equal to zero, render error modal
+				if (coins.amountActionFrom.lte(ethers.utils.bigNumberify(0))) {
+					executableFunc = noZeroOrders;
+					buttonText = "Schedule Trades";
+					color="primary"
+
+					// If amount is greater than zero
 				} else {
-					// Display insufficient balance modal
-					executableFunc = displayInsufficientBalance;
-                    buttonText = "Schedule Trades";
-                    color="secondary"
+					if (selectedTokenDetails.sufficientBalance) {
+						// User has sufficient balance
+						if (!selectedTokenDetails.needAllowance) {
+							// User has sufficient ERC20 Approval => Schedule
+							executableFunc = modalMintSplitSell;
+							buttonText = "Schedule Trades";
+							color="primary"
+						} else {
+							// // User has insufficient ERC20 Approval => Approve ERC20 token first
+							executableFunc = approveAndMint;
+							buttonText = "Approve + Schedule Trades";
+							color="primary"
+						}
+					} else {
+						// Display insufficient balance modal
+						executableFunc = displayInsufficientBalance;
+						buttonText = "Schedule Trades";
+						color="secondary"
+					}
 				}
 				return (
 					<Button
@@ -420,7 +431,7 @@ function ActionBtn(props) {
 		setOrders(orderCopy);
     }
 
-    function modalMintSplitSell() {
+	function noZeroOrders() {
 
         const copyModalState = { ...modalState };
         const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
@@ -431,6 +442,24 @@ function ActionBtn(props) {
         const decimals = coins.actionFrom.decimals
         let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
+        copyModalState.title = `Amount Cannot be Zero`;
+        copyModalState.body = `Please specify an amount greater than 0`;
+		copyModalState.btn1 = "Ok";
+		copyModalState.btn2 = "";
+        copyModalState.func = undefined;
+        setModalState(copyModalState);
+    }
+
+	function modalMintSplitSell() {
+
+        const copyModalState = { ...modalState };
+        const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
+		// const actionSellTokenAddress = coins["actionFrom"]["address"];
+        const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
+        const actionSellAmount = coins["amountActionFrom"];
+
+        const decimals = coins.actionFrom.decimals
+        let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
         copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
         copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;

@@ -136,12 +136,15 @@ function ConnectBtn(props) {
         // console.log(`Guard already deployed, set Authority`)
         updateProxyStatus(3)
       }
-      else
+      else if (proxyStatus === 4)
       {
-        // console.log(`Guard contract found - address: ${guardAddress}`);
+        // proxyStatus already 4, no need to update state again.
+        return;
+
+      } else {
+         // console.log(`Guard contract found - address: ${guardAddress}`);
         // console.log("Purchase!");
         updateProxyStatus(4)
-
       }
     }
   }
