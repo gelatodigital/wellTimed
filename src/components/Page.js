@@ -217,8 +217,6 @@ function Page() {
     setSelectedTokenDetails(newSelectedTokenDetails)
   }
 
-
-
   function createRows(
 		actionSellToken,
 		actionBuyToken,
@@ -264,12 +262,9 @@ function Page() {
       const gelatoCoreAddress = GELATO_CORE[context.networkId]
       const gelatoCore = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer)
 
-      let proxyAddress
-      gelatoCore.getProxyOfUser(context.account)
-      .then(result => {
-          proxyAddress = result
-        })
-      .catch(error => console.log(error))
+
+      let proxyAddress = await gelatoCore.getProxyOfUser(context.account)
+
 
       // Create Filter
       let topic1 = ethers.utils.id(gelatoCore.interface.events.LogNewExecutionClaimMinted.signature);
@@ -401,7 +396,7 @@ function Page() {
 
         // SWAP:
         let actionPayload = userLogs2[execId][1][3].toString()
-        let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
+        let dataTypes = ['address', 'address', 'uint256',  'address', 'uint256']
         // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
         try {
 
@@ -416,9 +411,27 @@ function Page() {
 
       // Store in orders
       let orderCopy = [];
+      /*
+
+        {type: 'address', name: '_user'},
+        {type: 'address', name: '_src'},
+        {type: 'uint256', name: '_srcAmt'},
+        {type: 'address', name: '_dest'},
+        {type: 'uint256', name: '_minConversionRate'}
+      */
+
+      /*
+      function createRows(
+		    actionSellToken,
+		    actionBuyToken,
+		    actionSellAmount,
+        timestamp,
+        status
+      )
+      */
 
       userOrders.forEach(order => {
-        let newOrder = createRows(order.swap[0], order.swap[2], order.swap[1], order.when, order.status)
+        let newOrder = createRows(order.swap[1], order.swap[3], order.swap[2], order.when, order.status)
         orderCopy.push(newOrder)
       })
 

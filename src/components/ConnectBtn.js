@@ -13,6 +13,8 @@ import {
 // ABIs
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
 
+// Wallet Connect
+import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,25 +32,56 @@ function ConnectBtn(props) {
   const updateUserIsRegistered = props.updateUserIsRegistered
   const fetchExecutionClaims = props.fetchExecutionClaims
 
+  // If wallet connect, display QR code if no connection is found
+  if (context.active && context.connectorName === "WalletConnect") {
+    if (!context.account) {
+      WalletConnectQRCodeModal.open(
+        context.connector.walletConnector.uri,
+        () => {}
+      );
+    } else {
+      try {
+        WalletConnectQRCodeModal.close();
+      } catch {}
+    }
+  }
+
   // Run only once
-  useEffect(() => {
-    context.setFirstValidConnector(["MetaMask", "Infura"]);
-  }, [])
+  // useEffect(() => {
+  //   context.setFirstValidConnector(["MetaMask", "Infura"]);
+  // }, [])
 
   // Run as long as context is false
-  useEffect(() => {
-    // Fetch Past events
-    fetchExecutionClaims()
-  }, [context.active])
+  // useEffect(() => {
+  //   // Fetch Past events
+  //   fetchExecutionClaims()
+  // }, [context.active])
 
-  function LogIn() {
+  function LogInMetaMask() {
     return (
       <Button
         variant="contained"
         color="primary"
         onClick={() => {
 
-          context.setFirstValidConnector(["MetaMask", "Infura"]);
+          // context.setFirstValidConnector(["MetaMask"]);
+          context.setFirstValidConnector(["MetaMask"]);
+        }}
+      >
+        Connect Metamask
+      </Button>
+  );
+  }
+
+  function LogInWalletConnect() {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+
+          // context.setFirstValidConnector(["MetaMask"]);
+          context.setFirstValidConnector(["WalletConnect"]);
         }}
       >
         Connect Metamask
@@ -57,18 +90,12 @@ function ConnectBtn(props) {
   }
 
   function LogOut() {
+    console.log(context.networkId)
     switch(context.networkId)
     {
       case 3:
         checkIfUserHasProxy()
 
-        // const fetchedRows = fetchOrderFromLocalStorage();
-        // if (newProxyStatus === userIsRegistered) {
-        //   if (fetchedRows === rows) { updateRows(fetchOrderFromLocalStorage) }
-        // } else {
-        //   updateProxyStatus(newProxyStatus)
-        //   updateRows(fetchOrderFromLocalStorage)
-        // }
         return (
           <Button
             variant="contained"
@@ -125,7 +152,7 @@ function ConnectBtn(props) {
       )}
       {!context.active && (
         <div className={classes.root}>
-          <LogIn></LogIn>
+          <LogInMetaMask></LogInMetaMask>
         </div>
 
       )}

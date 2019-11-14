@@ -79,7 +79,6 @@ function ActionBtn(props) {
 	});
 
 	function CreateTransactButton() {
-		console.log(`User is registered: ${userIsRegistered}`)
 		switch (userIsRegistered) {
 			case false:
 				return (
@@ -387,10 +386,10 @@ function ActionBtn(props) {
 
 		// actionData
 		const actionData = [
+			context.account,
 			actionSellToken,
 			sellAmountPerSubOrder.toString(),
 			actionBuyToken,
-			context.account,
 			0
 		];
 
@@ -475,7 +474,6 @@ function ActionBtn(props) {
 							copyModalState.btn2 = "Close";
 							copyModalState.func = undefined;
 							setModalState(copyModalState);
-							console.log(tx);
 							fetchExecutionClaims()
 							updateSelectedTokenDetails()
 						});
