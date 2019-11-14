@@ -23,8 +23,7 @@ import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 
 // Import addresses
 import {
-	DS_PROXY_REGISTRY,
-	GELATO_CORE
+  GELATO_CORE
 } from "../constants/contractAddresses";
 
 import {triggerTimestampPassed} from '../constants/triggers'
@@ -105,8 +104,8 @@ function Page() {
   });
   const [selectedTokenDetails, setSelectedTokenDetails] = React.useState({needAllowance: false, sufficientBalance: false})
 
-  // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-  const [proxyStatus, setProxyStatus] = React.useState(0);
+  // Used for checking if user has a proxy. False if not, true is yes
+  const [userIsRegistered, setUserIsRegistered] = React.useState(false);
 
   const [time, setTime] = React.useState({
     numOrders: 2,
@@ -144,34 +143,25 @@ function Page() {
         {
           // Store that user has sufficinet balance
           copySelectedTokenDetails.sufficientBalance = true
-          // Check if proxy is approved
-          const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-          const proxyRegistryContract = new ethers.Contract(
-            proxyRegistryAddress,
-            proxyRegistryABI,
+          const gelatoCoreAddress = GELATO_CORE[context.networkId];
+          const gelatoCoreContract = new ethers.Contract(
+            gelatoCoreAddress,
+            gelatoCoreABI,
             signer
           );
-          let proxyAddress
-          await proxyRegistryContract.proxies(
-            context.account)
-          .then(result => {
-              proxyAddress = result
-            })
-          .catch(error => console.log(error))
+
+          let proxyAddress = await gelatoCoreContract.getProxyOfUser(context.account)
+
 
           if (sellAmount && parseInt(sellAmount) > 0)
           {
-            let sellTokenAllowance
-            await getTokenAllowance(
+
+            let sellTokenAllowance = await getTokenAllowance(
               sellTokenAddress,
               proxyAddress,
               signer,
               context.account
             )
-            .then(result => {
-              sellTokenAllowance = result
-            })
-            .catch(error => console.log(error))
             // console.log(`SellTokenAllowance: ${sellTokenAllowance}`)
 
             if (parseInt(sellTokenAllowance) < parseInt(sellAmount))
@@ -206,23 +196,22 @@ function Page() {
     }
   }
 
-  async function updateProxyStatus(newProxyStatus) {
+  function updateUserIsRegistered(isUserRegistered) {
     // console.log(`Setting new Proxy Status in Page.js`);
-    // console.log(`${newProxyStatus}`);
-    setProxyStatus(newProxyStatus);
-    const newSelectedTokenDetails = await checkERC20ApprovalStatus()
-    setSelectedTokenDetails(newSelectedTokenDetails)
+    // console.log(`${isUserRegistered}`);
+    setUserIsRegistered(isUserRegistered);
+    updateSelectedTokenDetails()
   }
 
-  async function updateActiveCoins(coins) {
+  function updateActiveCoins(coins) {
     // console.log(`Setting coins in Page.js`);
     // console.log(`${coins}`);
     setActivCoins(coins);
-    const newSelectedTokenDetails = await checkERC20ApprovalStatus()
-    setSelectedTokenDetails(newSelectedTokenDetails)
+    updateSelectedTokenDetails()
   }
 
-  function updateSelectedTokenDetails(newSelectedTokenDetails) {
+  async function updateSelectedTokenDetails() {
+    const newSelectedTokenDetails = await checkERC20ApprovalStatus()
     // console.log(`Updating Selected Token Details`);
     // console.log(`${newSelectedTokenDetails}`);
     setSelectedTokenDetails(newSelectedTokenDetails)
@@ -275,16 +264,12 @@ function Page() {
       const gelatoCoreAddress = GELATO_CORE[context.networkId]
       const gelatoCore = new ethers.Contract(gelatoCoreAddress, gelatoCoreABI, signer)
 
-      const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-      const proxyRegistryContract = new ethers.Contract(
-        proxyRegistryAddress,
-        proxyRegistryABI,
-        signer
-      );
-
-      const proxyAddress = await proxyRegistryContract.proxies(
-        context.account
-      );
+      let proxyAddress
+      gelatoCore.getProxyOfUser(context.account)
+      .then(result => {
+          proxyAddress = result
+        })
+      .catch(error => console.log(error))
 
       // Create Filter
       let topic1 = ethers.utils.id(gelatoCore.interface.events.LogNewExecutionClaimMinted.signature);
@@ -463,11 +448,11 @@ function Page() {
   // }
   return (
     <React.Fragment>
-      <ProxyProvider value={proxyStatus}>
+      <ProxyProvider value={userIsRegistered}>
         <CoinProvider value={activeCoins}>
           <OrderProvider value={ordersContext}>
             <TimeProvider value={timePackage}>
-              <TimeOrderWrapper proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateActiveCoins={updateActiveCoins} fetchExecutionClaims={fetchExecutionClaims} orders2={activeCoins.orders} >
+              <TimeOrderWrapper userIsRegistered={userIsRegistered} networkId={context.networkId} updateUserIsRegistered={updateUserIsRegistered} updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateActiveCoins={updateActiveCoins} fetchExecutionClaims={fetchExecutionClaims} orders2={activeCoins.orders} >
               </TimeOrderWrapper>
             </TimeProvider>
           </OrderProvider>

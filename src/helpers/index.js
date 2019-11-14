@@ -31,7 +31,6 @@ export function updateEstimatedOrders(coinContext, time) {
       break;
   }
   let intervalTime = time.intervalTime * multiplier
-  console.log(intervalTime)
   const decimals = coinContext.actionFrom.decimals
   let userfriendlyAmountPerSubOrder = ethers.utils.formatUnits(sellAmountPerSubOrder, decimals)
 

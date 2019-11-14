@@ -99,15 +99,15 @@ function TimeOrderWrapper(props) {
 
 
     // Props
-    const proxyStatus = props.proxyStatus
-    const updateProxyStatus = props.updateProxyStatus
+    const userIsRegistered = props.userIsRegistered
+    const updateUserIsRegistered = props.updateUserIsRegistered
     const updateActiveCoins = props.updateActiveCoins
 
     return (
       <React.Fragment>
-        <ConnectBtn proxyStatus={proxyStatus} networkId={context.networkId} updateProxyStatus={updateProxyStatus} fetchExecutionClaims={ordersContext.fetchExecutionClaims} />
+        <ConnectBtn userIsRegistered={userIsRegistered} updateUserIsRegistered={updateUserIsRegistered} fetchExecutionClaims={ordersContext.fetchExecutionClaims} />
         <h1>Well Timed <span role="image">🐎</span></h1>
-        <h3>Time-based order splitting on Kyber</h3>
+        <h3>Time-based order splitting on Kyber using the gelato protocol</h3>
         <div className={classes.box}>
           <Card className={classes.card2} raised>
           {/* <h4 className={classes.title}>Title</h4> */}
@@ -147,7 +147,7 @@ function TimeOrderWrapper(props) {
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Resulting orders</h3>
         <MinOrders orders2={props.orders2}   ></MinOrders>
-        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateProxyStatus={updateProxyStatus} fetchExecutionClaims={ordersContext.fetchExecutionClaims} ></ActionBtn>
+        <ActionBtn updateSelectedTokenDetails={updateSelectedTokenDetails} selectedTokenDetails={selectedTokenDetails} updateUserIsRegistered={updateUserIsRegistered} fetchExecutionClaims={ordersContext.fetchExecutionClaims} ></ActionBtn>
         <Divider variant="middle" classes={{middle: classes.dividerMiddle}} className={classes.dividerClass}/>
         <h3>Your scheduled orders</h3>
         <Button color={"primary"} onClick={ordersContext.fetchExecutionClaims}>Update</Button>
