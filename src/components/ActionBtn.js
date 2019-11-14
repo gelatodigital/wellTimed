@@ -248,6 +248,41 @@ function ActionBtn(props) {
 		setModalState(copyModalState);
 	}
 
+	async function getPrepaymentPrice() {
+		const signer = context.library.getSigner();
+		// Calculate prepayment costs
+		const kyberTradeAddress = kyberTrade.address[context.networkId];
+		// method, funcDataTypes, funcParameters
+		const executorAddress = EXECUTOR[context.networkId];
+		const noOfOrders = time.numOrders;
+
+		const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
+
+		const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(
+			kyberTradeAddress,
+			executorAddress
+		);
+
+
+		const prepayment =
+			parseInt(kyberSwapPrepayment.toString()) * noOfOrders;
+		console.log(prepayment)
+
+		const userFriendlyPrepayment = ethers.utils.formatEther(ethers.utils.bigNumberify(prepayment.toString()))
+
+		let etherscanProvider = new ethers.providers.EtherscanProvider();
+
+		// Getting the current Ethereum price
+		let etherPrice = await etherscanProvider.getEtherPrice()
+
+		return ({dollarPrepayment: parseFloat(userFriendlyPrepayment*etherPrice).toFixed(2), userFriendlyPrepayment: userFriendlyPrepayment})
+	}
+
 	async function approveToken() {
 		// Close modal
 		setWaitingForTX(true);
@@ -273,7 +308,9 @@ function ActionBtn(props) {
 			actionSellTokenAddress,
 			ERC20_ABI,
 			signer
-        );
+		);
+
+		const { dollarPrepayment, userFriendlyPrepayment } = await getPrepaymentPrice()
 
 		// Send approve TX
 		erc20Contract
@@ -290,7 +327,10 @@ function ActionBtn(props) {
                     let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
                     copyModalState.open = true;
 					copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
-					copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
+					copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now
+
+					Required prepayment: ${userFriendlyPrepayment} ETH (=$${dollarPrepayment})
+					`;
 					copyModalState.btn1 = "Cancel";
 					copyModalState.btn2 = "Schedule";
 					copyModalState.func = mintSplitSell;
@@ -337,38 +377,7 @@ function ActionBtn(props) {
         const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
 		const actionSellAmount = coins["amountActionFrom"];
 
-		// Calculate prepayment costs
-		const kyberTradeAddress = kyberTrade.address[context.networkId];
-		// method, funcDataTypes, funcParameters
-		const executorAddress = EXECUTOR[context.networkId];
-		const noOfOrders = time.numOrders;
-
-		const signer = context.library.getSigner();
-		const gelatoCoreAddress = GELATO_CORE[context.networkId];
-		const gelatoCoreContract = new ethers.Contract(
-			gelatoCoreAddress,
-			gelatoCoreABI,
-			signer
-		);
-
-		const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(
-			kyberTradeAddress,
-			executorAddress
-		);
-
-
-		const prepayment =
-			parseInt(kyberSwapPrepayment.toString()) * noOfOrders;
-		console.log(prepayment)
-
-		const userFriendlyPrepayment = ethers.utils.formatEther(ethers.utils.bigNumberify(prepayment.toString()))
-
-		let etherscanProvider = new ethers.providers.EtherscanProvider();
-
-		// Getting the current Ethereum price
-		let etherPrice = await etherscanProvider.getEtherPrice()
-		console.log(`Prepayment: ${etherPrice}`)
-
+		const { dollarPrepayment, userFriendlyPrepayment } = await getPrepaymentPrice()
 
 
         const decimals = coins.actionFrom.decimals
@@ -377,7 +386,7 @@ function ActionBtn(props) {
         copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
 		copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now.
 
-		Required prepayment: ${userFriendlyPrepayment} ETH (=$${parseFloat(userFriendlyPrepayment*etherPrice).toFixed(2)})`;
+		Required prepayment: ${userFriendlyPrepayment} ETH (=$${dollarPrepayment})`;
         copyModalState.btn1 = "Cancel";
         copyModalState.btn2 = "Schedule";
         copyModalState.func = mintSplitSell;
