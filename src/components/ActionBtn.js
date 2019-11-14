@@ -329,19 +329,55 @@ function ActionBtn(props) {
         setModalState(copyModalState);
     }
 
-	function modalMintSplitSell() {
+	async function modalMintSplitSell() {
 
         const copyModalState = { ...modalState };
         const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
 		// const actionSellTokenAddress = coins["actionFrom"]["address"];
         const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
-        const actionSellAmount = coins["amountActionFrom"];
+		const actionSellAmount = coins["amountActionFrom"];
+
+		// Calculate prepayment costs
+		const kyberTradeAddress = kyberTrade.address[context.networkId];
+		// method, funcDataTypes, funcParameters
+		const executorAddress = EXECUTOR[context.networkId];
+		const noOfOrders = time.numOrders;
+
+		const signer = context.library.getSigner();
+		const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
+
+		const kyberSwapPrepayment = await gelatoCoreContract.getMintingDepositPayable(
+			kyberTradeAddress,
+			executorAddress
+		);
+
+
+		const prepayment =
+			parseInt(kyberSwapPrepayment.toString()) * noOfOrders;
+		console.log(prepayment)
+
+		const userFriendlyPrepayment = ethers.utils.formatEther(ethers.utils.bigNumberify(prepayment.toString()))
+
+		let etherscanProvider = new ethers.providers.EtherscanProvider();
+
+		// Getting the current Ethereum price
+		let etherPrice = await etherscanProvider.getEtherPrice()
+		console.log(`Prepayment: ${etherPrice}`)
+
+
 
         const decimals = coins.actionFrom.decimals
         let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
         copyModalState.title = `Schedule Orders ${actionSellTokenSymbol}`;
-        copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now`;
+		copyModalState.body = `Confirm swapping ${userfriendlyAmount / time.numOrders} ${actionSellTokenSymbol} for ${actionBuyTokenSymbol} every ${time.intervalTime} ${time.intervalType} using ${time.numOrders} trades starting now.
+
+		Required prepayment: ${userFriendlyPrepayment} ETH (=$${parseFloat(userFriendlyPrepayment*etherPrice).toFixed(2)})`;
         copyModalState.btn1 = "Cancel";
         copyModalState.btn2 = "Schedule";
         copyModalState.func = mintSplitSell;
@@ -407,7 +443,7 @@ function ActionBtn(props) {
 		const proxyContract = new ethers.Contract(proxyAddress, PROXY_ABI, signer)
 
 		const timeTriggerAddress = triggerTimestampPassed.address;
-		const kyberTradeAddress = kyberTrade.address;
+		const kyberTradeAddress = kyberTrade.address[context.networkId];
 		const actionPayload = encodeWithFunctionSelector(kyberTrade.method, kyberTrade.dataTypesWthNames, actionData);
 		// method, funcDataTypes, funcParameters
 		const executorAddress = EXECUTOR[context.networkId];

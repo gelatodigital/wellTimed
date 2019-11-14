@@ -14,7 +14,7 @@ export const DS_GUARD_FACTORY = {
 
 export const GELATO_CORE = {
     1: '0x0',
-    3: '0x84Ea81AD0EF5Aa3c6Aa051c76B5af6E946F88C4E',
+    3: '0x0Fcf27B454b344645a94788A3e820A0D2dab7F0e',
     4: '0x0',
     42: '0x0'
 }

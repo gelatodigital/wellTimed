@@ -52,10 +52,10 @@ function ConnectBtn(props) {
   // }, [])
 
   // Run as long as context is false
-  // useEffect(() => {
-  //   // Fetch Past events
-  //   fetchExecutionClaims()
-  // }, [context.active])
+  useEffect(() => {
+    // Fetch Past events
+    fetchExecutionClaims()
+  }, [context.active])
 
   function LogInMetaMask() {
     return (
