@@ -20,7 +20,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
     justifyContent: "flex-end",
-    margin: "20px 10px"
+    margin: "20px 10px",
+  },
+  button: {
+    marginRight: '5px'
   }
 
 }));
@@ -52,23 +55,26 @@ function ConnectBtn(props) {
   // }, [])
 
   // Run as long as context is false
-  useEffect(() => {
-    // Fetch Past events
-    fetchExecutionClaims()
-  }, [context.active])
+  // useEffect(() => {
+  //   // Fetch Past events
+  //   fetchExecutionClaims()
+
+
+  // }, [context.active])
 
   function LogInMetaMask() {
     return (
       <Button
         variant="contained"
         color="primary"
+        className={classes.button}
         onClick={() => {
 
           // context.setFirstValidConnector(["MetaMask"]);
           context.setFirstValidConnector(["MetaMask"]);
         }}
       >
-        Connect Metamask
+        Metamask
       </Button>
   );
   }
@@ -78,13 +84,14 @@ function ConnectBtn(props) {
       <Button
         variant="contained"
         color="primary"
+        className={classes.button}
         onClick={() => {
 
           // context.setFirstValidConnector(["MetaMask"]);
           context.setFirstValidConnector(["WalletConnect"]);
         }}
       >
-        Connect Metamask
+        WalletConnect
       </Button>
   );
   }
@@ -149,7 +156,12 @@ function ConnectBtn(props) {
 			signer
     );
     // IF user has a proxy => DEFAULT === FALSE
-    let isUser = await gelatoCoreContract.isUser(context.account);
+    let isUser = false
+    try {
+      isUser = await gelatoCoreContract.isUser(context.account);
+    } catch(error) {
+      console.log(error)
+    }
     if (isUser === false && userIsRegistered === true)
     {
       updateUserIsRegistered(false)
@@ -170,6 +182,8 @@ function ConnectBtn(props) {
       {!context.active && (
         <div className={classes.root}>
           <LogInMetaMask></LogInMetaMask>
+          <br></br>
+          <LogInWalletConnect></LogInWalletConnect>
         </div>
 
       )}

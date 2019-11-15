@@ -21,7 +21,7 @@ const supportedNetworkURLs =
   4: "https://rinkeby.infura.io/v3/aaea3ac8bed443ac9400715e836d9235"
 }
 
-const defaultNetwork = 3;
+const defaultNetwork = 4;
 
 const Infura = new NetworkOnlyConnector({
   providerURL: supportedNetworkURLs[3]

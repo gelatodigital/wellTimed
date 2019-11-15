@@ -111,7 +111,6 @@ function ERC20Input(props) {
   };
 
   let checksum = ethers.utils.getAddress("0x0f5d2fb29fb7d3cfee444a200298f468908cc942")
-  console.log(checksum)
 
   const userChoice = () => {
     if (coinContext.actionFrom) {
