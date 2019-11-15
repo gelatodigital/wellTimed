@@ -100,20 +100,20 @@ function ConnectBtn(props) {
     console.log(context.networkId)
     switch(context.networkId)
     {
-      case 3:
-        checkIfUserHasProxy()
+      // case 3:
+      //   checkIfUserHasProxy()
 
-        return (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              context.unsetConnector();
-            }}
-          >
-            Disconnect
-          </Button>
-        );
+      //   return (
+      //     <Button
+      //       variant="contained"
+      //       color="secondary"
+      //       onClick={() => {
+      //         context.unsetConnector();
+      //       }}
+      //     >
+      //       Disconnect
+      //     </Button>
+      //   );
 
       case 4:
         checkIfUserHasProxy()
@@ -141,7 +141,7 @@ function ConnectBtn(props) {
               context.unsetConnector();
             }}
           >
-            Ropsten Network only
+            Rinkeby Network only
           </Button>
         );
     }
