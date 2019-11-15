@@ -252,6 +252,7 @@ function ActionBtn(props) {
 		const signer = context.library.getSigner();
 		// Calculate prepayment costs
 		const kyberTradeAddress = kyberTrade.address[context.networkId];
+		console.log(kyberTradeAddress)
 		// method, funcDataTypes, funcParameters
 		const executorAddress = EXECUTOR[context.networkId];
 		const noOfOrders = time.numOrders;
@@ -451,7 +452,7 @@ function ActionBtn(props) {
 		const proxyAddress = await gelatoCoreContract.getProxyOfUser(context.account)
 		const proxyContract = new ethers.Contract(proxyAddress, PROXY_ABI, signer)
 
-		const timeTriggerAddress = triggerTimestampPassed.address;
+		const timeTriggerAddress = triggerTimestampPassed.address[context.networkId];
 		const kyberTradeAddress = kyberTrade.address[context.networkId];
 		const actionPayload = encodeWithFunctionSelector(kyberTrade.method, kyberTrade.dataTypesWthNames, actionData);
 		// method, funcDataTypes, funcParameters
@@ -505,7 +506,7 @@ function ActionBtn(props) {
 
 
 		proxyContract
-			.execute(multiMintKyberTrade.address, multiMintPayload, overrides)
+			.execute(multiMintKyberTrade.address[context.networkId], multiMintPayload, overrides)
 			.then(
 				function(txReceipt) {
 					signer.provider

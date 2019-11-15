@@ -108,6 +108,23 @@ function ConnectBtn(props) {
           </Button>
         );
 
+      case 4:
+        checkIfUserHasProxy()
+
+        return (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              context.unsetConnector();
+            }}
+          >
+            Disconnect
+          </Button>
+        );
+
+
+
       default:
         return (
           <Button

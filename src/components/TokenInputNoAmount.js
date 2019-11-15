@@ -11,6 +11,7 @@ import { ethers } from "ethers";
 import CoinContext from "../contexts/CoinContext";
 import TimeContext from "../contexts/TimeContext";
 import { getCorrectImageLink, updateEstimatedOrders } from "../helpers";
+import { useWeb3Context } from "web3-react";
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -50,7 +51,7 @@ function TokenInputNoAmount(props) {
     // defaultToken => none if 'Select a Token'
     // const defaultToken = props.defaultToken
     // value for coinContext => e.g. 'triggerFrom' or 'actionTp'
-
+	const context = useWeb3Context()
 	const classes = useStyles();
 	const coinContext = useContext(CoinContext);
 	const timeContext = useContext(TimeContext)
@@ -61,7 +62,7 @@ function TokenInputNoAmount(props) {
 
 	const [state, setState] = React.useState({
 		open: false,
-		availableCoins: Object.values(getCorrectImageLink())
+		availableCoins: Object.values(getCorrectImageLink(context.networkId))
 	});
 
 	const handleChange = coin => {
@@ -96,17 +97,17 @@ function TokenInputNoAmount(props) {
 			);
 		} else {
 			return (
-					<span className={classes.coins}>
-					{"KNC"}
-					<img
-					src={
-						"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974D5C2e2928deA5F71b9825b8b646686BD200/logo.png"
-					}
-					alt="coin logo"
-					className={classes.img}
-					/>
-				  </span>
-				  )
+				<span className={classes.coins}>
+				{"KNC"}
+				<img
+				src={
+					"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdd974D5C2e2928deA5F71b9825b8b646686BD200/logo.png"
+				}
+				alt="coin logo"
+				className={classes.img}
+				/>
+			</span>
+			)
 
 		}
 	};

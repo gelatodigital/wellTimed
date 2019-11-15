@@ -67,6 +67,32 @@ function Page() {
     timestamp: timestamp1,
     amountActionFrom: ethers.utils.parseUnits("1.0", "ether"),
     actionFrom: {
+      symbol: "MANA",
+      name: "Mana",
+      address: "0x725d648E6ff2B8C44c96eFAEa29b305e5bb1526a",
+      decimals: 18,
+      mainnet: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+      id: "0x725d648E6ff2B8C44c96eFAEa29b305e5bb1526a",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    actionTo: {
+      symbol: "KNC",
+      name: "Kyber Network",
+      address: "0x6FA355a7b6bD2D6bD8b927C489221BFBb6f1D7B2",
+      decimals: 18,
+      mainnet: "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
+      id: "0x6FA355a7b6bD2D6bD8b927C489221BFBb6f1D7B2",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+  });
+
+  /*
+  from:
+  {
       symbol: "DAI",
       name: "DAI",
       address: "0xad6d458402f60fd3bd25163575031acdce07538d",
@@ -77,8 +103,11 @@ function Page() {
       reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
       logo: function(address) {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
-    }},
-    actionTo: {
+    }}
+
+    to:
+
+{
       symbol: "KNC",
       name: "KyberNetwork",
       address: "0x4e470dc7321e84ca96fcaedd0c8abcebbaeb68c6",
@@ -101,7 +130,8 @@ function Page() {
         "0xA467b88BBF9706622be2784aF724C4B44a9d26F4"
       ]
     }
-  });
+  */
+
   const [selectedTokenDetails, setSelectedTokenDetails] = React.useState({needAllowance: false, sufficientBalance: false})
 
   // Used for checking if user has a proxy. False if not, true is yes
@@ -119,6 +149,7 @@ function Page() {
 
     // check if context has an actionFrom
     let copySelectedTokenDetails = {...selectedTokenDetails}
+    console.log("in here")
     if (context.active)
     {
       if (activeCoins['actionFrom']['address']) {
@@ -189,6 +220,8 @@ function Page() {
           // console.log("Render Modal: You don't have enough balance of Token X")
           return copySelectedTokenDetails
         }
+      } else {
+        return copySelectedTokenDetails
       }
 
     } else {
@@ -233,7 +266,7 @@ function Page() {
     actionSellToken = ethers.utils.getAddress(actionSellToken)
     actionBuyToken = ethers.utils.getAddress(actionBuyToken)
     // console.log(coins[3])
-    coins[3].forEach(coin => {
+    coins[context.networkId].forEach(coin => {
       let coinAddress = ethers.utils.getAddress(coin.address)
       if (coinAddress === actionSellToken) {
         actionSellTokenSymbol = coin.symbol
@@ -286,21 +319,29 @@ function Page() {
       let iface2 = new ethers.utils.Interface(abi2)
       let iface3 = new ethers.utils.Interface(abi3)
 
+      const ropstenBlock = 6660070
+      const rinkebyBlock = 5442398
+      let blockNumber
+      if (context.networkId.toString() === "3") {
+          blockNumber = ropstenBlock
+      } else if (context.networkId.toString() === "4") {
+        blockNumber = rinkebyBlock
+      }
       const filter1 = {
         address: gelatoCoreAddress,
-        fromBlock: 6660070,
+        fromBlock: blockNumber,
         topics: [topic1]
       };
 
       const filter2 = {
         address: gelatoCoreAddress,
-        fromBlock: 6660070,
+        fromBlock: blockNumber,
         topics: [topic2]
       };
 
       const filter3 = {
         address: gelatoCoreAddress,
-        fromBlock: 6660070,
+        fromBlock: blockNumber,
         topics: [topic3]
       };
 

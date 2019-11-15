@@ -78,10 +78,10 @@ export async function approveToken(signer, beneficiary, tokenAddress) {
   })
 }
 
-export function getCorrectImageLink() {
+export function getCorrectImageLink(networkId = 4) {
   const table1 = {};
   const table2 = {};
-  coins[3].forEach(coin => {
+  coins[networkId].forEach(coin => {
     table1[coin["symbol"]] = coin;
   });
   coins[1].forEach(coin => {
