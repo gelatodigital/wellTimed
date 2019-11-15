@@ -90,7 +90,7 @@ function ERC20Input(props) {
   // State
   const [state, setState] = React.useState({
     open: false,
-    availableCoins: Object.values(getCorrectImageLink())
+    availableCoins: Object.values(getCorrectImageLink(context.networkId))
   });
 
   const handleChange = coin => {
@@ -110,6 +110,8 @@ function ERC20Input(props) {
     setState({ ...state, open: false });
   };
 
+  let checksum = ethers.utils.getAddress("0x0f5d2fb29fb7d3cfee444a200298f468908cc942")
+
   const userChoice = () => {
     if (coinContext.actionFrom) {
       return (
@@ -123,15 +125,20 @@ function ERC20Input(props) {
         </span>
       );
     } else {
+
       return  (<span className={classes.coins}>
-        {"DAI"}
+        {"MANA"}
         <img
-          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359/logo.png"}
+          src={"https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0F5D2fB29fb7d3CFeE444a200298f468908cC942/logo.png"}
           alt="coin logo"
           className={classes.img}
         />
       </span>)
+
+
     }
+
+
   };
 
   const handleAmount = name => event => {

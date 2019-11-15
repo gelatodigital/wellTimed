@@ -1,5 +1,8 @@
 export const multiMintKyberTrade = {
-    address: '0xD10b3f4b06439b2b8B2D9788b6A5278d6055B19B',
+    address: {
+        3: '0xcD816f760BBd8d63740a82cff56c04288667D921',
+        4: '0x47aC300a47095EedA741dA6088fd243D044430Cc'
+    },
     dataTypesWithName: [
         {type: 'address', name: '_timeTrigger'},
         {type: 'uint256', name: '_startTime'},

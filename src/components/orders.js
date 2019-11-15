@@ -138,7 +138,7 @@ export default function Orders(props) {
 
   const ordersContext = useContext(OrderContext)
   let rows = ordersContext['orders']
-  if (rows[0].swap === "") {
+  if ( rows.length === 0 || rows[0].swap === "" ) {
     rows = []
   }
 

@@ -56,7 +56,7 @@ function TokenInput(props) {
 		open: false,
 		coin: "",
 		amount: 0,
-		availableCoins: Object.values(getCorrectImageLink())
+		availableCoins: Object.values(getCorrectImageLink(context.networkId))
 	});
 
 	// const handleChange = name => event => {

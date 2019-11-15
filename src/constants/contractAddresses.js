@@ -14,8 +14,8 @@ export const DS_GUARD_FACTORY = {
 
 export const GELATO_CORE = {
     1: '0x0',
-    3: '0x624f09392ae014484a1aB64c6D155A7E2B6998E6',
-    4: '0x0',
+    3: '0x0Fcf27B454b344645a94788A3e820A0D2dab7F0e',
+    4: '0x501aF774Eb578203CC34E7171273124A93706C06',
     42: '0x0'
 }
 
@@ -54,7 +54,8 @@ export const KYBER_PROXY= {
 }
 
 export const EXECUTOR = {
-    3: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72'
+    3: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72',
+    4: '0x203AdbbA2402a36C202F207caA8ce81f1A4c7a72',
 }
 
 

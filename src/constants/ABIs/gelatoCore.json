@@ -1,891 +1,1269 @@
 [
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_trigger",
-				"type": "address"
-			},
-			{
-				"name": "_triggerPayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_userProxy",
-				"type": "address"
-			},
-			{
-				"name": "_executePayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"name": "_selectedExecutor",
-				"type": "address"
-			},
-			{
-				"name": "_executeGas",
-				"type": "uint256"
-			},
-			{
-				"name": "_executionClaimExpiryDate",
-				"type": "uint256"
-			},
-			{
-				"name": "_executorFee",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelExecutionClaim",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "devirginize",
-		"outputs": [
-			{
-				"name": "userProxy",
-				"type": "address"
-			},
-			{
-				"name": "userProxyGuardAddress",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_trigger",
-				"type": "address"
-			},
-			{
-				"name": "_triggerPayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_userProxy",
-				"type": "address"
-			},
-			{
-				"name": "_executePayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_executeGas",
-				"type": "uint256"
-			},
-			{
-				"name": "_executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"name": "_executionClaimExpiryDate",
-				"type": "uint256"
-			},
-			{
-				"name": "_executorFee",
-				"type": "uint256"
-			}
-		],
-		"name": "execute",
-		"outputs": [
-			{
-				"name": "executionResult",
-				"type": "uint8"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "guard",
-		"outputs": [
-			{
-				"name": "userProxyGuardAddress",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_trigger",
-				"type": "address"
-			},
-			{
-				"name": "_specificTriggerParams",
-				"type": "bytes"
-			},
-			{
-				"name": "_action",
-				"type": "address"
-			},
-			{
-				"name": "_specificActionParams",
-				"type": "bytes"
-			},
-			{
-				"name": "_selectedExecutor",
-				"type": "address"
-			}
-		],
-		"name": "mintExecutionClaim",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_newExecutorClaimLifespan",
-				"type": "uint256"
-			}
-		],
-		"name": "setExecutorClaimLifespan",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_newExecutorGasPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "setExecutorPrice",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "withdrawExecutorBalance",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "selectedExecutor",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "userProxy",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "executePayload",
-				"type": "bytes"
-			},
-			{
-				"indexed": false,
-				"name": "executeGas",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "executionClaimExpiryDate",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "executorFee",
-				"type": "uint256"
-			}
-		],
-		"name": "LogNewExecutionClaimMinted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "trigger",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "triggerPayload",
-				"type": "bytes"
-			},
-			{
-				"indexed": true,
-				"name": "action",
-				"type": "address"
-			}
-		],
-		"name": "LogTriggerActionMinted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "executor",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "canExecuteResult",
-				"type": "uint256"
-			}
-		],
-		"name": "LogCanExecuteFailed",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "success",
-				"type": "bool"
-			},
-			{
-				"indexed": true,
-				"name": "executor",
-				"type": "address"
-			}
-		],
-		"name": "LogExecutionResult",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "userProxy",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "executor",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "gasUsedEstimate",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "gasPriceUsed",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "executionCostEstimate",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "executorPayout",
-				"type": "uint256"
-			}
-		],
-		"name": "LogClaimExecutedBurnedAndDeleted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"name": "userProxy",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "cancelor",
-				"type": "address"
-			}
-		],
-		"name": "LogExecutionClaimCancelled",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "executorPrice",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "newExecutorPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "LogSetExecutorPrice",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "executorClaimLifespan",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "newExecutorClaimLifespan",
-				"type": "uint256"
-			}
-		],
-		"name": "LogSetExecutorClaim",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "executor",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "withdrawAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "LogSetExecutorBalanceWithdrawal",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "userProxy",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "userProxyGuard",
-				"type": "address"
-			}
-		],
-		"name": "LogDevirginize",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "userProxyGuard",
-				"type": "address"
-			}
-		],
-		"name": "LogGuard",
-		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_trigger",
-				"type": "address"
-			},
-			{
-				"name": "_triggerPayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_userProxy",
-				"type": "address"
-			},
-			{
-				"name": "_executePayload",
-				"type": "bytes"
-			},
-			{
-				"name": "_executeGas",
-				"type": "uint256"
-			},
-			{
-				"name": "_executionClaimId",
-				"type": "uint256"
-			},
-			{
-				"name": "_executionClaimExpiryDate",
-				"type": "uint256"
-			},
-			{
-				"name": "_executorFee",
-				"type": "uint256"
-			}
-		],
-		"name": "canExecute",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constCanExecMaxGas",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constExecSelector",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bytes4"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constExecuteGas",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constGasInsideGasleftChecks",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constGasOutsideGasleftChecks",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constGuardFactory",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "constProxyRegistry",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getCanExecMaxGas",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getCurrentExecutionClaimId",
-		"outputs": [
-			{
-				"name": "currentId",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_executor",
-				"type": "address"
-			}
-		],
-		"name": "getExecutorBalance",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_executor",
-				"type": "address"
-			}
-		],
-		"name": "getExecutorPrice",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getGasInsideGasleftChecks",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getGasOutsideGasleftChecks",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_executionClaimId",
-				"type": "uint256"
-			}
-		],
-		"name": "getHashedExecutionClaim",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_actionGasStipend",
-				"type": "uint256"
-			}
-		],
-		"name": "getMinExecutionGasRequirement",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_action",
-				"type": "address"
-			},
-			{
-				"name": "_selectedExecutor",
-				"type": "address"
-			}
-		],
-		"name": "getMintingDepositPayable",
-		"outputs": [
-			{
-				"name": "mintingDepositPayable",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_executionClaimId",
-				"type": "uint256"
-			}
-		],
-		"name": "getProxyWithExecutionClaimId",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_userProxy",
-				"type": "address"
-			}
-		],
-		"name": "getuserProxyDeposit",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "guardFactory",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "isOwner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "proxyRegistry",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	}
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address payable",
+          "name": "executor",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "canExecuteResult",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogCanExecuteFailed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "userProxy",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address payable",
+          "name": "executor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gasUsedEstimate",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gasPriceUsed",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executionCostEstimate",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executorPayout",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogClaimExecutedAndDeleted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "userProxy",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "LogCreateUserProxy",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address payable",
+          "name": "executor",
+          "type": "address"
+        }
+      ],
+      "name": "LogDeregisterExecutor",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "userProxy",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "cancelor",
+          "type": "address"
+        }
+      ],
+      "name": "LogExecutionClaimCancelled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint8",
+          "name": "executionResult",
+          "type": "uint8"
+        },
+        {
+          "indexed": true,
+          "internalType": "address payable",
+          "name": "executor",
+          "type": "address"
+        }
+      ],
+      "name": "LogExecutionResult",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "selectedExecutor",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "userProxy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "actionPayload",
+          "type": "bytes"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executeGas",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executionClaimExpiryDate",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "mintingDeposit",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogNewExecutionClaimMinted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address payable",
+          "name": "executor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executorPrice",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executorClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogRegisterExecutor",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "canExecMaxGas",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newCanExecMaxGas",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetCanExecMaxGas",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executorClaimLifespan",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newExecutorClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetExecutorClaimLifespan",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "executorPrice",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newExecutorPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetExecutorPrice",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gasInsideGasleftChecks",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newGasInsideGasleftChecks",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetGasInsideGasleftChecks",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gasOutsideGasleftChecks",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newGasOutsideGasleftChecks",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetGasOutsideGasleftChecks",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "minExecutionClaimLifespan",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newMinExecutionClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetMinExecutionClaimLifespan",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "userProxyExecGas",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newUserProxyExecGas",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogSetUserProxyExecGas",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "trigger",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "triggerPayload",
+          "type": "bytes"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "action",
+          "type": "address"
+        }
+      ],
+      "name": "LogTriggerActionMinted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "executor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "withdrawAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "LogWithdrawExecutorBalance",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_trigger",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_triggerPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "_userProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_actionPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executeGas",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimExpiryDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_mintingDeposit",
+          "type": "uint256"
+        }
+      ],
+      "name": "canExecute",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_trigger",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_triggerPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "_userProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_actionPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_selectedExecutor",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executeGas",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimExpiryDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_mintingDeposit",
+          "type": "uint256"
+        }
+      ],
+      "name": "cancelExecutionClaim",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "createUserProxy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "userProxy",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "deregisterExecutor",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_trigger",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_triggerPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "_userProxy",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_actionPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "_action",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executeGas",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimExpiryDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_mintingDeposit",
+          "type": "uint256"
+        }
+      ],
+      "name": "execute",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "executionResult",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCanExecMaxGas",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCurrentExecutionClaimId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "currentId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_executor",
+          "type": "address"
+        }
+      ],
+      "name": "getExecutorBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_executor",
+          "type": "address"
+        }
+      ],
+      "name": "getExecutorClaimLifespan",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_executor",
+          "type": "address"
+        }
+      ],
+      "name": "getExecutorPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getGasInsideGasleftChecks",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getGasOutsideGasleftChecks",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getHashedExecutionClaim",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getMinExecutionClaimLifespan",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_actionGasStipend",
+          "type": "uint256"
+        }
+      ],
+      "name": "getMinExecutionGasRequirement",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_action",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_selectedExecutor",
+          "type": "address"
+        }
+      ],
+      "name": "getMintingDepositPayable",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "mintingDepositPayable",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        }
+      ],
+      "name": "getProxyOfUser",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUserCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_proxy",
+          "type": "address"
+        }
+      ],
+      "name": "getUserOfProxy",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUserProxies",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUserProxyExecGas",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getUserProxyWithExecutionClaimId",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_executionClaimId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getUserWithExecutionClaimId",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUsers",
+      "outputs": [
+        {
+          "internalType": "address payable[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_user",
+          "type": "address"
+        }
+      ],
+      "name": "isUser",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_userProxy",
+          "type": "address"
+        }
+      ],
+      "name": "isUserProxy",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_trigger",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_triggerPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address",
+          "name": "_action",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_actionPayload",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_selectedExecutor",
+          "type": "address"
+        }
+      ],
+      "name": "mintExecutionClaim",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_executorPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_executorClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "registerExecutor",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newCanExecMaxGas",
+          "type": "uint256"
+        }
+      ],
+      "name": "setCanExecMaxGas",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newExecutorClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "setExecutorClaimLifespan",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newExecutorGasPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "setExecutorPrice",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newGasInsideGasleftChecks",
+          "type": "uint256"
+        }
+      ],
+      "name": "setGasInsideGasleftChecks",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newGasOutsideGasleftChecks",
+          "type": "uint256"
+        }
+      ],
+      "name": "setGasOutsideGasleftChecks",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newMinExecutionClaimLifespan",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMinExecutionClaimLifespan",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newUserProxyExecGas",
+          "type": "uint256"
+        }
+      ],
+      "name": "setUserProxyExecGas",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "withdrawExecutorBalance",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
 ]

@@ -1289,5 +1289,70 @@ export const coins = {
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
       }
     }
+  ],
+  4: [
+    {
+      symbol: "KNC",
+      name: "Kyber Network",
+      address: "0x6FA355a7b6bD2D6bD8b927C489221BFBb6f1D7B2",
+      decimals: 18,
+      id: "0x6FA355a7b6bD2D6bD8b927C489221BFBb6f1D7B2",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    {
+      symbol: "MANA",
+      name: "Mana",
+      address: "0x725d648E6ff2B8C44c96eFAEa29b305e5bb1526a",
+      decimals: 18,
+      id: "0x725d648E6ff2B8C44c96eFAEa29b305e5bb1526a",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    {
+      symbol: "OMG",
+      name: "OmiseGO",
+      address: "0x732fBA98dca813C3A630b53a8bFc1d6e87B1db65",
+      decimals: 18,
+      id: "0x732fBA98dca813C3A630b53a8bFc1d6e87B1db65",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    {
+      symbol: "POLY",
+      name: "Polymath",
+      address: "0xBcb83bAFD042618d5c9b1a91D0Fcd4B935e08CEA",
+      decimals: 18,
+      id: "0xBcb83bAFD042618d5c9b1a91D0Fcd4B935e08CEA",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    {
+      symbol: "SALT",
+      name: "Salt",
+      address: "0x058832CA736AB027c12367e53915e34e87a6081B",
+      decimals: 8,
+      id: "0x058832CA736AB027c12367e53915e34e87a6081B",
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+    {
+      symbol: "ZIL",
+      name: "Zilliqa",
+      address: "0x405A656Dc1b672800D21a15eF5539D4776F6654c",
+      decimals: 12,
+      id: "0x405A656Dc1b672800D21a15eF5539D4776F6654c",
+      reserves_src: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
+      reserves_dest: ["0xEB52Ce516a8d054A574905BDc3D4a176D3a2d51a"],
+      logo: function(address) {
+        return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
+      }
+    },
+
   ]
 };

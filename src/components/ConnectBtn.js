@@ -6,17 +6,24 @@ import ProxyContext from '../contexts/ProxyContext'
 
 import { Button, makeStyles } from "@material-ui/core";
 import { ethers } from "ethers";
-import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
+import {
+	GELATO_CORE
+} from "../constants/contractAddresses";
 
 // ABIs
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import dsProxyABI from "../constants/ABIs/ds-proxy.json";
+import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
+
+// Wallet Connect
+import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
     justifyContent: "flex-end",
-    margin: "20px 10px"
+    margin: "20px 10px",
+  },
+  button: {
+    marginRight: '5px'
   }
 
 }));
@@ -24,57 +31,93 @@ const useStyles = makeStyles(theme => ({
 function ConnectBtn(props) {
   const classes = useStyles();
   const context = useWeb3Context();
-  const proxyStatus = useContext(ProxyContext)
+  const userIsRegistered = useContext(ProxyContext)
+  const updateUserIsRegistered = props.updateUserIsRegistered
   const fetchExecutionClaims = props.fetchExecutionClaims
 
+  // If wallet connect, display QR code if no connection is found
+  if (context.active && context.connectorName === "WalletConnect") {
+    if (!context.account) {
+      WalletConnectQRCodeModal.open(
+        context.connector.walletConnector.uri,
+        () => {}
+      );
+    } else {
+      try {
+        WalletConnectQRCodeModal.close();
+      } catch {}
+    }
+  }
+
   // Run only once
-  useEffect(() => {
-    context.setFirstValidConnector(["MetaMask", "Infura"]);
-  }, [])
+  // useEffect(() => {
+  //   context.setFirstValidConnector(["MetaMask", "Infura"]);
+  // }, [])
 
   // Run as long as context is false
-  useEffect(() => {
+  // useEffect(() => {
+  //   // Fetch Past events
+  //   fetchExecutionClaims()
 
-    // Fetch Past events
-    fetchExecutionClaims()
 
-  }, [context.active])
+  // }, [context.active])
 
-  const updateProxyStatus = props.updateProxyStatus
-  // const fetchOrderFromLocalStorage = props.fetchOrderFromLocalStorage
-  // const handleChangeInPage = props.handleChange
-  // const updateRows = props.updateRows
-  // const rows = props.rows
-  // Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-
-  function LogIn() {
+  function LogInMetaMask() {
     return (
       <Button
         variant="contained"
         color="primary"
+        className={classes.button}
         onClick={() => {
 
-          context.setFirstValidConnector(["MetaMask", "Infura"]);
+          // context.setFirstValidConnector(["MetaMask"]);
+          context.setFirstValidConnector(["MetaMask"]);
         }}
       >
-        Connect Metamask
+        Metamask
+      </Button>
+  );
+  }
+
+  function LogInWalletConnect() {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => {
+
+          // context.setFirstValidConnector(["MetaMask"]);
+          context.setFirstValidConnector(["WalletConnect"]);
+        }}
+      >
+        WalletConnect
       </Button>
   );
   }
 
   function LogOut() {
+    console.log(context.networkId)
     switch(context.networkId)
     {
-      case 3:
+      // case 3:
+      //   checkIfUserHasProxy()
+
+      //   return (
+      //     <Button
+      //       variant="contained"
+      //       color="secondary"
+      //       onClick={() => {
+      //         context.unsetConnector();
+      //       }}
+      //     >
+      //       Disconnect
+      //     </Button>
+      //   );
+
+      case 4:
         checkIfUserHasProxy()
 
-        // const fetchedRows = fetchOrderFromLocalStorage();
-        // if (newProxyStatus === proxyStatus) {
-        //   if (fetchedRows === rows) { updateRows(fetchOrderFromLocalStorage) }
-        // } else {
-        //   updateProxyStatus(newProxyStatus)
-        //   updateRows(fetchOrderFromLocalStorage)
-        // }
         return (
           <Button
             variant="contained"
@@ -87,6 +130,8 @@ function ConnectBtn(props) {
           </Button>
         );
 
+
+
       default:
         return (
           <Button
@@ -96,7 +141,7 @@ function ConnectBtn(props) {
               context.unsetConnector();
             }}
           >
-            Ropsten Network only
+            Rinkeby Network only
           </Button>
         );
     }
@@ -104,62 +149,26 @@ function ConnectBtn(props) {
 
   async function checkIfUserHasProxy() {
     const signer = context.library.getSigner();
-    const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-    const proxyRegistryContract = new ethers.Contract(
-      proxyRegistryAddress,
-      proxyRegistryABI,
-      signer
+    const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
     );
-    let proxyAddress = await proxyRegistryContract.proxies(context.account);
-    if (proxyAddress === ethers.constants.AddressZero && proxyStatus !== 3) {
-      // console.log(
-      //   "No proxy found, please deploy proxy through registry + deploy associated guard through guard registry"
-      // );
-      updateProxyStatus(1)
-      // Deploy Proxy
-      // Deploy Guard
-    } else {
-      // console.log(`Proxy exists - Address: ${proxyAddress}`);
-      // fetch proxy
-      const proxyContract = new ethers.Contract(
-        proxyAddress,
-        dsProxyABI,
-        signer
-      );
-
-      // Check if proxy has guard / authority
-      let guardAddress = await proxyContract.authority();
-      // Also check past events if user deployed guard at some point
-      const localStorageGuard = localStorage.getItem('guardAddress')
-      // console.log(`Local Storage: ${localStorageGuard}`)
-
-      if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard === null) {
-        // console.log(
-        //   "No guard contract found as proxy authority, please 1) deploy guard and 2) set as authority"
-        // );
-        updateProxyStatus(2)
-      }
-      else if (guardAddress === ethers.constants.AddressZero  && proxyStatus !== 3 && localStorageGuard !== null)
-      {
-        // console.log(`Guard already deployed, set Authority`)
-        updateProxyStatus(3)
-
-      }
-      else if (guardAddress === ethers.constants.AddressZero  && proxyStatus === 3)
-      {
-        // console.log(`Guard already deployed, set Authority`)
-        updateProxyStatus(3)
-      }
-      else if (proxyStatus === 4)
-      {
-        // proxyStatus already 4, no need to update state again.
-        return;
-
-      } else {
-         // console.log(`Guard contract found - address: ${guardAddress}`);
-        // console.log("Purchase!");
-        updateProxyStatus(4)
-      }
+    // IF user has a proxy => DEFAULT === FALSE
+    let isUser = false
+    try {
+      isUser = await gelatoCoreContract.isUser(context.account);
+    } catch(error) {
+      console.log(error)
+    }
+    if (isUser === false && userIsRegistered === true)
+    {
+      updateUserIsRegistered(false)
+    }
+    else if (isUser === true && userIsRegistered === false)
+    {
+      updateUserIsRegistered(true)
     }
   }
 
@@ -172,7 +181,9 @@ function ConnectBtn(props) {
       )}
       {!context.active && (
         <div className={classes.root}>
-          <LogIn></LogIn>
+          <LogInMetaMask></LogInMetaMask>
+          <br></br>
+          <LogInWalletConnect></LogInWalletConnect>
         </div>
 
       )}

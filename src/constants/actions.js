@@ -1,5 +1,14 @@
 export const kyberTrade = {
     method: 'action',
-    address: '0xD31D01544Ab158a4370D38B2E9b0d3390E928A2b',
-    dataTypesWthNames: [{type: 'address', name: '_src'}, {type: 'uint256', name: '_srcAmt'}, {type: 'address', name: '_dest'}, {type: 'address', name: '_user'}, {type: 'uint256', name: '_minConversionRate'}]
+    address: {
+        3: '0xB59b6B36a31661cd24F95D703ec4c7Ce41f2E06E',
+        4: '0x5e2C7234DC00eF98B52B694b29824AcF30dBA53e'
+    },
+    dataTypesWthNames: [
+        {type: 'address', name: '_user'},
+        {type: 'address', name: '_src'},
+        {type: 'uint256', name: '_srcAmt'},
+        {type: 'address', name: '_dest'},
+        {type: 'uint256', name: '_minConversionRate'}
+    ]
 }
