@@ -55,12 +55,10 @@ function ConnectBtn(props) {
   // }, [])
 
   // Run as long as context is false
-  // useEffect(() => {
-  //   // Fetch Past events
-  //   fetchExecutionClaims()
-
-
-  // }, [context.active])
+  useEffect(() => {
+    // Fetch Past events
+    fetchExecutionClaims()
+  }, [context.active])
 
   function LogInMetaMask() {
     return (
@@ -69,8 +67,6 @@ function ConnectBtn(props) {
         color="primary"
         className={classes.button}
         onClick={() => {
-
-          // context.setFirstValidConnector(["MetaMask"]);
           context.setFirstValidConnector(["MetaMask"]);
         }}
       >
@@ -97,7 +93,6 @@ function ConnectBtn(props) {
   }
 
   function LogOut() {
-    console.log(context.networkId)
     switch(context.networkId)
     {
       // case 3:
@@ -129,8 +124,6 @@ function ConnectBtn(props) {
             Disconnect
           </Button>
         );
-
-
 
       default:
         return (

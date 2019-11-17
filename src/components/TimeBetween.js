@@ -4,8 +4,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { ethers } from "ethers";
-
 // Helpers
 import { updateEstimatedOrders } from "../helpers";
 
@@ -48,10 +46,6 @@ export default function TimeBetween(props) {
 		updateActiveCoins(updatedCoinContext);
 		setTime(newTime);
 	};
-
-	function renderDefaultValue() {
-		return time.intervalTime;
-	}
 
 	function renderDefaultValue() {
 		return time.intervalTime;

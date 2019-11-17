@@ -49,9 +49,6 @@ export default function TimeInterval(props) {
 
   return (
         <FormControl className={classes.formControl}>
-            {/* <InputLabel shrink htmlFor="age-label-placeholder">
-                Interval Type
-            </InputLabel> */}
             <Select
                 disableUnderline={true}
                 htmlFor="outlined-age-simple"

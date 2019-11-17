@@ -10,22 +10,22 @@ import WalletConnectApi from "@walletconnect/web3-subprovider";
 
 const {
   InjectedConnector,
-  NetworkOnlyConnector,
+  // NetworkOnlyConnector,
   WalletConnectConnector
 } = Connectors;
 
 const supportedNetworkURLs =
 {
-  1: "https://mainnet.infura.io/v3/aaea3ac8bed443ac9400715e836d9235",
-  3: "https://ropsten.infura.io/v3/aaea3ac8bed443ac9400715e836d9235",
-  4: "https://rinkeby.infura.io/v3/aaea3ac8bed443ac9400715e836d9235"
+  1: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_SECRET}`,
+  3: `https://ropsten.infura.io/v3/${process.env.REACT_APP_INFURA_SECRET}`,
+  4: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_SECRET}`
 }
 
 const defaultNetwork = 4;
 
-const Infura = new NetworkOnlyConnector({
-  providerURL: supportedNetworkURLs[3]
-});
+// const Infura = new NetworkOnlyConnector({
+//   providerURL: supportedNetworkURLs[3]
+// });
 
 const WalletConnect = new WalletConnectConnector({
   api: WalletConnectApi,
@@ -35,14 +35,7 @@ const WalletConnect = new WalletConnectConnector({
 });
 
 const MetaMask = new InjectedConnector({ supportedNetworks: [1, 3, 4] });
-
-console.log(MetaMask)
-console.log(WalletConnect)
-
-
 const connectors = { MetaMask, WalletConnect };
-
-// `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`
 
 const theme = createMuiTheme({
   palette: {

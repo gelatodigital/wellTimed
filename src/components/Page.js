@@ -2,50 +2,29 @@ import React from "react";
 import { ethers } from "ethers";
 
 // Import Components
-
 import TimeOrderWrapper from './TimeOrderWrapper'
 
+// Contexts
 import { CoinProvider } from "../contexts/CoinContext";
 import { coins } from '../constants/coins'
-
-
-
 import {TimeProvider} from "../contexts/TimeContext"
-
 import { OrderProvider } from "../contexts/OrderContext";
+import { ProxyProvider } from "../contexts/ProxyContext";
+import { useWeb3Context } from "web3-react";
 
 // Helper
 import {  decoder, timeStampDecoder, getTokenBalance, getTokenAllowance } from '../helpers'
 
 // ABIS
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
 
 // Import addresses
 import {
   GELATO_CORE
 } from "../constants/contractAddresses";
 
+// Trigger
 import {triggerTimestampPassed} from '../constants/triggers'
-
-// Import ContextParents
-import { ProxyProvider } from "../contexts/ProxyContext";
-
-// Context so we access the users account & provider
-import { useWeb3Context } from "web3-react";
-
-
-// const style = makeStyles({
-//   card: {
-//     margin: "25px"
-//   },
-//   arrow: {
-//     marginTop: "20px"
-//   },
-//   title: {
-//     textAlign: "left"
-//   }
-// });
 
 function Page() {
   const context = useWeb3Context();
@@ -59,7 +38,7 @@ function Page() {
   let timestamp2 = timestamp1 + 86400000
   let date2 = new Date(timestamp2)
   const timestampString2 = `${date2.toLocaleDateString()} - ${date2.toLocaleTimeString()}`;
-  const  dummy = [{'#': 1, swap: '0.5000 WETH => GNO', when: `${timestampString1}`}, {'#': 2, swap: '0.5000 WETH => GNO', when: `${timestampString2}`}]
+  const  dummy = [{'#': 1, swap: '0.5000 MANA => KNC', when: `${timestampString1}`}, {'#': 2, swap: '0.5000 MANA => KNC', when: `${timestampString2}`}]
 
 
   const [activeCoins, setActivCoins] = React.useState({
@@ -90,7 +69,7 @@ function Page() {
     },
   });
 
-  /*
+  /* ROPSTEN Data
   from:
   {
       symbol: "DAI",
@@ -149,7 +128,6 @@ function Page() {
 
     // check if context has an actionFrom
     let copySelectedTokenDetails = {...selectedTokenDetails}
-    console.log("in here")
     if (context.active)
     {
       if (activeCoins['actionFrom']['address']) {
@@ -212,7 +190,7 @@ function Page() {
           }
           else {
             copySelectedTokenDetails.sufficientBalance = true
-            console.log("Cannot sell value equal to zero")
+            // console.log("Cannot sell value equal to zero")
             return copySelectedTokenDetails
         } }
           else {
@@ -265,7 +243,6 @@ function Page() {
 
     actionSellToken = ethers.utils.getAddress(actionSellToken)
     actionBuyToken = ethers.utils.getAddress(actionBuyToken)
-    // console.log(coins[3])
     coins[context.networkId].forEach(coin => {
       let coinAddress = ethers.utils.getAddress(coin.address)
       if (coinAddress === actionSellToken) {
@@ -367,7 +344,6 @@ function Page() {
       logs2.forEach((log) => {
         userLogs1.forEach(log2 => {
           let returnedLog = iface2.parseLog(log)
-          // console.log(returnedLog)
           let values = returnedLog.values;
 
           if (values[0].eq(log2[1])) {
@@ -377,46 +353,18 @@ function Page() {
 
           }
         })
-        // Do something with decoded data
       });
-
-
-      // Minted execution claims of user
 
       // Now check which one already got executed
       const logs3 = await signer.provider.getLogs(filter3);
       logs3.forEach((log) => {
-        // console.log(log)
         // Claims that got minted
         let returnedLog = iface3.parseLog(log)
         let executionClaimId = returnedLog.values.executionClaimId
         for (let execId in userLogs2) {
-        // userLogs2.forEach(claim => {
-          let order = {}
-          // console.log(claim[0].executionClaimId)
           try {
             if (executionClaimId.eq(userLogs2[execId][0].executionClaimId)) {
-
-              // // 1, Decode trigger payload
-              // let triggerPayload = claim[0].triggerPayload
-              // // WHEN:
-              // // let decodedTimestamp = triggerPayload, triggerTimestampPassed.dataTypes)
-              // let decodedTimestamp = decoder(triggerPayload, triggerTimestampPassed.dataTypes)
-
               userLogs2[execId] = [userLogs2[execId][0], userLogs2[execId][1], 'executed']
-
-              // order['when'] = decodedTimestamp
-
-              // // 2. Decode action payload
-              // let actionPayload = claim[1][3].toString()
-              // let dataTypes = ['address', 'uint256', 'address', 'address', 'uint256']
-              // // let decodedAction = simpleMultipleDecoder(actionPayload, dataTypes)
-              // let decodedAction = decoder(actionPayload, dataTypes)
-              // order['swap'] = decodedAction
-
-              // // status
-              // order['status'] = 'executed'
-              // userLogs3.push(order)
             }
           } catch(err) {
           }
@@ -490,19 +438,6 @@ function Page() {
     setOrders: setOrders
   }
 
-  // function updateRows(newRows) {
-  //   setRows(newRows)
-  // }
-
-
-  // function fetchOrderFromLocalStorage() {
-  //   console.log("fetchOrderFromLocalStorage")
-  //   if (localStorage.getItem(`triggered-${context.account}`) !== null) {
-  //     const ordersInStorage = localStorage.getItem(`triggered-${context.account}`)
-  //     return(ordersInStorage)
-
-  //   }
-  // }
   return (
     <React.Fragment>
       <ProxyProvider value={userIsRegistered}>

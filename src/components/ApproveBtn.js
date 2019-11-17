@@ -1,12 +1,12 @@
+// Not used
 import React, { useContext } from "react";
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
-import { getTokenBalance } from "../helpers";
 import Button from "@material-ui/core/Button";
-import { DS_PROXY_REGISTRY } from "../constants/contractAddresses";
+import { GELATO_CORE } from "../constants/contractAddresses";
 import { ethers } from "ethers";
 
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
+import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
 import ERC20_ABI from "../constants/ABIs/erc20.json";
 
 function ApproveBtn(probs) {
@@ -20,15 +20,15 @@ function ApproveBtn(probs) {
   async function approveToken() {
     setWaitingForTX(true)
     const signer = context.library.getSigner();
-    const proxyRegistryAddress = DS_PROXY_REGISTRY[context.networkId];
-    const proxyRegistryContract = new ethers.Contract(
-      proxyRegistryAddress,
-      proxyRegistryABI,
-      signer
-    );
-    const proxyAddress = await proxyRegistryContract.proxies(
-      context.account)
 
+    const gelatoCoreAddress = GELATO_CORE[context.networkId];
+		const gelatoCoreContract = new ethers.Contract(
+			gelatoCoreAddress,
+			gelatoCoreABI,
+			signer
+		);
+
+		const proxyAddress = await gelatoCoreContract.getProxyOfUser(context.account)
     const sellTokenAddress = coinContext['actionFrom']['address'];
     const erc20Contract = new ethers.Contract(sellTokenAddress, ERC20_ABI, signer);
 

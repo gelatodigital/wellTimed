@@ -1,17 +1,15 @@
-import React , {useContext, useEffect} from "react";
+import React , {useContext} from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 
-// import { useWeb3Context } from "web3-react";
-import OrderContext from "../contexts/OrderContext";
+// Context
 import CoinContext from "../contexts/CoinContext";
 
 
@@ -40,14 +38,6 @@ function getSorting(order, orderBy) {
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
 }
-
-// const headCells = [
-//   { id: "if", numeric: false, disablePadding: false, label: "If This" },
-//   { id: "swap", numeric: true, disablePadding: false, label: "Then Swap" },
-//   { id: "created", numeric: true, disablePadding: false, label: "Created" },
-//   { id: "status", numeric: false, disablePadding: false, label: "Status" },
-//   { id: "action", numeric: false, disablePadding: false, label: "Action" }
-// ];
 
 const headCells = [
   { id: "#", numeric: true, disablePadding: false, label: "#" },
@@ -141,12 +131,10 @@ export default function MinOrders(props) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("fat");
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
+  const [page] = React.useState(0);
   const [dense] = React.useState(true);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(5);
 
-
-  const ordersContext = useContext(OrderContext)
   const coinContext = useContext(CoinContext);
   const contextOrders = coinContext.orders
 
@@ -188,14 +176,14 @@ export default function MinOrders(props) {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = event => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
   const isSelected = name => selected.indexOf(name) !== -1;
 

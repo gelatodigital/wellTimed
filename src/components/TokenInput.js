@@ -1,3 +1,4 @@
+// Not used
 import React, { useContext } from "react";
 import {
 	Input,
@@ -8,8 +9,10 @@ import {
 	MenuItem
 } from "@material-ui/core";
 
-import { useWeb3Context } from "web3-react";
+// Contexts
 import CoinContext from "../contexts/CoinContext";
+
+// Helpers
 import { getCorrectImageLink } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
@@ -40,13 +43,6 @@ function TokenInput(props) {
     const amountPlaceholder = inputData.amountPlaceholder
     const disabledAmount = inputData.disabledAmount
 	const defaultToken = inputData.defaultToken
-
-
-    // defaultToken => none if 'Select a Token'
-    // const defaultToken = props.defaultToken
-    // value for coinContext => e.g. 'triggerFrom' or 'actionTp'
-    const selectType = props.selectType
-
 	const classes = useStyles();
 	const coinContext = useContext(CoinContext);
 
@@ -59,18 +55,7 @@ function TokenInput(props) {
 		availableCoins: Object.values(getCorrectImageLink(context.networkId))
 	});
 
-	// const handleChange = name => event => {
-	//   console.log(name)
-	//   console.log(event)
-	//   const newState = { ...state };
-	//   newState[name] = event.target.value;
-	//   setState({ ...state, [name]: event.target.value , open: false});
-	//   coinContext.triggerFrom = event.target.value;
-	//   // handleClose()
-	// };
-
 	const handleChange = coin => {
-		console.log(coin);
 		const newState = { ...state };
 		newState["coin"] = coin;
 		setState({ ...state, ["coin"]: coin, open: false });
@@ -79,7 +64,6 @@ function TokenInput(props) {
 	};
 
 	const handleClickOpen = async () => {
-		console.log("open");
 		setState({ ...state, open: true });
 	};
 

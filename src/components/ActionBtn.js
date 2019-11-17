@@ -8,12 +8,10 @@ import { ethers } from "ethers";
 import { useWeb3Context } from "web3-react";
 import ProxyContext from "../contexts/ProxyContext";
 import CoinContext from "../contexts/CoinContext";
-import OrderContext from "../contexts/OrderContext";
 import TimeContext from "../contexts/TimeContext";
 
 // Import ABIs
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import PROXY_ABI from "../constants/ABIs/ds-proxy.json";
+import PROXY_ABI from "../constants/ABIs/gelatoProxy.json";
 import gelatoCoreABI from "../constants/ABIs/gelatoCore.json";
 import ERC20_ABI from "../constants/ABIs/erc20.json";
 
@@ -22,7 +20,6 @@ import { encodeWithFunctionSelector } from "../helpers";
 
 // Import addresses
 import {
-	DS_PROXY_REGISTRY,
 	GELATO_CORE,
 	EXECUTOR
 } from "../constants/contractAddresses";
@@ -42,11 +39,8 @@ function ActionBtn(props) {
 	const context = useWeb3Context();
 	const userIsRegistered = useContext(ProxyContext);
 	const coins = useContext(CoinContext);
-	const ordersContext = useContext(OrderContext);
 	const timeContext = useContext(TimeContext);
 	const time = timeContext.time;
-	const orders = ordersContext["orders"];
-	const setOrders = ordersContext["setOrders"];
 	const selectedTokenDetails = props.selectedTokenDetails;
 	const fetchExecutionClaims = props.fetchExecutionClaims
 	const updateSelectedTokenDetails = props.updateSelectedTokenDetails
@@ -65,8 +59,6 @@ function ActionBtn(props) {
 
 	// Used for reacting to successfull txs
 	const [waitingForTX, setWaitingForTX] = React.useState(false);
-	// Used for checking if user has a proxy + guard contract(3), proxy contract (2), or no proxy contract at all (1) - default (0)
-	const [guardAddress, setGuardAddress] = React.useState(undefined);
 
 	// Modal state
 	const [modalState, setModalState] = React.useState({
@@ -179,6 +171,9 @@ function ActionBtn(props) {
 			case(4):
 				prefix = 'rinkeby.'
 				break;
+			default:
+				prefix = 'rinkeby.'
+				break;
 		}
 
 
@@ -252,7 +247,6 @@ function ActionBtn(props) {
 		const signer = context.library.getSigner();
 		// Calculate prepayment costs
 		const kyberTradeAddress = kyberTrade.address[context.networkId];
-		console.log(kyberTradeAddress)
 		// method, funcDataTypes, funcParameters
 		const executorAddress = EXECUTOR[context.networkId];
 		const noOfOrders = time.numOrders;
@@ -353,13 +347,6 @@ function ActionBtn(props) {
 	function noZeroOrders() {
 
         const copyModalState = { ...modalState };
-        // const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
-		// // const actionSellTokenAddress = coins["actionFrom"]["address"];
-        // const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
-        const actionSellAmount = coins["amountActionFrom"];
-
-        const decimals = coins.actionFrom.decimals
-        // let userfriendlyAmount = ethers.utils.formatUnits(actionSellAmount, decimals)
         copyModalState.open = true;
         copyModalState.title = `Amount Cannot be Zero`;
         copyModalState.body = `Please specify an amount greater than 0`;
@@ -423,12 +410,9 @@ function ActionBtn(props) {
 
 		// encode action
 		const actionSellToken = coins["actionFrom"]["address"];
-		const actionSellTokenSymbol = coins["actionFrom"]["symbol"];
 		const actionSellAmount = coins["amountActionFrom"];
 		let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
-
 		const actionBuyToken = coins["actionTo"]["address"];
-		const actionBuyTokenSymbol = coins["actionTo"]["symbol"];
 
 		// actionData
 		const actionData = [

@@ -1,5 +1,4 @@
 import React, { useContext }  from 'react'
-import { useWeb3Context } from "web3-react";
 
 // Import Components
 import ActionBtn from "./ActionBtn";
@@ -12,6 +11,7 @@ import NoOfSwaps from "./NoOfSwaps";
 import TimeBetween from "./TimeBetween";
 import MinOrders from "./MinOrders"
 
+// Contexts
 import OrderContext from "../contexts/OrderContext";
 
 
@@ -91,7 +91,6 @@ const style = makeStyles({
 
 function TimeOrderWrapper(props) {
 
-    const context = useWeb3Context()
     const classes = style();
     const selectedTokenDetails = props.selectedTokenDetails
     const updateSelectedTokenDetails = props.updateSelectedTokenDetails

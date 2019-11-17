@@ -10,16 +10,15 @@ import {
 } from "@material-ui/core";
 
 import { ethers } from "ethers";
-import proxyRegistryABI from "../constants/ABIs/proxy-registry.json";
-import kyberProxyABI from "../constants/ABIs/kyberProxy.json";
 
+// Contexts
 import { useWeb3Context } from "web3-react";
 import CoinContext from "../contexts/CoinContext";
 import TimeContext from "../contexts/TimeContext";
 
+// Helpers
 import { getCorrectImageLink } from "../helpers";
-import { getTokenBalance, getTokenAllowance, updateEstimatedOrders } from "../helpers";
-import { DS_PROXY_REGISTRY, KYBER_PROXY } from "../constants/contractAddresses";
+import { updateEstimatedOrders } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,10 +81,7 @@ function ERC20Input(props) {
   const coinContext = useContext(CoinContext);
   const timeContext = useContext(TimeContext)
   const time = timeContext.time
-  const updateSelectedTokenDetails = props.updateSelectedTokenDetails
-  const selectedTokenDetails = props.selectedTokenDetails
   const updateActiveCoins = props.updateActiveCoins
-  const checkERC20ApprovalStatus = props.checkERC20ApprovalStatus
 
   // State
   const [state, setState] = React.useState({
@@ -99,7 +95,6 @@ function ERC20Input(props) {
     coinContext.actionFrom = coin;
     const updatedCoinContext = updateEstimatedOrders(coinContext, time)
 		updateActiveCoins(updatedCoinContext)
-    // checkERC20ApprovalStatus()
   };
 
   const handleClickOpen = () => {
@@ -109,8 +104,6 @@ function ERC20Input(props) {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-
-  let checksum = ethers.utils.getAddress("0x0f5d2fb29fb7d3cfee444a200298f468908cc942")
 
   const userChoice = () => {
     if (coinContext.actionFrom) {

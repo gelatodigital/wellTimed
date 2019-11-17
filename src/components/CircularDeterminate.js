@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -12,7 +12,7 @@ export default function CircularDeterminate() {
   const classes = useStyles();
   const [progress, setProgress] = React.useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function tick() {
       // reset when reaching 100%
       setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));

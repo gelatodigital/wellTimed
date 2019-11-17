@@ -8,10 +8,16 @@ import {
 } from "@material-ui/core";
 
 import { ethers } from "ethers";
+
+// Contexts
 import CoinContext from "../contexts/CoinContext";
 import TimeContext from "../contexts/TimeContext";
-import { getCorrectImageLink, updateEstimatedOrders } from "../helpers";
 import { useWeb3Context } from "web3-react";
+
+// Helpers
+import { getCorrectImageLink, updateEstimatedOrders } from "../helpers";
+
+
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -48,9 +54,6 @@ const useStyles = makeStyles(theme => ({
 
 function TokenInputNoAmount(props) {
 
-    // defaultToken => none if 'Select a Token'
-    // const defaultToken = props.defaultToken
-    // value for coinContext => e.g. 'triggerFrom' or 'actionTp'
 	const context = useWeb3Context()
 	const classes = useStyles();
 	const coinContext = useContext(CoinContext);
@@ -112,15 +115,10 @@ function TokenInputNoAmount(props) {
 		}
 	};
 
-	// const handleAmount = name => event => {
-	// 	setState({ ...state, [name]: event.target.value || "" });
-	// 	coinContext[amountType] = event.target.value;
-	// };
-
 	return (
 		<div className={classes.container}>
 			<Button
-				// color={state.coin ? "primary" : "secondary"}
+
 				onClick={handleClickOpen}
 				className={classes.buttonPadding}
 			>
@@ -132,18 +130,16 @@ function TokenInputNoAmount(props) {
 				open={state.open}
 				onClose={handleClose}
 				value={coinContext.actionTo}
-				// onChange={handleChange("coin")}
+
 			>
 				<DialogTitle>Choose Token to buy</DialogTitle>
-				{/* <Select value={state.coin} onChange={handleChange("coin")} onClick={console.log("click")} > */}
-				{/* // <div value={state.coin} onChange={handleChange("coin")}> */}
+
 				{state.availableCoins.map((coin, key) => {
 					return (
 						<div key={key} >
 							<div key={key} style={{marginTop: '4px', marginBottom: '4px', borderBottom: '1px solid rgb(220,220,220, 1)'}}></div>
 							<MenuItem
-								// onChange={handleChange("coin")}
-								// onClick={handleClose}
+
 								onClick={() => {
 									handleChange(coin);
 								}}

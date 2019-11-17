@@ -39,14 +39,6 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-// const headCells = [
-//   { id: "if", numeric: false, disablePadding: false, label: "If This" },
-//   { id: "swap", numeric: true, disablePadding: false, label: "Then Swap" },
-//   { id: "created", numeric: true, disablePadding: false, label: "Created" },
-//   { id: "status", numeric: false, disablePadding: false, label: "Status" },
-//   { id: "action", numeric: false, disablePadding: false, label: "Action" }
-// ];
-
 const headCells = [
   { id: "swap", numeric: false, disablePadding: false, label: "Swap" },
   { id: "when", numeric: true, disablePadding: false, label: "When" },
