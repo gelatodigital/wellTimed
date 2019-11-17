@@ -12,6 +12,8 @@ export function updateEstimatedOrders(coinContext, time) {
   const actionSellAmount = coinContext["amountActionFrom"];
   let sellAmountPerSubOrder =  ethers.utils.bigNumberify(actionSellAmount).div(ethers.utils.bigNumberify(time.numOrders))
   let newOrders = []
+
+
   let multiplier;
   switch (time.intervalType) {
     case "minutes":
@@ -37,6 +39,8 @@ export function updateEstimatedOrders(coinContext, time) {
   for (let i = 0; i < time.numOrders; i++)
   {
     let timestamp = coinContext['timestamp'] + (i * intervalTime)
+    // Make it reflect on-chain timestamp, in seconds
+    timestamp = Math.floor(timestamp/1000) * 1000
     let date1 = new Date(timestamp);
     let timestampString1 = `${date1.toLocaleDateString()} - ${date1.toLocaleTimeString()}`;
     let order = {'#': i+1, swap: `${parseFloat(userfriendlyAmountPerSubOrder).toFixed(4)} ${actionSellTokenSymbol} => ${actionBuyTokenSymbol}`, when: `${timestampString1}`}

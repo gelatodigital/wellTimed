@@ -272,7 +272,6 @@ function ActionBtn(props) {
 
 		const prepayment =
 			parseInt(kyberSwapPrepayment.toString()) * noOfOrders;
-		console.log(prepayment)
 
 		const userFriendlyPrepayment = ethers.utils.formatEther(ethers.utils.bigNumberify(prepayment.toString()))
 
@@ -400,7 +399,8 @@ function ActionBtn(props) {
 		copyModalState.open = false;
 		setModalState(copyModalState);
 
-		let timestamp = Math.floor(Date.now() / 1000);
+		// Convert to Ethereum timestmap seconds
+		const timestamp = Math.floor(coins.timestamp / 1000)
 		let multiplier;
 		switch (time.intervalType) {
 			case "minutes":
@@ -419,7 +419,7 @@ function ActionBtn(props) {
 				multiplier = 60;
 				break;
 		}
-		let interval = (time.intervalTime * multiplier) / time.numOrders;
+		let interval = time.intervalTime * multiplier;
 
 		// encode action
 		const actionSellToken = coins["actionFrom"]["address"];
